@@ -5,21 +5,29 @@
 #include "piece.h"
 #include "player.h"
 
+class Player;
+class Piece;
+
 class Board {
     std::vector<std::vector<Piece>> theBoard; // The actual board
-    bool IsWhite;
-    bool IsFinish;
-    Player whiteP;
-    Player blackP;
+    bool isWhite;
+    bool isFinish;
+    std::string prev; // storing previous command for a single undo
+
+    Player *whiteP;
+    Player *blackP;
 public:
     // construct empty board without pieces
     Board(); // default ctor
 
+    // convert string position into vector of integers
+    std::vector intPos(std::string pos);
+
     // construct board with pieces in the default position
-    // defBoard(); // ctor
+    void defBoard(); // ctor
 
     // allow to customize the initial position of pieces
-    void setUp();
+    void init();
 
     // add char type of piece on the string position
     void addPiece(char piece, std::string pos);
@@ -31,8 +39,8 @@ public:
     void changeTurn();
 
     // check current game flow
-    bool isInCheckmate(bool iscm);
-    bool isInCheck(bool isc);
+    bool isInCheckmate();
+    bool isInCheck();
     bool isInStalemate();
 
     // allow a single undo
