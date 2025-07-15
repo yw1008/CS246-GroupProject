@@ -14,6 +14,8 @@ class Board {
     bool isFinish;
     std::string prev; // storing previous command for a single undo
 
+    TextDisplay *td = nullptr;
+
     Player *whiteP;
     Player *blackP;
 public:
@@ -51,5 +53,5 @@ public:
 };
 
 // need ostream?
-// std::ostream &operator<<(std::ostream &out, const Board &b);
+std::ostream &operator<<(std::ostream &out, const Board &b);
 #endif
