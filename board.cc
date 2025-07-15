@@ -41,8 +41,6 @@ std::vector Board::intPos(std::string pos) {
 
 
 void Board::defBoard() {
-    // need to define other data within the Piece -> call piece ctor?
-
     // black
     //pawn
     for (int c = 0; c < BOARD_SIZE; ++c) {
@@ -74,12 +72,17 @@ void Board::defBoard() {
 
 void Board::init() {
     // clear existing board if necessary
-
     theBoard.clear();
+    for (size_t r = 0; r < n; ++r) {
+        theBoard[r].reserve(BOARD_SIZE);
+        for (size_t c = 0; c < n; ++c) {
+            theBoard[r].emplace_back(Piece(r,c));
+        }
+    }
 
 }
 
-void Board::getPiece(std::string pos) {
+char Board::getPiece(std::string pos) {
     std::vector intPos = intPos(pos);
     int r = intPos[1];
     int c= intPos[0];
@@ -105,7 +108,6 @@ void Board::addPiece(char piece, std::string pos) {
         //check if the move catch the other piece
         else removePiece(pos);
     }
-
     theBoard[r][c].type = piece;
 }
 
@@ -133,6 +135,6 @@ bool Board::isInStalemate();
 void Board::undo() {
     // check if there is previous move
     if (prev == "") std::cerr << "There is no previous action" << std::endl; 
-
+    *this = prev;
 }
 

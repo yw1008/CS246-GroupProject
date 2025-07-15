@@ -6,13 +6,14 @@
 #include "player.h"
 
 class Player;
-class Piece;
+class TextDisplay;
+class GraphicDisplay;
 
 class Board {
     std::vector<std::vector<Piece>> theBoard; // The actual board
     bool isWhite;
     bool isFinish;
-    std::string prev; // storing previous command for a single undo
+    Board prev; // storing previous board data
 
     Player *whiteP;
     Player *blackP;
@@ -30,7 +31,7 @@ public:
     void init();
 
     // get the name of the type (distinguish piece type and color)
-    void getPiece (std::string pos);
+    char getPiece (std::string pos);
 
     // add char type of piece on the string position
     void addPiece(char piece, std::string pos);
