@@ -138,3 +138,7 @@ void Board::undo() {
     *this = prev;
 }
 
+std::ostream &operator<<(std::ostream &out, const Board &b) {
+    if(b.td) out << *b.td;
+    return out;
+}

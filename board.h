@@ -15,6 +15,8 @@ class Board {
     bool isFinish;
     Board prev; // storing previous board data
 
+    TextDisplay *td = nullptr;
+
     Player *whiteP;
     Player *blackP;
 public:
@@ -52,5 +54,5 @@ public:
 };
 
 // need ostream?
-// std::ostream &operator<<(std::ostream &out, const Board &b);
+std::ostream &operator<<(std::ostream &out, const Board &b);
 #endif
