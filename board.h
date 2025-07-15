@@ -29,6 +29,9 @@ public:
     // allow to customize the initial position of pieces
     void init();
 
+    // get the name of the type (distinguish piece type and color)
+    void getPiece (std::string pos);
+
     // add char type of piece on the string position
     void addPiece(char piece, std::string pos);
 

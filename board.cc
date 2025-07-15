@@ -79,6 +79,13 @@ void Board::init() {
 
 }
 
+void Board::getPiece(std::string pos) {
+    std::vector intPos = intPos(pos);
+    int r = intPos[1];
+    int c= intPos[0];
+    return theBoard[r][c].getName();
+}
+
 void Board::addPiece(char piece, std::string pos) {
     std::vector intPos = intPos(pos);
     int r = intPos[1];
@@ -112,7 +119,6 @@ void Board::removePiece(std::string pos) {
 
     theBoard[r][c].isAlive = false;
 }
-
 
 void Board::changeTurn() {
     if (isWhite) isWhite = false;
