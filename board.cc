@@ -12,7 +12,7 @@ Board::Board():
         whiteP{Player *wp}, balckP{Player *bp} {
     for (int r = 0; r < BOARD_SIZE; ++r) {
         for (int c = 0; c < BOARD_SIZE; ++c) {
-            if (c%2 == 0) theBoard[r][c].type = '';
+            if (c%2 == 0) theBoard[r][c].type = ' ';
             else theBoard[r][c].type = '_';
         }
     }
