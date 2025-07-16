@@ -4,19 +4,19 @@
 #include <iostream>
 #include <sstream>
 
-const int BOARD_SIZE = 8;
+const std::size_t BOARD_SIZE = 8;
 
 Board::Board(): 
         theBoard{BOARD_SIZE, std::vector<Piece>(BOARD_SIZE)}, 
         isWhite{true}, isFinish{false}, prev{""}, 
-        whiteP{Player *wp}, balckP{Player *bp} {
-    for (int r = 0; r < BOARD_SIZE; ++r) {
-        for (int c = 0; c < BOARD_SIZE; ++c) {
-            if (c%2 == 0) theBoard[r][c].type = '';
-            else theBoard[r][c].type = '_';
+        whiteP{Player *wp}, balckP{Player *bp} { // not sure about the player for now
+    for (std::size_t r = 0; r < BOARD_SIZE; ++r) { // blank board
+        for (std::size_t c = 0; c < BOARD_SIZE; ++c) {
+            if (r%2 == c%2) theBoard[r][c].type = '_'; // black cell
+            else theBoard[r][c].type = ' '; // white cell
         }
     }
-} // not sure about the player for now
+} 
 
 std::vector Board::intPos(std::string pos) {
     std::vector intPos;
@@ -43,9 +43,10 @@ std::vector Board::intPos(std::string pos) {
 void Board::defBoard() {
     // black
     //pawn
-    for (int c = 0; c < BOARD_SIZE; ++c) {
+    for (std::size_t c = 0; c < BOARD_SIZE; ++c) {
         theBoard[1][c].type = 'p';
     }
+    //else
     theBoard[0][0].type = 'r';
     theBoard[0][1].type = 'n';
     theBoard[0][2].type = 'b';
@@ -57,9 +58,10 @@ void Board::defBoard() {
 
     //white
     //pawn
-    for (int c = 0; c < BOARD_SIZE; ++c) {
+    for (std::size_t c = 0; c < BOARD_SIZE; ++c) {
         theBoard[6][c].type = 'P';
     }
+    //else 
     theBoard[7][0].type = 'R';
     theBoard[7][1].type = 'N';
     theBoard[7][2].type = 'B';
@@ -68,14 +70,17 @@ void Board::defBoard() {
     theBoard[7][5].type = 'B';
     theBoard[7][6].type = 'N';
     theBoard[7][7].type = 'R';
+    // also need to update other data in the class?
 }
 
 void Board::init() {
     // clear existing board if necessary
+    delete td;
+    td = new TextDisplay();
     theBoard.clear();
-    for (size_t r = 0; r < n; ++r) {
+    for (std::size_t r = 0; r < n; ++r) {
         theBoard[r].reserve(BOARD_SIZE);
-        for (size_t c = 0; c < n; ++c) {
+        for (std::size_t c = 0; c < n; ++c) {
             theBoard[r].emplace_back(Piece(r,c));
         }
     }
@@ -84,15 +89,15 @@ void Board::init() {
 
 char Board::getPiece(std::string pos) {
     std::vector intPos = intPos(pos);
-    int r = intPos[1];
-    int c= intPos[0];
+    std::size_t r = intPos[1];
+    std::size_t c= intPos[0];
     return theBoard[r][c].getName();
 }
 
 void Board::addPiece(char piece, std::string pos) {
     std::vector intPos = intPos(pos);
-    int r = intPos[1];
-    int c= intPos[0];
+    std::size_t r = intPos[1];
+    std::size_t c= intPos[0];
 
     if (theBoard[r][c] != '' && theBoard[r][c] != '_') {
         //check if the move is invalid
@@ -113,8 +118,8 @@ void Board::addPiece(char piece, std::string pos) {
 
 void Board::removePiece(std::string pos) {
     std::vector intPos = intPos(pos);
-    int r = intPos[1];
-    int c= intPos[0];
+    std::size_t r = intPos[1];
+    std::size_t c= intPos[0];
 
     if (c%2 == 0) theBoard[r][c].type = '';
     else theBoard[r][c].type = '_';

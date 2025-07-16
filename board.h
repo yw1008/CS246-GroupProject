@@ -23,7 +23,7 @@ public:
     // construct empty board without pieces
     Board(); // default ctor
 
-    // convert string position into vector of integers
+    // convert string position into vector of size_t (row,col)
     std::vector intPos(std::string pos);
 
     // construct board with pieces in the default position
