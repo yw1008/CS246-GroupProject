@@ -33,16 +33,6 @@ void Computer::move(Board &board) {
 
         char piece = board.getPiece(from);
 
-        if (piece == ' ' || piece == '_') {
-            continue;
-        }
-        if (isWhite() && !isupper(piece)) {
-            continue;
-        }
-        if (!isWhite() && !islower(piece)) {
-            continue;
-        }
-
         char target = board.getPiece(to);
 
         // If moving to same square, skip
