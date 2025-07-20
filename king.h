@@ -6,6 +6,7 @@
 
 class King: public Piece {
     char name;
+    bool canMove; // true if King can move false otherwise
 
     public:
         King();

@@ -7,7 +7,7 @@
 class Pawn: public Piece {
     bool isFirstMove = 0;
     char name;
-    char direction;
+    bool isEnPassant; //for the Pawn class
 
     public:
         Pawn();

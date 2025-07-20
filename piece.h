@@ -2,17 +2,22 @@
 #define PIECE_H
 #include "subject.h"
 #include "observer.h"
+#include "info.h"
 #include <vector>
 
 using namespace std;
 
-enum class pieceType {Pawn, King, Queen, Rook, Knight, Bishop, White, Black};
+struct moveType{
+    int colChange, rowChange;
+    bool repeatable; // true for sliders (B,R,Q), false for “leapers” (N,K,P)
+};
 
 class Piece: public Subject, public Observer {
     protected:
-        vector<int> pos;
+        Position pos;
         bool isAlive;
         char type;
+        const std::vector<moveType> possibleWays;
     public:
         bool isValid();
 
