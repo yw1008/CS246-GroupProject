@@ -20,15 +20,19 @@ Position strToPos(const string str){
 Pawn::pawn(bool fm, bool ep, vector<moveType> mt): isFirstMove{fm}, isEnPassant{ep}, possibleWays{mt} {}  
 
 bool Pawn::isValid(const string &to){
-    Position pos = strToPos(to);
+    Position to = strToPos(to);
     if(isFirstMove){
         if(isEnPassant){
-            vector<moveType> mt = [moveType{0, 1, true}, moveType{1, 1, ,false}, moveType{-1, 1, false}];
+            vector<moveType> mt = [moveType{0, 1, false}, moveType{1, 1, ,false}, moveType{-1, 1, false}, moveType{0, 2, false}];
         } else{
             vector<moveType> mt = [moveType{0, 1, false}, moveType{0, 2, false}];
         }
     } else{
-        vector<moveType> mt = [moveType{0, 1, false}];
+        if(isEnPassant){
+            vector<moveType> mt = [moveType{0, 1, false}, moveType{1, 1, ,false}, moveType{-1, 1, false}];
+        } else{
+            vector<moveType> mt = [moveType{0, 1, false}];
+        }
     }
 
     for(size_t i = 0; i < mt.size(); i++){

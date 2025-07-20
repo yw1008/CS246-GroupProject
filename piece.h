@@ -27,6 +27,8 @@ class Piece: public Subject, public Observer {
 
         void addPiece(pieceType p, Colour c);
 
+        void removePiece(pieceType p, Colour c)
+
         void notify() override;
 };
 
