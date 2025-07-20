@@ -5,7 +5,7 @@
 #include "Board.h"
 
 class Computer : public Player {
-    int level;  // Difficulty level
+    int level;
 
 public:
     // Constructor
