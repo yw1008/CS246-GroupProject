@@ -14,14 +14,18 @@ struct moveType{
 
 class Piece: public Subject, public Observer {
     protected:
+        pieceType pieceType;
+        Colour colour;
         Position pos;
-        bool isAlive;
-        char type;
-        const std::vector<moveType> possibleWays;
+        //bool isAlive;
     public:
-        bool isValid();
+        virtual bool isValid(const &to) = 0; // Check the received move is in 
 
-        pieceType getType() const;
+        Info getInfo();
+
+        char getType() const;
+
+        void addPiece(pieceType p, Colour c);
 
         void notify() override;
 };

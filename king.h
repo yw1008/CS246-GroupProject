@@ -7,6 +7,7 @@
 class King: public Piece {
     char name;
     bool canMove; // true if King can move false otherwise
+    const std::vector<moveType> possibleWays;
 
     public:
         King();
