@@ -18,23 +18,22 @@ Board::Board():
     }
 } // not sure about the player for now
 
-std::vector Board::intPos(std::string pos) {
-    std::vector intPos;
-    std::string col = pos[0];
-    std::string row = pos[1];
+std::vector<int> Board::intPos(std::string pos) {
+    std::vector<int> intPos(2);  // Make sure the vector has space for 2 elements
 
-    if (col == "a") intPos[0] = 0;
-    else if (col == "b") intPos[0] = 1;
-    else if (col == "c") intPos[0] = 2;
-    else if (col == "d") intPos[0] = 3;
-    else if (col == "e") intPos[0] = 4;
-    else if (col == "f") intPos[0] = 5;
-    else if (col == "g") intPos[0] = 6;
-    else intPos[0] = 7;
+    char col = pos[0];
+    char row = pos[1];
 
+    // Convert column character 'a'–'h' to integer 0–7
+    intPos[0] = col - 'a';
+
+    // Convert row character '1'–'8' to integer 0–7 using stringstream
     std::stringstream ss;
     ss << row;
-    intPos[1] = ss - 1;
+    int rowInt;
+    ss >> rowInt;
+
+    intPos[1] = rowInt - 1;  // zero-based indexing
 
     return intPos;
 }
@@ -96,15 +95,10 @@ void Board::addPiece(char piece, std::string pos) {
 
     if (theBoard[r][c] != '' && theBoard[r][c] != '_') {
         //check if the move is invalid
-        if (theBoard[r][c].isWhite && isWhite) {
+        if (theBoard[r][c].isWhite == isWhite) {
             std::cerr << "Invalid move" << std::endl;
             return;
         }
-        else if ((!theBoard[r][c].isWhite && !isWhite)) {
-            std::cerr << "Invalid move" << std::endl;
-            return;
-        }
-
         //check if the move catch the other piece
         else removePiece(pos);
     }
