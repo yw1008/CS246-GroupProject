@@ -5,14 +5,14 @@
 #include <string>
 
 class Pawn: public Piece {
-    bool isFirstMove = 0;
-    char name;
-    char direction;
+    bool isFirstMove = true;
+    bool isEnPassant = false; //for the Pawn class
+    const std::vector<moveType> possibleWays;
 
     public:
-        Pawn();
+        Pawn(bool fm, bool ep);
 
-        bool isValid(const string &from, const string &to, const Board &b);
+        bool isValid(const string &to) override;
 
         char getName();
 

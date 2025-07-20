@@ -6,6 +6,7 @@
 
 class Rook: public Piece {
     char name;
+    const std::vector<moveType> possibleWays;
 
     public:
         Rook();
