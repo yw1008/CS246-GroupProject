@@ -16,12 +16,15 @@ class Board {
     Board prev; // storing previous board data
 
     TextDisplay *td = nullptr;
+    GraphicDisplay *gd = nullptr;
 
     Player *whiteP;
     Player *blackP;
 public:
     // construct empty board without pieces
     Board(); // default ctor
+
+    ~Board(); // dtor
 
     // convert string position into vector of size_t (row,col)
     std::vector intPos(std::string pos);
