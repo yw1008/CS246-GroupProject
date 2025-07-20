@@ -16,7 +16,7 @@ void notify(Subject &whoNotified) override {
     std::vecotr<std::size_t> endPos;
     char piece;
     std::size_t r = endPos[0], c = endPos[1];
-    theTD[r][c].type = piece;
+    theTD[r][c] = piece;
     // also need to update caught piece?
 }
 
