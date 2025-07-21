@@ -17,10 +17,10 @@ Position strToPos(const string str){
     return Position{c, r};
 }
 
-Pawn::pawn(bool fm, bool ep, vector<moveType> mt): isFirstMove{fm}, isEnPassant{ep}, possibleWays{mt} {}  
+Pawn::Pawn(bool fm, bool ep, vector<moveType> mt): isFirstMove{fm}, isEnPassant{ep}, possibleWays{mt} {}  
 
 bool Pawn::isValid(const string &to){
-    Position to = strToPos(to);
+    Position toPos = strToPos(to);
     if(isFirstMove){
         if(isEnPassant){
             vector<moveType> mt = [moveType{0, 1, false}, moveType{1, 1, ,false}, moveType{-1, 1, false}, moveType{0, 2, false}];
@@ -37,8 +37,12 @@ bool Pawn::isValid(const string &to){
 
     for(size_t i = 0; i < mt.size(); i++){
         Position next{Piece::pos.c + mt[i].colChange, Piece::pos.r + mt[i].rowChange};
-        if(next.col == to.col && next.row == to.row) return true;
+        if(next.col == toPos.col && next.row == toPos.row) return true;
     }
 
     return false;
+}
+
+vector<moveType> Pawn::getMoveType(){
+    return possibleWays;
 }

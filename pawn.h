@@ -16,6 +16,8 @@ class Pawn: public Piece {
 
         char getName();
 
+        std::vector<moveType> getMoveType();
+
         bool getIsFirstMove();
 
         bool isEnPassant(const string &from, const string &to, const board &b);

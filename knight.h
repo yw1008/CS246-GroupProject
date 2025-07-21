@@ -5,15 +5,12 @@
 #include <string>
 
 class Knight: public Piece {
-    char name;
     const std::vector<moveType> possibleWays;
 
     public:
         Knight();
 
-        bool isValid(const string &from, const string &to, const Board &b);
-
-        char getName();
+        bool isValid(const string &to);
 }; 
 
 #endif

@@ -2,8 +2,10 @@
 #define PIECE_H
 #include "subject.h"
 #include "observer.h"
+#include "state.h"
 #include "info.h"
 #include <vector>
+#include <cstddef>
 
 using namespace std;
 
@@ -14,7 +16,7 @@ struct moveType{
 
 class Piece: public Subject, public Observer {
     protected:
-        pieceType pieceType;
+        pieceType pT;
         Colour colour;
         Position pos;
         //bool isAlive;
@@ -23,11 +25,13 @@ class Piece: public Subject, public Observer {
 
         Info getInfo();
 
+        pieceType getPieceType();
+
         char getType() const;
 
         void addPiece(pieceType p, Colour c);
 
-        void removePiece(pieceType p, Colour c)
+        void removePiece();
 
         void notify() override;
 };

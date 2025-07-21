@@ -43,15 +43,27 @@ char Piece::getType() {
         } else {
             return 'r'
         }
-    } else {
-        if(colour == Colour::White){
-            return ' '
-        } else {
-            return '_'
-        }
     }
 }
 
 Info Piece::getInfo() const {
     return Info{pieceType, colour, pos};
+}
+
+pieceType Piece::getPieceType(){
+    return pT;
+}
+
+void Piece::addPiece(pieceType p, Colour c){
+    pT = p;
+    colour = c;
+    if(pT == pieceType::Pawn){
+        vector<moveType> Pawn::getMakeMove();
+        for()
+    } 
+}
+
+void Piece::removePiece(){
+    pT = pieceType::Nothing;
+    colour = Colour::Nothing;
 }
