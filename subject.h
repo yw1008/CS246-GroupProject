@@ -9,12 +9,16 @@ class Observer;
 
 class Subject{
     vector<Observer*> observers;
+    State state;
+
+    protected:
+        void setState(State newS);
 
     public:
-        virtual bool getColour() const = 0; // White is true, black is false
-        virtual Position getPosition() const = 0; // Get the position of the piece [row, column]
         void notifyObservers();
         void attach(Observer *ob);
+        virtual Info getInfo() const = 0;
+        State getState() const;
 };
 
 #endif

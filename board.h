@@ -16,12 +16,15 @@ class Board {
     Board prev; // storing previous board data
 
     TextDisplay *td = nullptr;
+    GraphicDisplay *gd = nullptr;
 
     Player *whiteP;
     Player *blackP;
 public:
     // construct empty board without pieces
     Board(); // default ctor
+
+    ~Board(); // dtor
 
     // convert string position into vector of size_t (row,col)
     std::vector intPos(std::string pos);
@@ -35,9 +38,11 @@ public:
     // get the name of the type (distinguish piece type and color)
     char getPiece (std::string pos);
 
+    // move piece from startpos to endpos
+    void makeMove(std::string startPos, std::string endPos);
+
     // add char type of piece on the string position
     void addPiece(char piece, std::string pos);
-
     // remove piece on the string position
     void removePiece(std::string pos);
 

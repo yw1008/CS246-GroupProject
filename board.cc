@@ -18,6 +18,11 @@ Board::Board():
     }
 } // not sure about the player for now
 
+Board::~Board() {
+    delete td;
+    delete gd;
+}
+
 std::vector<int> Board::intPos(std::string pos) {
     std::vector<int> intPos(2);  // Make sure the vector has space for 2 elements
 
@@ -39,7 +44,7 @@ std::vector<int> Board::intPos(std::string pos) {
 }
 
 
-void Board::defBoard() {
+void Board::defBoard() { // use add piece to place default pieces
     // black
     //pawn
     for (int c = 0; c < BOARD_SIZE; ++c) {
@@ -70,12 +75,20 @@ void Board::defBoard() {
 }
 
 void Board::init() {
+    delete td; // clean Text display observer
+    delete gd; // clean Graphic display observer
+    // define text and graphics
+    td = new TextDisplay();
+    gd = new GraphicDisplay();
+
     // clear existing board if necessary
     theBoard.clear();
-    for (size_t r = 0; r < n; ++r) {
+    for (int r = 0; r < n; ++r) {
         theBoard[r].reserve(BOARD_SIZE);
-        for (size_t c = 0; c < n; ++c) {
+        for (int c = 0; c < n; ++c) {
             theBoard[r].emplace_back(Piece(r,c));
+            theBoard[r][c].attach(td); // text
+            theBoard[r][c].attach(gd); // graphics
         }
     }
 
@@ -88,32 +101,36 @@ char Board::getPiece(std::string pos) {
     return theBoard[r][c].getName();
 }
 
-void Board::addPiece(char piece, std::string pos) {
-    std::vector intPos = intPos(pos);
-    int r = intPos[1];
-    int c= intPos[0];
+void Board::makeMove(std::string startPos, std::string endPos) {
+    std::vector intStartPos = intPos(startPos);
+    int startr = intStartPos[1];
+    int startc= intStartPos[0];
+    std::vector intEndPos = intPos(endPos);
+    int endr = intEndPos[1];
+    int endc= intEndPos[0];
 
-    if (theBoard[r][c] != '' && theBoard[r][c] != '_') {
-        //check if the move is invalid
-        if (theBoard[r][c].isWhite == isWhite) {
-            std::cerr << "Invalid move" << std::endl;
+    Colour c;
+    if (isWhite) c = Colour::White;
+    else c = Colour::Black;
+
+    pieceType piece = theBoard[startr][startc].getPieceType; //get the pieceType of the moving piece
+
+    if (theBoard[startr][startc].isWhite != isWhite) {
+        std::cerr << "Invalid move: must move piece of your colour" << std::endl;
+        return;
+    }
+
+    if (theBoard[endr][endc] != pieceType::Nothing) {
+        // catching the same coloured piece
+        if (theBoard[endr][endc].isWhite == isWhite) {
+            std::cerr << "Invalid move: Catching the same coloured piece" << std::endl;
             return;
         }
-        //check if the move catch the other piece
-        else removePiece(pos);
+        //if the move catch the other piece
+        else theBoard[endr][endc].removePiece();
     }
-    theBoard[r][c].type = piece;
-}
-
-void Board::removePiece(std::string pos) {
-    std::vector intPos = intPos(pos);
-    int r = intPos[1];
-    int c= intPos[0];
-
-    if (c%2 == 0) theBoard[r][c].type = '';
-    else theBoard[r][c].type = '_';
-
-    theBoard[r][c].isAlive = false;
+    theBoard[startr][startc].removePiece()
+    theBoard[endr][endc].addPiece(piece, c);
 }
 
 void Board::changeTurn() {
