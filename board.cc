@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+#include <memory>
 
 const int BOARD_SIZE = 8;
 
@@ -215,6 +216,26 @@ void Board::changeTurn() {
     if (isWhite) isWhite = false;
     else isWhite = true;
 }
+
+std::vector<std::unique_ptr<Position>> Board::getNextMove(std::string startPos){
+    std::vector<std::unique_ptr<Position>> nextPos;
+    std::vector intStartPos = intPos(startPos);
+    int startr = intStartPos[1];
+    int startc= intStartPos[0];
+    std::vector<moveType> movetypes = theBoard[startr][startc].getMoveType();
+    for(int j = 0; j < movetypes.size(); ++j){
+        moveType tempMT = movetypes[j];
+        for(int i = 1; i < BOARD_SIZE + 1; ++i){
+            int tempR = startr + i*tempMT.rowChange;
+            int tempC = startc + i*tempMT.colChange;
+            if(tempR =< 8 && tempC =< 8 && tempR >= 0 && tempC >= 0){
+                Position next{tempC, tempR};
+                nextPos.emplace_back(next);
+            }
+        }
+    }
+    return nextPos;
+} //Use it to a = getNextMove(...); theBoard[a[i].row][a[i].col].notify(..., true, true)
 
 bool Board::isInCheckmate();
 

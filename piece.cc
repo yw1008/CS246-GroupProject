@@ -58,17 +58,33 @@ void Piece::setMoveType(){
     } else if(pT == pieceType::Bishop){
         mT = {moveType{1, 1, true}, moveType{1, -1, true}, moveType{-1, 1, true}, moveType{-1, -1, true}};
     } else if(pT == pieceType::Pawn){
-        if(isFirstMove){
-        if(isEnPassant){
-            mT = {moveType{0, 1, false}, moveType{1, 1, false}, moveType{-1, 1, false}, moveType{0, 2, false}};
-        } else{
-            mT = {moveType{0, 1, false}, moveType{0, 2, false}};
-        }
-        } else{
+        if(colour = Colour::White){
+            if(isFirstMove){
             if(isEnPassant){
-                mT = {moveType{0, 1, false}, moveType{1, 1, false}, moveType{-1, 1, false}};
+                mT = {moveType{0, 1, false}, moveType{1, 1, false}, moveType{-1, 1, false}, moveType{0, 2, false}};
             } else{
-                mT = {moveType{0, 1, false}};
+                mT = {moveType{0, 1, false}, moveType{0, 2, false}};
+            }
+            } else{
+                if(isEnPassant){
+                    mT = {moveType{0, 1, false}, moveType{1, 1, false}, moveType{-1, 1, false}};
+                } else{
+                    mT = {moveType{0, 1, false}};
+                }
+            }
+        } else {
+            if(isFirstMove){
+            if(isEnPassant){
+                mT = {moveType{0, -1, false}, moveType{-1, -1, false}, moveType{1, -1, false}, moveType{0, -2, false}};
+            } else{
+                mT = {moveType{0, -1, false}, moveType{0, -2, false}};
+            }
+            } else{
+                if(isEnPassant){
+                    mT = {moveType{0, -1, false}, moveType{-1, -1, false}, moveType{1, -1, false}};
+                } else{
+                    mT = {moveType{0, -1, false}};
+                }
             }
         }
     }

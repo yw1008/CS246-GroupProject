@@ -55,6 +55,8 @@ public:
 
     // allow a single undo
     void undo();
+
+    std::unique_ptr<std::vector<Position>> Board::getNextMove(std::string startPos);
 };
 
 // need ostream?
