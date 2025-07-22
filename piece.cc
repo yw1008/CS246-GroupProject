@@ -130,13 +130,17 @@ void Piece::notify(Subject &whoFrom, bool adding, bool isWhite){ // whoFrom is n
     }
 }
 
-vector<Position> Piece::nextMove(Position current, pieceType pType){ // to Board Class can get the vector of possible next move point
+vector<Position> Piece::nextMove(){ // to Board Class can get the vector of possible next move point
     vector<Position> nextmove;
     for(int i = 0; i < mT.size(); ++i){
         Position next{pos.col + mT[i].colChange, pos.row + mT[i].rowChange};
         nextmove.emplace_back(next);
     }
     return nextmove;
+}
+
+vector<moveType> Piece::getMoveType(){
+    return mT;
 }
 
 void Piece::removePiece(){

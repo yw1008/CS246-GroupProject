@@ -34,7 +34,7 @@ class Piece: public Subject, public Observer {
 
         void setMoveType();
 
-        std::vector<Position> nextMove(Position current, pieceType pType);
+        std::vector<Position> nextMove();
 
         char getType() const;
 
@@ -43,6 +43,8 @@ class Piece: public Subject, public Observer {
         void removePiece();
 
         void notify(Subject &whoFrom, bool adding, bool isWhite) override;
+
+        vector<moveType> Piece::getMoveType();
 };
 
 #endif
