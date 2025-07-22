@@ -3,6 +3,8 @@
 
 using namespace std;
 
+const std::size_t BOARD_SIZE = 8;
+
 TextDisplay::TextDisplay()
     : theTD(BOARD_SIZE, vector<char>(BOARD_SIZE)) {
     for (size_t r = 0; r < BOARD_SIZE; ++r) {
@@ -12,12 +14,12 @@ TextDisplay::TextDisplay()
     }
 }
 
-void notify(Subject &whoNotified) {
+void TextDisplay::notify(Subject &whoNotified) {
     // need end position and the type of the piece (with color) that is moved. 
     // for now just assume each variable represent those two
     Info info = whoNotified.getInfo();
     Colour c = info.colour;
-    pieceType type = info.pieceType;
+    pieceType type = info.piecetype;
     if (c == Colour::White) {
         if (type == pieceType::King) theTD[info.pos.row][info.pos.col] = 'K';
         else if (type == pieceType::Queen) theTD[info.pos.row][info.pos.col] = 'Q';
@@ -44,7 +46,7 @@ ostream &operator<<(ostream &out, const TextDisplay &td) {
         out << colNum << " ";
         --colNum;
         for (size_t c = 0; c < BOARD_SIZE; ++c) {
-            out << td[r][c];
+            out << td.theTD[r][c];
         }
         out << endl;
     }

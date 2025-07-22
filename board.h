@@ -14,6 +14,8 @@ class Board {
     std::vector<std::vector<Piece>> theBoard; // The actual board
     bool isWhite;
     bool isFinish;
+    Position whiteK; // position of white King
+    Position blackK; // position of black King
     // Board prev; // storing previous board data
 
     TextDisplay *td = nullptr;
@@ -55,9 +57,12 @@ public:
     void changeTurn();
 
     // check current game flow
-    bool isInCheckmate();
+    bool whiteKingCanMove();
+
+    bool blackKingCanMove();
+
     bool isInCheck();
-    bool isInStalemate();
+
 
     // allow a single undo
     void undo();
