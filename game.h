@@ -32,10 +32,15 @@ public:
     void makeMove(const std::string &startPos, const std::string &endPos);
 
     // Returns true if the current player is in check
-    bool isInCheck() const;
+    std::string isInCheck() const;
+
+    bool Game::whiteKingCanMove();
+
+    bool Game::blackKingCanMove();
 
     // Returns true if the current player is in checkmate
-    bool isInCheckmate() const;
+    bool isWhiteInCheckmate() const;
+    bool isBlackInCheckmate() const;
 
     // Undoes the last move made
     void undo();

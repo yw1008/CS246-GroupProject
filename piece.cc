@@ -114,9 +114,9 @@ void Piece::changeState(bool adding, bool isWhite){ // when adding is running ad
     if(adding){
         if(isWhite){
             if(state.stateType == stateType::blackCheck){ // blackCheck is the piece where black piece can check
-                state = State{stateType::bothCheck, state.hasMoved, state.colour};
+                state = State{stateType::bothCheck, state.colour};
             } else{
-                state = State{stateType::whiteCheck, ps.hasMoved, ps.colour};
+                state = State{stateType::whiteCheck, ps.colour};
             }
         } else {
             if(state.stateType == stateType::whiteCheck){
@@ -153,6 +153,10 @@ vector<Position> Piece::nextMove(){ // to Board Class can get the vector of poss
 
 vector<moveType> Piece::getMoveType(){
     return mT;
+}
+
+void Piece::setState(stateType sT, Colour c){
+    state = {sT, c};
 }
 
 void Piece::removePiece(){

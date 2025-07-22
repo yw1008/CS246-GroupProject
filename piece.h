@@ -27,8 +27,6 @@ class Piece: public Subject, public Observer {
     public:
         virtual bool isValid(const Position &to) = 0; // Check the received move is in 
 
-        void Piece::changeState()
-
         Info getInfo() const override;
 
         Colour getColour();
@@ -39,6 +37,8 @@ class Piece: public Subject, public Observer {
 
         State getState();
 
+        void setState(stateType sT, Colour c);
+
         std::vector<Position> nextMove();
 
         char getType() const;
@@ -47,7 +47,7 @@ class Piece: public Subject, public Observer {
 
         void removePiece();
 
-        vector<moveType> Piece::getMoveType();
+        vector<moveType> getMoveType();
 };
 
 #endif
