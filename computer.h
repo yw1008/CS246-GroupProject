@@ -8,17 +8,15 @@ class Computer : public Player {
     int level;
 
 public:
-    // Constructor
     Computer(bool isWhite, int level);
-
-    // Get the difficulty level
     int getLevel() const;
-
-    // Perform a move
     void move(Board &board);
-
-    // Destructor
     ~Computer() override;
+
+private:
+    void moveLevel1(Board &board);
+    void moveLevel2(Board &board);
+    void moveLevel3(Board &board);
 };
 
 #endif
