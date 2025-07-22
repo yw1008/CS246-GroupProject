@@ -49,8 +49,7 @@ void Game::makeMove(const string &startPos, const string &endPos) {
 
     // Move piece from startPos to endPos
     char type = board->getPiece(startPos);
-    board->removePiece(startPos);
-    board->addPiece(type, endPos);
+    board->makeMove(startPos, endPos);
 
     if (isInCheckmate()) {
         if (isWhiteTurn) {
