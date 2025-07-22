@@ -3,7 +3,7 @@
 #include <string>
 #include "Game.h"
 
-Human::Human(bool isWhite) : Player(true, isWhite) {}
+Human::Human(bool isWhite) : Player{true, isWhite} {}
 
 Human::~Human() {}
 
