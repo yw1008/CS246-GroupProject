@@ -40,6 +40,7 @@ public:
 
     // Returns true if the current player is in checkmate
     bool isWhiteInCheckmate() const;
+    
     bool isBlackInCheckmate() const;
 
     // Undoes the last move made

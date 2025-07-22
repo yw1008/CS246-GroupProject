@@ -47,42 +47,28 @@ void Game::makeMove(const string &startPos, const string &endPos) {
         return;
     }
 
-<<<<<<< HEAD
-    // Unsure for now
-    board->removePiece(startPos);
-    board->addPiece(board->getPieceAt(startPos), endPos);
-
-    if(isInCheck() == "white"){
-        if(whiteKingCanMove()){
-
-        } else{
-=======
     // Move piece from startPos to endPos
     char type = board->getPiece(startPos);
     board->makeMove(startPos, endPos);
->>>>>>> 30088af9cf6654fa1978d4f599402c2f87891b18
-
-        }
-    } else if(isInCheck() == "black"){
-        if(blackKingCanMove()){
-
-        } else{
-
-        }
-    } else if(isInCheck() == "both"){
-        if(){
-
-        } else if(){
-
-        } else if(){
-
-        } else {
-
-        }
+    if(isWhiteInCheckmate()){
+        cout << "Checkmate! Black wins!\n";
+        isFinished = true;
+    } else if(isBlackInCheckmate()){
+        cout << "Checkmate! White wins!\n";
+        isFinished = true;
     } else {
-        if(board->isInStalemate()){
+        if(isInCheck() = "white"){
+            cout << "White is in check.\n";
+        } else if(isInCheck() = "black"){
+            cout << "Black is in check.\n";
+        } else if(isInCheck() = "both"){
+            cout << "White is in check.\n";
+            cout << "Black is in check.\n";
+        } else {
+            if(board->isInStalemate()){
             cout << "Stalemate!\n"
             isFinished = true;
+            }
         }
     }
     // Change turn
@@ -117,10 +103,10 @@ bool Game::isWhiteInCheckmate() const {
         return false;
     }
     if(isInCheck() == "white"){
-        if(whiteKingCanMove()) return true;
+        if(!whiteKingCanMove()) return true;
         return false;
     } else if(isInCheck()  == "both"){
-        if(whiteKingCanMove()) return true;
+        if(!whiteKingCanMove()) return true;
         return false;
     } else {
         return false;
@@ -133,10 +119,10 @@ bool Game::isBlackInCheckmate() const {
         return false;
     }
     if(isInCheck() == "black"){
-        if(blackKingCanMove()) return true;
+        if(!blackKingCanMove()) return true;
         return false;
     } else if(isInCheck()  == "both"){
-        if(blackKingCanMove()) return true;
+        if(!blackKingCanMove()) return true;
         return false;
     } else {
         return false;

@@ -110,34 +110,6 @@ void Piece::addPiece(pieceType p, Colour c){
     notifyObservers();   
 }
 
-void Piece::changeState(bool adding, bool isWhite){ // when adding is running adding = true, if is White turn isWhite = true
-    if(adding){
-        if(isWhite){
-            if(state.stateType == stateType::blackCheck){ // blackCheck is the piece where black piece can check
-                state = State{stateType::bothCheck, state.colour};
-            } else{
-                state = State{stateType::whiteCheck, ps.colour};
-            }
-        } else {
-            if(state.stateType == stateType::whiteCheck){
-                state = State{stateType::bothCheck, state.hasMoved, state.colour};
-            } else {
-                state = State{stateType::blackCheck, state.hasMoved, state.colour};
-            }
-        }
-    } else {
-        if(state.stateType == stateType::bothCheck){
-            if(isWhite){
-                state = State{stateType::blackCheck, state.hasMoved, state.colour};
-            } else {
-                state = State{stateType::whiteCheck, state.hasMoved, state.colour};
-            }
-        } else {
-            state = State{stateType::Nothing, state.hasMoved, state.colour};
-        }
-    }
-}
-
 State Piece::getState(){
     return state;
 }

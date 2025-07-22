@@ -71,12 +71,12 @@ public:
 
     std::string isInCheck();
 
-    bool isStalemate()
+    bool isStalemate();
 
     // allow a single undo
     void undo();
 
-    std::vector<Position> allPossibleMoves()
+    std::vector<Position> allPossibleMoves();
 
     std::unique_ptr<std::vector<Position>> getNextMove(std::string startPos);
 };
