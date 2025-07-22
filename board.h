@@ -25,8 +25,14 @@ public:
 
     ~Board(); // dtor
 
+    pieceType getPieceType(char piece);
+
+    Colour getPieceColor(char piece);
+
     // convert string position into vector of size_t (row,col)
     std::vector<int> intPos(const std::string& pos);
+
+    void setUp();
 
     // construct board with pieces in the default position
     void defBoard(); // ctor
@@ -40,10 +46,10 @@ public:
     // move piece from startpos to endpos
     void makeMove(std::string startPos, std::string endPos);
 
-    // add char type of piece on the string position
-    void addPiece(char piece, std::string pos);
-    // remove piece on the string position
-    void removePiece(std::string pos);
+    // // add char type of piece on the string position
+    // void addPiece(char piece, std::string pos);
+    // // remove piece on the string position
+    // void removePiece(std::string pos);
 
     // change the turn of player
     void changeTurn();

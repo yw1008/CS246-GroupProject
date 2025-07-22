@@ -3,6 +3,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
+
 #include <memory>
 
 const int BOARD_SIZE = 8;
@@ -24,23 +25,136 @@ Board::~Board() {
 }
 
 std::vector<int> intPos(const std::string& pos) {
-    std::vector<int> intPos(2);  // Make sure the vector has space for 2 elements
+    if (pos.size() != 2) {
+        throw std::invalid_argument("Position must be 2 characters long.");
+    }
 
     char col = pos[0];
     char row = pos[1];
 
+    // Check if column is in 'a' to 'h'
+    if (col < 'a' || col > 'h') {
+        throw std::invalid_argument("Column must be between 'a' and 'h'.");
+    }
+
+    // Check if row is in '1' to '8'
+    if (row < '1' || row > '8') {
+        throw std::invalid_argument("Row must be between '1' and '8'.");
+    }
+
+    std::vector<int> intPos(2);
+
     // Convert column character 'a'–'h' to integer 0–7
     intPos[0] = col - 'a';
 
-    // Convert row character '1'–'8' to integer 0–7 using stringstream
-    std::stringstream ss;
-    ss << row;
-    int rowInt;
-    ss >> rowInt;
-
-    intPos[1] = rowInt - 1;  // zero-based indexing
+    // Convert row character '1'–'8' to integer 0–7
+    // You can simplify conversion by subtracting '1'
+    intPos[1] = row - '1';
 
     return intPos;
+}
+
+// std::vector<int> intPos(const std::string& pos) {
+//     std::vector<int> intPos(2);  // Make sure the vector has space for 2 elements
+
+//     char col = pos[0];
+//     char row = pos[1];
+
+//     // Convert column character 'a'–'h' to integer 0–7
+//     intPos[0] = col - 'a';
+
+//     // Convert row character '1'–'8' to integer 0–7 using stringstream
+//     std::stringstream ss;
+//     ss << row;
+//     int rowInt;
+//     ss >> rowInt;
+
+//     intPos[1] = rowInt - 1;  // zero-based indexing
+
+//     return intPos;
+// }
+
+pieceType getPieceType(char piece) {
+    switch (std::toupper(piece)) {
+        case 'K': return pieceType::King;
+        case 'Q': return pieceType::Queen;
+        case 'R': return pieceType::Rook;
+        case 'B': return pieceType::Bishop;
+        case 'N': return pieceType::Knight;
+        case 'P': return pieceType::Pawn;
+        default:
+            throw std::invalid_argument("Invalid piece type.");
+    }
+}
+
+Colour getPieceColor(char piece) {
+    if (piece == 'P' || piece == 'K' || piece == 'Q' || piece == 'N' || piece == 'B' || piece == 'R') {
+        return Colour::Black;
+    } else if (piece == 'p' || piece == 'k' || piece == 'q' || piece == 'n' || piece == 'b' || piece == 'r') {
+        return Colour::White;
+    } else {
+        throw std::invalid_argument("Invalid piece color.");
+    }
+}
+
+void Board::setUp() {
+    std::string cmd;
+
+    std::cout << "Entered setup mode. Type 'done' when you're finished.\n";
+
+    while (std::cin >> cmd) {
+        if (cmd == "+") { // add piece
+            char piece;
+            std::string pos;
+            std::cin >> piece >> pos;
+
+            try {
+                std::vector<int> coords = intPos(pos);
+                int row = coords[1];
+                int col = coords[0];
+
+                pieceType pt = getPieceType(piece);     // may throw
+                Colour c = getPieceColor(piece);        // may throw
+
+                theBoard[row][col].addPiece(pt, c);     // assumes no throw
+                theBoard[row][col].setMoveType();       // sets en passant, etc.
+            } catch (std::invalid_argument &e) {
+                std::cerr << "Error: " << e.what() << '\n';
+            }
+
+        } else if (cmd == "-") { // remove piece
+            std::string pos;
+            std::cin >> pos;
+
+            try {
+                std::vector<int> coords = intPos(pos);
+                int row = coords[1];
+                int col = coords[0];
+                if (theBoard[row][col].getPieceType() != ' ') {
+                    theBoard[row][col].removePiece(); // Assume you have removePiece() method
+                }
+            } catch (std::invalid_argument &e) {
+                std::cerr << "Error: " << e.what() << '\n';
+            }
+
+        } else if (cmd == "=") { // change turn (colour)
+            std::string color;
+            std::cin >> color;
+            if (color == "white") {
+                isWhite = true; // Assume you have enum Colour { White, Black }
+            } else if (color == "black") {
+                isWhite = false;
+            } else {
+                std::cerr << "Invalid colour.\n";
+            }
+
+        } else if (cmd == "done") { // done
+            break;
+        } else { // input command error
+            std::cerr << "Unknown command.\n"; 
+        }
+    }
+    std::cout << "Exited setup mode.\n"; // finish the setup
 }
 
 
@@ -112,32 +226,57 @@ void Board::init() {
 
 }
 
+// need as a piece type? or not even needed
 char Board::getPiece(std::string pos) {
-    std::vector intPos = intPos(pos);
-    int r = intPos[1];
-    int c= intPos[0];
-    return theBoard[r][c].getPieceType();
+    std::vector<int>  coords = intPos(pos);
+    int r = coords [1];
+    int c= coords [0];
+    return theBoard[r][c].getType();
 }
 
 void Board::makeMove(std::string startPos, std::string endPos) {
-    std::vector intStartPos = intPos(startPos);
-    int startr = intStartPos[1];
-    int startc= intStartPos[0];
-    std::vector intEndPos = intPos(endPos);
-    int endr = intEndPos[1];
-    int endc= intEndPos[0];
+    int startr, startc, endr, endc;
+
+    try {
+        std::vector<int> intStartPos = intPos(startPos);
+        startc = intStartPos[0];
+        startr = intStartPos[1];
+    } catch (const std::invalid_argument& e) {
+        std::cerr << "Invalid move: start position error - " << e.what() << std::endl;
+        return;
+    }
+
+    try {
+        std::vector<int> intEndPos = intPos(endPos);
+        endc = intEndPos[0];
+        endr = intEndPos[1];
+    } catch (const std::invalid_argument& e) {
+        std::cerr << "Invalid move: end position error - " << e.what() << std::endl;
+        return;
+    }
+
+    // std::vector<int>  intStartPos = intPos(startPos);
+    // int startr = intStartPos[1];
+    // int startc= intStartPos[0];
+    // std::vector<int>  intEndPos = intPos(endPos);
+    // int endr = intEndPos[1];
+    // int endc= intEndPos[0];
+
+    // Colour c;
+    // if (isWhite) c = Colour::White;
+    // else c = Colour::Black;
+
+    // pieceType piece = theBoard[startr][startc].getPieceType(); //get the pieceType of the moving piece
+
+    // // check if the endposition is out of scope
+    // if (endr < 0 || endr > 7 || endc < 0 || endc > 7) {
+    //     std::cerr << "Invalid move: end position is out of scope" << std::endl;
+    //     return;
+    // }
 
     Colour c;
     if (isWhite) c = Colour::White;
     else c = Colour::Black;
-
-    pieceType piece = theBoard[startr][startc].getPieceType(); //get the pieceType of the moving piece
-
-    // check if the endposition is out of scope
-    if (endr < 0 || endr > 7 || endc < 0 || endc > 7) {
-        std::cerr << "Invalid move: end position is out of scope" << std::endl;
-        return;
-    }
 
     if (theBoard[startr][startc].getColour() != c) {
         std::cerr << "Invalid move: must move piece of your colour" << std::endl;
