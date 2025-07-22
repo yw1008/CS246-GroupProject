@@ -4,8 +4,9 @@
 #include <string>
 #include "piece.h"
 #include "player.h"
+#include "textdisplay.h"
+#include "graphicdisplay.h"
 
-class Player;
 class TextDisplay;
 class GraphicDisplay;
 
@@ -13,21 +14,19 @@ class Board {
     std::vector<std::vector<Piece>> theBoard; // The actual board
     bool isWhite;
     bool isFinish;
-    Board prev; // storing previous board data
+    // Board prev; // storing previous board data
 
     TextDisplay *td = nullptr;
     GraphicDisplay *gd = nullptr;
-
-    Player *whiteP;
-    Player *blackP;
+    
 public:
     // construct empty board without pieces
-    Board(); // default ctor
+    // Board(); // default ctor
 
     ~Board(); // dtor
 
     // convert string position into vector of size_t (row,col)
-    std::vector intPos(std::string pos);
+    std::vector<int> intPos(const std::string& pos);
 
     // construct board with pieces in the default position
     void defBoard(); // ctor

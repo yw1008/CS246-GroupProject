@@ -6,24 +6,23 @@
 
 const int BOARD_SIZE = 8;
 
-Board::Board(): 
-        theBoard{BOARD_SIZE, std::vector<Piece>(BOARD_SIZE)}, 
-        isWhite{true}, isFinish{false}, prev{""}, 
-        whiteP{Player *wp}, balckP{Player *bp} {
-    for (int r = 0; r < BOARD_SIZE; ++r) {
-        for (int c = 0; c < BOARD_SIZE; ++c) {
-            if (c%2 == 0) theBoard[r][c].type = ' ';
-            else theBoard[r][c].type = '_';
-        }
-    }
-} // not sure about the player for now
+// Board::Board(): 
+//         theBoard{BOARD_SIZE, std::vector<Piece>(BOARD_SIZE)}, 
+//         isWhite{true}, isFinish{false}, prev{""} {
+//     for (int r = 0; r < BOARD_SIZE; ++r) {
+//         for (int c = 0; c < BOARD_SIZE; ++c) {
+//             if (c%2 == 0) theBoard[r][c].type = ' ';
+//             else theBoard[r][c].type = '_';
+//         }
+//     }
+// } // not sure about the player for now
 
 Board::~Board() {
     delete td;
     delete gd;
 }
 
-std::vector<int> Board::intPos(std::string pos) {
+std::vector<int> intPos(const std::string& pos) {
     std::vector<int> intPos(2);  // Make sure the vector has space for 2 elements
 
     char col = pos[0];
@@ -48,30 +47,48 @@ void Board::defBoard() { // use add piece to place default pieces
     // black
     //pawn
     for (int c = 0; c < BOARD_SIZE; ++c) {
-        theBoard[1][c].type = 'p';
+        theBoard[1][c].addPiece(pieceType::Pawn, Colour::Black);
+        theBoard[1][c].setMoveType();
     }
-    theBoard[0][0].type = 'r';
-    theBoard[0][1].type = 'n';
-    theBoard[0][2].type = 'b';
-    theBoard[0][3].type = 'q';
-    theBoard[0][4].type = 'k';
-    theBoard[0][5].type = 'b';
-    theBoard[0][6].type = 'n';
-    theBoard[0][7].type = 'r';
+    theBoard[0][0].addPiece(pieceType::Rook, Colour::Black);
+    theBoard[0][0].setMoveType();
+    theBoard[0][1].addPiece(pieceType::Knight, Colour::Black);
+    theBoard[0][1].setMoveType();
+    theBoard[0][2].addPiece(pieceType::Bishop, Colour::Black);
+    theBoard[0][2].setMoveType();
+    theBoard[0][3].addPiece(pieceType::Queen, Colour::Black);
+    theBoard[0][3].setMoveType();
+    theBoard[0][4].addPiece(pieceType::King, Colour::Black);
+    theBoard[0][4].setMoveType();
+    theBoard[0][5].addPiece(pieceType::Bishop, Colour::Black);
+    theBoard[0][5].setMoveType();
+    theBoard[0][6].addPiece(pieceType::Knight, Colour::Black);
+    theBoard[0][6].setMoveType();
+    theBoard[0][7].addPiece(pieceType::Rook, Colour::Black);
+    theBoard[0][7].setMoveType();
 
     //white
     //pawn
     for (int c = 0; c < BOARD_SIZE; ++c) {
-        theBoard[6][c].type = 'P';
+        theBoard[6][c].addPiece(pieceType::Pawn, Colour::White);
+        theBoard[6][c].setMoveType();
     }
-    theBoard[7][0].type = 'R';
-    theBoard[7][1].type = 'N';
-    theBoard[7][2].type = 'B';
-    theBoard[7][3].type = 'Q';
-    theBoard[7][4].type = 'K';
-    theBoard[7][5].type = 'B';
-    theBoard[7][6].type = 'N';
-    theBoard[7][7].type = 'R';
+    theBoard[7][0].addPiece(pieceType::Rook, Colour::White);
+    theBoard[7][0].setMoveType();
+    theBoard[7][1].addPiece(pieceType::Knight, Colour::White);
+    theBoard[7][1].setMoveType();
+    theBoard[7][2].addPiece(pieceType::Bishop, Colour::White);
+    theBoard[7][2].setMoveType();
+    theBoard[7][3].addPiece(pieceType::Queen, Colour::White);
+    theBoard[7][3].setMoveType();
+    theBoard[7][4].addPiece(pieceType::King, Colour::White);
+    theBoard[7][4].setMoveType();
+    theBoard[7][5].addPiece(pieceType::Bishop, Colour::White);
+    theBoard[7][5].setMoveType();
+    theBoard[7][6].addPiece(pieceType::Knight, Colour::White);
+    theBoard[7][6].setMoveType();
+    theBoard[7][7].addPiece(pieceType::Rook, Colour::White);
+    theBoard[7][7].setMoveType();
 }
 
 void Board::init() {
@@ -83,9 +100,9 @@ void Board::init() {
 
     // clear existing board if necessary
     theBoard.clear();
-    for (int r = 0; r < n; ++r) {
+    for (int r = 0; r < BOARD_SIZE; ++r) {
         theBoard[r].reserve(BOARD_SIZE);
-        for (int c = 0; c < n; ++c) {
+        for (int c = 0; c < BOARD_SIZE; ++c) {
             theBoard[r].emplace_back(Piece(r,c));
             theBoard[r][c].attach(td); // text
             theBoard[r][c].attach(gd); // graphics
@@ -98,7 +115,7 @@ char Board::getPiece(std::string pos) {
     std::vector intPos = intPos(pos);
     int r = intPos[1];
     int c= intPos[0];
-    return theBoard[r][c].getName();
+    return theBoard[r][c].getPieceType();
 }
 
 void Board::makeMove(std::string startPos, std::string endPos) {
@@ -113,23 +130,47 @@ void Board::makeMove(std::string startPos, std::string endPos) {
     if (isWhite) c = Colour::White;
     else c = Colour::Black;
 
-    pieceType piece = theBoard[startr][startc].getPieceType; //get the pieceType of the moving piece
+    pieceType piece = theBoard[startr][startc].getPieceType(); //get the pieceType of the moving piece
 
-    if (theBoard[startr][startc].isWhite != isWhite) {
+    // check if the endposition is out of scope
+    if (endr < 0 || endr > 7 || endc < 0 || endc > 7) {
+        std::cerr << "Invalid move: end position is out of scope" << std::endl;
+        return;
+    }
+
+    if (theBoard[startr][startc].getColour() != c) {
         std::cerr << "Invalid move: must move piece of your colour" << std::endl;
         return;
     }
 
-    if (theBoard[endr][endc] != pieceType::Nothing) {
+    // check it the movement is correct for the piece type
+    Position toPos{endc, endr};
+    bool isValid = theBoard[startr][startc].isValid(toPos);
+    if(!isValid) {
+        std::cerr << "Invalid move for the piece type" << std::endl;
+        return;
+    }
+
+    vector<moveType> possibleMove = theBoard[startr][startc].getMoveType();
+    for (int i = 0; i < possibleMove.size; ++i) {
+        // if (possibleMove[i] == toPos) {
+        //     std::cerr << "Invalid move for the piece type" << std::endl;
+        //     return;
+        // }
+        
+
+    }
+
+    if (theBoard[endr][endc].getPieceType() != pieceType::Nothing) {
         // catching the same coloured piece
-        if (theBoard[endr][endc].isWhite == isWhite) {
+        if (theBoard[endr][endc].getColour() == c) {
             std::cerr << "Invalid move: Catching the same coloured piece" << std::endl;
             return;
         }
         //if the move catch the other piece
         else theBoard[endr][endc].removePiece();
     }
-    theBoard[startr][startc].removePiece()
+    theBoard[startr][startc].removePiece();
     theBoard[endr][endc].addPiece(piece, c);
 }
 
