@@ -151,14 +151,51 @@ void Board::makeMove(std::string startPos, std::string endPos) {
         return;
     }
 
+    Position diffPos;
+    diffPos.col = endc - startc;
+    diffPos.row = endr - startr;
     vector<moveType> possibleMove = theBoard[startr][startc].getMoveType();
-    for (int i = 0; i < possibleMove.size; ++i) {
-        // if (possibleMove[i] == toPos) {
-        //     std::cerr << "Invalid move for the piece type" << std::endl;
-        //     return;
-        // }
+    moveType correctMove;
+    if (possibleMove[1].repeatable) {
+        for (int i = 0; i < possibleMove.size; ++i) {
+            if (possibleMove[i].rowChange < 0 && diffPos.row < 0) {
+                if (possibleMove[i].colChange < 0 && diffPos < 0) {
+                    correctMove = possibleMove[i];
+                } else if (possibleMove[i].colChange > 0 && diffPos > 0) {
+                    correctMove = possibleMove[i];
+                } else if (possibleMove[i].colChange == 0 && diffPos == 0) {
+                    correctMove = possibleMove[i];
+                }
+            } else if (possibleMove[i].rowChange > 0 && diffPos.row > 0) {
+                if (possibleMove[i].colChange < 0 && diffPos < 0) {
+                    correctMove = possibleMove[i];
+                } else if (possibleMove[i].colChange > 0 && diffPos > 0) {
+                    correctMove = possibleMove[i];
+                } else if (possibleMove[i].colChange == 0 && diffPos == 0) {
+                    correctMove = possibleMove[i];
+                }
+            } else if (possibleMove[i].rowChange == 0 && diffPos.row == 0) {
+                if (possibleMove[i].colChange < 0 && diffPos < 0) {
+                    correctMove = possibleMove[i];
+                } else if (possibleMove[i].colChange > 0 && diffPos > 0) {
+                    correctMove = possibleMove[i];
+                } else if (possibleMove[i].colChange == 0 && diffPos == 0) {
+                    correctMove = possibleMove[i];                
+                }
+            }
+        }
         
+        for (int j = 1; j < BOARD_SIZE + 1; ++j) {
+            int tempc = correctMove.colChange * j + startc;
+            int tempr = correctMove.rowChange * j + startr;
 
+            if (tempc == endc && tempr == endr) break; // escape if the loop gets to the end posisiton
+            
+            if (theBoard[tempr][tempc].getPieceType() != pieceType::Nothing) {
+                std::cerr << "Invalid move: another piece blocks the way" << std::endl;
+                return;
+            }
+        } 
     }
 
     if (theBoard[endr][endc].getPieceType() != pieceType::Nothing) {
