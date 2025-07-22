@@ -3,7 +3,7 @@
 #include <string>
 #include <iostream>
 #include <sstream>
-
+#include "info.h"
 #include <memory>
 
 const int BOARD_SIZE = 8;
@@ -174,6 +174,7 @@ void Board::defBoard() { // use add piece to place default pieces
     theBoard[0][3].addPiece(pieceType::Queen, Colour::Black);
     theBoard[0][3].setMoveType();
     theBoard[0][4].addPiece(pieceType::King, Colour::Black);
+    blackK = {0, 4};
     theBoard[0][4].setMoveType();
     theBoard[0][5].addPiece(pieceType::Bishop, Colour::Black);
     theBoard[0][5].setMoveType();
@@ -197,6 +198,7 @@ void Board::defBoard() { // use add piece to place default pieces
     theBoard[7][3].addPiece(pieceType::Queen, Colour::White);
     theBoard[7][3].setMoveType();
     theBoard[7][4].addPiece(pieceType::King, Colour::White);
+    whiteK = {4, 7};
     theBoard[7][4].setMoveType();
     theBoard[7][5].addPiece(pieceType::Bishop, Colour::White);
     theBoard[7][5].setMoveType();
@@ -349,6 +351,13 @@ void Board::makeMove(std::string startPos, std::string endPos) {
     }
     theBoard[startr][startc].removePiece();
     theBoard[endr][endc].addPiece(piece, c);
+    if(theBoard[endr][endc].getPieceType() == pieceType::King){
+        if(theBoard[endr][endc].getColour() == Colour::White){
+            whiteK = {endc, endr};
+        } else {
+            blackK = {endc, endr};
+        }
+    }
 }
 
 void Board::changeTurn() {
@@ -376,11 +385,49 @@ std::vector<std::unique_ptr<Position>> Board::getNextMove(std::string startPos){
     return nextPos;
 } //Use it to a = getNextMove(...); theBoard[a[i].row][a[i].col].notify(..., true, true)
 
-bool Board::isInCheckmate();
+string Board::isInCheck(){
+    int wC = whiteK.col;
+    int wR = whiteK.row;
+    int bC = blackK.col;
+    int bR = blackK.row;
+    if(theBoard[wR][wC].getState().stateType == stateType::whiteCheck || theBoard[wR][wC].getState().stateType == stateType::bothCheck){
+        if(theBoard[bR][bC].getState().stateType == stateType::blackCheck || theBoard[bR][bC].getState().stateType == stateType::bothCheck){
+            return "both";
+        } else{
+            return "white";
+        }
+    } else if(theBoard[bR][bC].getState().stateType == stateType::blackCheck || theBoard[bR][bC].getState().stateType == stateType::bothCheck){
+        if(theBoard[wR][wC].getState().stateType == stateType::whiteCheck || theBoard[wR][wC].getState().stateType == stateType::bothCheck){
+            return "both";
+        } else{
+            return "black";
+        }
+    } else {
+        return "nothing";
+    }
+}
 
-bool Board::isInCheck();
+bool Board::whiteKingCanMove(){
+    std::vector<Position> nextW = theBoard[whiteK.row][whiteK.col].nextMove();
+    for(int i = 0; i < nextW.size(); ++i){
+        Piece nextMove = theBoard[whiteK.row + nextW[i].row][whiteK.col + nextW[i].col];
+        if(nextMove.getColour() == Colour::White || nextMove.getState().stateType == stateType::whiteCheck || nextMove.getState().stateType == stateType::bothCheck){
+            return false;
+        }
+    }
+    return true;
+}
 
-bool Board::isInStalemate();
+bool Board::blackKingCanMove(){
+    std::vector<Position> nextB = theBoard[blackK.row][blackK.col].nextMove();
+    for(int i = 0; i < nextB.size(); ++i){
+        Piece nextMove = theBoard[blackK.row + nextB[i].row][blackK.col + nextB[i].col];
+        if(nextMove.getColour() == Colour::Black || nextMove.getState().stateType == stateType::blackCheck || nextMove.getState().stateType == stateType::bothCheck){
+            return false;
+        }
+    }
+    return true;
+}
 
 // allow a single undo
 void Board::undo() {
