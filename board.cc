@@ -180,7 +180,9 @@ void Board::changeTurn() {
 }
 
 bool Board::isInCheckmate();
+
 bool Board::isInCheck();
+
 bool Board::isInStalemate();
 
 // allow a single undo
