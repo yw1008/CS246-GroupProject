@@ -14,12 +14,12 @@ TextDisplay::TextDisplay()
     }
 }
 
-void notify(Subject &whoNotified) {
+void TextDisplay::notify(Subject &whoNotified) {
     // need end position and the type of the piece (with color) that is moved. 
     // for now just assume each variable represent those two
     Info info = whoNotified.getInfo();
     Colour c = info.colour;
-    pieceType type = info.pieceType;
+    pieceType type = info.piecetype;
     if (c == Colour::White) {
         if (type == pieceType::King) theTD[info.pos.row][info.pos.col] = 'K';
         else if (type == pieceType::Queen) theTD[info.pos.row][info.pos.col] = 'Q';

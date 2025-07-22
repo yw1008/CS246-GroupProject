@@ -9,16 +9,11 @@ class Observer;
 
 class Subject{
     vector<Observer*> observers;
-    State state;
-
-    protected:
-        void setState(State newS);
 
     public:
         void notifyObservers();
         void attach(Observer *ob);
         virtual Info getInfo() const = 0;
-        State getState() const;
 };
 
 #endif

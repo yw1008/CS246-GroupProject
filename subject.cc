@@ -10,6 +10,3 @@ void Subject::attach(Observer *ob) {
 void Subject::notifyObservers() {
     for (auto &ob : observers) ob->notify(*this);
 }
-
-void Subject::setState(State newS) { state = newS; }
-State Subject::getState() const { return state; }

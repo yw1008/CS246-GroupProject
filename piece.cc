@@ -58,17 +58,33 @@ void Piece::setMoveType(){
     } else if(pT == pieceType::Bishop){
         mT = {moveType{1, 1, true}, moveType{1, -1, true}, moveType{-1, 1, true}, moveType{-1, -1, true}};
     } else if(pT == pieceType::Pawn){
-        if(isFirstMove){
-        if(isEnPassant){
-            mT = {moveType{0, 1, false}, moveType{1, 1, false}, moveType{-1, 1, false}, moveType{0, 2, false}};
-        } else{
-            mT = {moveType{0, 1, false}, moveType{0, 2, false}};
-        }
-        } else{
+        if(colour = Colour::White){
+            if(isFirstMove){
             if(isEnPassant){
-                mT = {moveType{0, 1, false}, moveType{1, 1, false}, moveType{-1, 1, false}};
+                mT = {moveType{0, 1, false}, moveType{1, 1, false}, moveType{-1, 1, false}, moveType{0, 2, false}};
             } else{
-                mT = {moveType{0, 1, false}};
+                mT = {moveType{0, 1, false}, moveType{0, 2, false}};
+            }
+            } else{
+                if(isEnPassant){
+                    mT = {moveType{0, 1, false}, moveType{1, 1, false}, moveType{-1, 1, false}};
+                } else{
+                    mT = {moveType{0, 1, false}};
+                }
+            }
+        } else {
+            if(isFirstMove){
+            if(isEnPassant){
+                mT = {moveType{0, -1, false}, moveType{-1, -1, false}, moveType{1, -1, false}, moveType{0, -2, false}};
+            } else{
+                mT = {moveType{0, -1, false}, moveType{0, -2, false}};
+            }
+            } else{
+                if(isEnPassant){
+                    mT = {moveType{0, -1, false}, moveType{-1, -1, false}, moveType{1, -1, false}};
+                } else{
+                    mT = {moveType{0, -1, false}};
+                }
             }
         }
     }
@@ -90,47 +106,43 @@ void Piece::addPiece(pieceType p, Colour c){
     pT = p;
     colour = c;
     setMoveType();
-    isFirstMove = false;   
+    isFirstMove = false;
+    notifyObservers();   
 }
 
-void Piece::notify(Subject &whoFrom, bool adding, bool isWhite){ // whoFrom is next possible moved piece 
-    State ps = whoFrom.getState();
-
+void Piece::changeState(bool adding, bool isWhite){ // when adding is running adding = true, if is White turn isWhite = true
     if(adding){
         if(isWhite){
-            if(ps.stateType == stateType::blackCheck){ // blackCheck is the piece where black piece can check
-                setState(State{stateType::bothCheck, ps.hasMoved, ps.colour});
-                notifyObservers();
+            if(state.stateType == stateType::blackCheck){ // blackCheck is the piece where black piece can check
+                state = State{stateType::bothCheck, state.hasMoved, state.colour};
             } else{
-                setState(State{stateType::whiteCheck, ps.hasMoved, ps.colour});
-                notifyObservers();
+                state = State{stateType::whiteCheck, ps.hasMoved, ps.colour};
             }
         } else {
-            if(ps.stateType == stateType::whiteCheck){
-                setState(State{stateType::bothCheck, ps.hasMoved, ps.colour});
-                notifyObservers();
+            if(state.stateType == stateType::whiteCheck){
+                state = State{stateType::bothCheck, state.hasMoved, state.colour};
             } else {
-                setState(State{stateType::blackCheck, ps.hasMoved, ps.colour});
-                notifyObservers();
+                state = State{stateType::blackCheck, state.hasMoved, state.colour};
             }
         }
     } else {
-        if(ps.stateType == stateType::bothCheck){
+        if(state.stateType == stateType::bothCheck){
             if(isWhite){
-                setState(State{stateType::blackCheck, ps.hasMoved, ps.colour});
-                notifyObservers();
+                state = State{stateType::blackCheck, state.hasMoved, state.colour};
             } else {
-                setState(State{stateType::whiteCheck, ps.hasMoved, ps.colour});
-                notifyObservers();
+                state = State{stateType::whiteCheck, state.hasMoved, state.colour};
             }
         } else {
-            setState(State{stateType::Nothing, ps.hasMoved, ps.colour});
-            notifyObservers();
+            state = State{stateType::Nothing, state.hasMoved, state.colour};
         }
     }
 }
 
-vector<Position> Piece::nextMove(){ // to Board Class can get the vector of possible next move point
+State Piece::getState(){
+    return state;
+}
+
+vector<Position> Piece::nextMove(){ // to Board Class can get the vector of possible next move point who are not repeatable
     vector<Position> nextmove;
     for(int i = 0; i < mT.size(); ++i){
         Position next{pos.col + mT[i].colChange, pos.row + mT[i].rowChange};
