@@ -3,6 +3,8 @@
 
 using namespace std;
 
+const std::size_t BOARD_SIZE = 8;
+
 TextDisplay::TextDisplay()
     : theTD(BOARD_SIZE, vector<char>(BOARD_SIZE)) {
     for (size_t r = 0; r < BOARD_SIZE; ++r) {
@@ -44,7 +46,7 @@ ostream &operator<<(ostream &out, const TextDisplay &td) {
         out << colNum << " ";
         --colNum;
         for (size_t c = 0; c < BOARD_SIZE; ++c) {
-            out << td[r][c];
+            out << td.theTD[r][c];
         }
         out << endl;
     }

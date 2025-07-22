@@ -347,10 +347,24 @@ void Board::makeMove(std::string startPos, std::string endPos) {
             return;
         }
         //if the move catch the other piece
-        else theBoard[endr][endc].removePiece();
+        else {
+            prev.removedPiece = theBoard[endr][endc].getPieceType();
+            prev.removedColour = theBoard[endr][endc].getColour();
+            theBoard[endr][endc].removePiece();
+        }
     }
+    else {
+        prev.removedPiece = theBoard[endr][endc].getPieceType();
+        prev.removedColour = theBoard[endr][endc].getColour();
+    }
+    prev.startPos.col = startc;
+    prev.startPos.row = startr;
+    prev.endPos.col = endc;
+    prev.endPos.row = endr;
+    prev.isEmpty = false;
     theBoard[startr][startc].removePiece();
     theBoard[endr][endc].addPiece(piece, c);
+
     if(theBoard[endr][endc].getPieceType() == pieceType::King){
         if(theBoard[endr][endc].getColour() == Colour::White){
             whiteK = {endc, endr};
@@ -398,6 +412,8 @@ std::vector<Position> Board::allPossibleMoves(){
             }
         }
     }
+
+    return nextmoves;
 }
 
 bool Board::isStalemate(){
@@ -471,8 +487,20 @@ bool Board::blackKingCanMove(){
 // allow a single undo
 void Board::undo() {
     // check if there is previous move
-    if (prev == "") std::cerr << "There is no previous action" << std::endl; 
-    *this = prev;
+    if (prev.isEmpty) {
+        std::cerr << "There is no previous action" << std::endl; 
+        return;
+    }
+    pieceType movedPiece = theBoard[prev.endPos.row][prev.endPos.col].getPieceType();
+    Colour movedColor = theBoard[prev.endPos.row][prev.endPos.col].getColour();
+    // return moved piece
+    theBoard[prev.startPos.row][prev.startPos.col].addPiece(movedPiece, movedColor);
+    theBoard[prev.endPos.row][prev.endPos.col].removePiece();
+    // return removed piece if there exists
+    if (prev.removedPiece != pieceType::Nothing) {
+        theBoard[prev.endPos.row][prev.endPos.col].addPiece(prev.removedPiece, prev.removedColour);
+    }
+    prev.isEmpty = true;
 }
 
 std::ostream &operator<<(std::ostream &out, const Board &b) {

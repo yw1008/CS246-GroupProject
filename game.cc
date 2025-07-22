@@ -47,6 +47,7 @@ void Game::makeMove(const string &startPos, const string &endPos) {
         return;
     }
 
+<<<<<<< HEAD
     // Unsure for now
     board->removePiece(startPos);
     board->addPiece(board->getPieceAt(startPos), endPos);
@@ -55,6 +56,11 @@ void Game::makeMove(const string &startPos, const string &endPos) {
         if(whiteKingCanMove()){
 
         } else{
+=======
+    // Move piece from startPos to endPos
+    char type = board->getPiece(startPos);
+    board->makeMove(startPos, endPos);
+>>>>>>> 30088af9cf6654fa1978d4f599402c2f87891b18
 
         }
     } else if(isInCheck() == "black"){

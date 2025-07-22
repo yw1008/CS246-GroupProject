@@ -6,7 +6,7 @@
 #include <ctime>
 #include <cctype>
 
-Computer::Computer(bool isWhite, int lvl) : Player(false, isWhite), level{lvl} {}
+Computer::Computer(bool isWhite, int lvl) : Player{false, isWhite}, level{lvl} {}
 
 Computer::~Computer() {}
 

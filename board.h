@@ -10,13 +10,21 @@
 class TextDisplay;
 class GraphicDisplay;
 
+struct History {
+    Position startPos; // start position of the last move
+    Position endPos; // end position of the last move
+    pieceType removedPiece; // pieceType of the removed piece (if no piece is removed, Nothing)
+    Colour removedColour; // piece colour of the removed piece
+    bool isEmpty = true; // check if there is a last move (no first move is made / have done undo once)
+}
+
 class Board {
     std::vector<std::vector<Piece>> theBoard; // The actual board
     bool isWhite;
     bool isFinish;
     Position whiteK; // position of white King
     Position blackK; // position of black King
-    // Board prev; // storing previous board data
+    History prev; // storing previous move and removed piece (if it exists)
 
     TextDisplay *td = nullptr;
     GraphicDisplay *gd = nullptr;

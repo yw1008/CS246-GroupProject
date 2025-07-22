@@ -1,15 +1,17 @@
 #include "graphicsdisplay.h"
 
+const int cellPixel = 12;
+
 GraphicsDisplay::GraphicsDisplay(size_t n)
     : xw{579, 579}, gridSize{96} {
     if (gridSize > 0) {
         cellSize = 579 / gridSize;
     }
 
-    // fill 12x12 blocks with the same color
+    // fill 13x13 blocks with the same color
     for (size_t r = 0; r < gridSize; ++r) {
         for (size_t c = 0; c < gridSize; ++c) {
-            // Determine which 12x12 block we're in
+            // Determine which 12×12 block we're in
             size_t blockRow = r / 12;
             size_t blockCol = c / 12;
 
@@ -19,4 +21,286 @@ GraphicsDisplay::GraphicsDisplay(size_t n)
             xw.fillRectangle(c * cellSize, r * cellSize, cellSize, cellSize, color);
         }
     }
+}
+
+int GraphicsDisplay::getColorCode(const std::string &color) {
+    if (color == "black") {
+        return Xwindow::Black;
+    } else if (color == "white") {
+        return Xwindow::White;
+    } else {
+        throw std::invalid_argument("Unsupported color: " + color);
+    }
+}
+
+void GraphicsDisplay::drawPawn(size_t boardr, size_t boardc, int cellSize, const std::string &color) {
+    int colourCode = getColorCode(color);
+
+    xw.fillRectangle((3 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((3 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (5 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (6 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (8 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (4 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (5 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (6 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (7 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (8 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (4 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (5 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (6 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (7 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (8 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (5 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (6 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (8 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((8 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((8 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+}
+
+void GraphicsDisplay::drawKing(size_t boardr, size_t boardc, int cellSize, const std::string &color) {
+    int colourCode = getColorCode(color);
+
+    xw.fillRectangle((3 + boardc * 12) * cellSize, (2 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((3 + boardc * 12) * cellSize, (3 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((3 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((3 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (2 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (3 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (5 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (8 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (1 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (2 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (3 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (4 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (5 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (6 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (7 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (8 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (1 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (2 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (3 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (4 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (5 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (6 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (7 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (8 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (2 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (3 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (5 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (8 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((8 + boardc * 12) * cellSize, (2 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((8 + boardc * 12) * cellSize, (3 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((8 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((8 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+}
+
+void GraphicsDisplay::drawQueen(size_t boardr, size_t boardc, int cellSize, const std::string &color) {
+    int colourCode = getColorCode(color);
+
+    xw.fillRectangle((3 + boardc * 12) * cellSize, (1 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((3 + boardc * 12) * cellSize, (2 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((3 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((3 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (2 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (3 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (6 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (8 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (1 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (2 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (3 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (4 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (5 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (6 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (7 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (8 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (1 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (2 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (3 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (4 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (5 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (6 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (7 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (8 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (2 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (3 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (6 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (8 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((8 + boardc * 12) * cellSize, (1 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((8 + boardc * 12) * cellSize, (2 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((8 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((8 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+}
+
+void GraphicsDisplay::drawRook(size_t boardr, size_t boardc, int cellSize, const std::string &color) {
+    int colourCode = getColorCode(color);
+
+    xw.fillRectangle((3 + boardc * 12) * cellSize, (3 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((3 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((3 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (4 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (5 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (6 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (7 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (8 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (3 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (4 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (5 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (6 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (7 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (8 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (3 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (4 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (5 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (6 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (7 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (8 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (4 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (5 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (6 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (7 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (8 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((8 + boardc * 12) * cellSize, (3 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((8 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((8 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+}
+
+void GraphicsDisplay::drawKnight(size_t boardr, size_t boardc, int cellSize, const std::string &color) {
+    int colourCode = getColorCode(color);
+
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (4 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (5 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (3 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (4 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (5 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (7 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (8 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (2 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (3 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (4 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (6 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (7 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (8 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (2 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (3 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (4 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (5 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (6 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (7 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (8 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((8 + boardc * 12) * cellSize, (3 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((8 + boardc * 12) * cellSize, (4 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((8 + boardc * 12) * cellSize, (5 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((8 + boardc * 12) * cellSize, (6 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((8 + boardc * 12) * cellSize, (7 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((8 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((8 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+}
+
+void GraphicsDisplay::drawBishop(size_t boardr, size_t boardc, int cellSize, const std::string &color) {
+    int colourCode = getColorCode(color);
+
+    xw.fillRectangle((3 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((3 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (2 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (3 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (4 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (5 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (8 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((4 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (1 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (2 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (3 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (4 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (5 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (6 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (7 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (8 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((5 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (4 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (5 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (6 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (7 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (8 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((6 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (3 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (4 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (5 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (8 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((7 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+
+    xw.fillRectangle((8 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
+    xw.fillRectangle((8 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);  
 }
