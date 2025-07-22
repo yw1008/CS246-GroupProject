@@ -13,8 +13,8 @@ struct Position{
     int col, row;
 }; // We can use Postion to "Postion next{current.col + colChange, current.row + rowChange};" 
 
-class Info {
-    pieceType pieceType;
+struct Info {
+    pieceType piecetype;
     Colour colour;
     Position pos;   
 };

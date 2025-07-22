@@ -5,12 +5,13 @@
 #include <string>
 
 class Pawn: public Piece {
-    bool isFirstMove = true;
-    bool isEnPassant = false; //for the Pawn class
+    bool isFirstMove;
+    bool isEnPassant; //for the Pawn class
     const std::vector<moveType> possibleWays;
 
     public:
-        Pawn(bool fm, bool ep);
+        // Pawn(bool fm, bool ep, std::vector<moveType> mt);
+        Pawn(bool fm, bool ep, std::vector<moveType> pW);
 
         bool isValid(const string &to) override;
 
@@ -20,7 +21,7 @@ class Pawn: public Piece {
 
         bool getIsFirstMove();
 
-        bool isEnPassant(const string &from, const string &to, const board &b);
+        bool EnPassant(const string &from, const string &to, const board &b);
 
         char promotion();
 };

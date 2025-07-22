@@ -19,21 +19,30 @@ class Piece: public Subject, public Observer {
         pieceType pT;
         Colour colour;
         Position pos;
+        vector<moveType> mT;
+        bool isFirstMove;
+        bool isEnPassant; //for the Pawn class
         //bool isAlive;
     public:
-        virtual bool isValid(const &to) = 0; // Check the received move is in 
+        virtual bool isValid(const Position &to) = 0; // Check the received move is in 
 
-        Info getInfo();
+        Info getInfo() const override;
+
+        Colour getColour();
 
         pieceType getPieceType();
 
+        void setMoveType();
+
+        std::vector<Position> nextMove(Position current, pieceType pType);
+
         char getType() const;
 
-        void addPiece(pieceType p, Colour c);
+        void addPiece(pieceType p, Colour c); //set state and adding Check state on the possible next moves
 
         void removePiece();
 
-        void notify() override;
+        void notify(Subject &whoFrom, bool adding, bool isWhite) override;
 };
 
 #endif
