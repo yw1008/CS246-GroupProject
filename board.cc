@@ -93,7 +93,7 @@ void Board::setUp(string cmd, char type, string position, string c) {
             theBoard[r][c].setMoveType();       // sets en passant, etc.
             // track king position
             if (pt == pieceType::King) {
-                if (colour == Colour::White) whitek = {c, r}; 
+                if (colour == Colour::White) whiteK = {c, r}; 
                 else blackK = {c, r};
             }
         } catch (invalid_argument &e) {
@@ -116,7 +116,7 @@ void Board::setUp(string cmd, char type, string position, string c) {
                 else blackK = {-1, -1};
             }
         } catch (invalid_argument &e) {
-            cerr << "Error: " << e.what() << enl;
+            cerr << "Error: " << e.what() << endl;
         }
 
     } else if (cmd == "=") { // change turn (colour)
@@ -337,6 +337,7 @@ void Board::makeMove(string startPos, string endPos) {
     prev.endPos.col = endc;
     prev.endPos.row = endr;
     prev.isEmpty = false;
+    pieceType piece = theBoard[startr][startc].getPieceType();
     theBoard[startr][startc].removePiece();
     theBoard[endr][endc].addPiece(piece, c);
 
