@@ -22,10 +22,10 @@ const int BOARD_SIZE = 8;
 
 Board::~Board() {
     delete td;
-    delete gd;
+    // delete gd;
 }
 
-vector<int> intPos(const string& pos) {
+vector<int> intPos(string pos) {
     if (pos.size() != 2) {
         throw invalid_argument("Position must be 2 characters long.");
     }
@@ -207,10 +207,10 @@ void Board::defBoard() { // use add piece to place default pieces
 
 void Board::init() {
     delete td; // clean Text display observer
-    delete gd; // clean Graphic display observer
+    // delete gd; // clean Graphic display observer
     // define text and graphics
     td = new TextDisplay();
-    //gd = new GraphicDisplay();
+    // gd = new GraphicDisplay();
 
     // clear existing board if necessary
     theBoard.clear();
@@ -277,7 +277,7 @@ void Board::makeMove(string startPos, string endPos) {
     vector<moveType> possibleMove = theBoard[startr][startc].getMoveType();
     moveType correctMove;
     if (possibleMove[1].repeatable) {
-        for (int i = 0; i < possibleMove.size(); ++i) {
+        for (size_t i = 0; i < possibleMove.size(); ++i) {
             if (possibleMove[i].rowChange < 0 && diffPos.row < 0) {
                 if (possibleMove[i].colChange < 0 && diffPos.col < 0) {
                     correctMove = possibleMove[i];
@@ -305,7 +305,7 @@ void Board::makeMove(string startPos, string endPos) {
             }
         }
         
-        for (int j = 1; j < BOARD_SIZE + 1; ++j) {
+        for (size_t j = 1; j < BOARD_SIZE + 1; ++j) {
             int tempc = correctMove.colChange * j + startc;
             int tempr = correctMove.rowChange * j + startr;
 
@@ -370,7 +370,7 @@ vector<Position> Board::allPossibleMoves(){
     for(int i = 0; i < BOARD_SIZE; ++i){
         for(int j = 0; j < BOARD_SIZE; ++j){
             vector<moveType> next = theBoard[i][j].getMoveType();
-            for(int k = 0; k < next.size(); ++k){
+            for(size_t k = 0; k < next.size(); ++k){
                 if(next[k].repeatable){
                     for(int w = 1; w < BOARD_SIZE + 1; ++w){
                         if(j + w * next[k].colChange < 9 && i + w * next[k].rowChange < 9 && i + w * next[k].rowChange > 0 && j + w * next[k].colChange > 0){
@@ -427,7 +427,7 @@ vector<Position> Board::getNextMove(string startPos){
     int startr = intStartPos[1];
     int startc= intStartPos[0];
     vector<moveType> movetypes = theBoard[startr][startc].getMoveType();
-    for(int j = 0; j < movetypes.size(); ++j){
+    for(size_t j = 0; j < movetypes.size(); ++j){
         moveType tempMT = movetypes[j];
         for(int i = 1; i < BOARD_SIZE + 1; ++i){
             int tempR = startr + i*tempMT.rowChange;
@@ -465,7 +465,7 @@ string Board::isInCheck(){
 
 bool Board::whiteKingCanMove(){ // true when whiteKingCanMove
     vector<Position> nextW = theBoard[whiteK.row][whiteK.col].nextMove();
-    for(int i = 0; i < nextW.size(); ++i){
+    for(size_t i = 0; i < nextW.size(); ++i){
         Piece nextMove = theBoard[whiteK.row + nextW[i].row][whiteK.col + nextW[i].col];
         if(nextMove.getColour() == Colour::White || nextMove.getState().sT == stateType::whiteCheck || nextMove.getState().sT == stateType::bothCheck){
             return false;
@@ -476,7 +476,7 @@ bool Board::whiteKingCanMove(){ // true when whiteKingCanMove
 
 bool Board::blackKingCanMove(){ // true when blackKingCanMove
     vector<Position> nextB = theBoard[blackK.row][blackK.col].nextMove();
-    for(int i = 0; i < nextB.size(); ++i){
+    for(size_t i = 0; i < nextB.size(); ++i){
         Piece nextMove = theBoard[blackK.row + nextB[i].row][blackK.col + nextB[i].col];
         if(nextMove.getColour() == Colour::Black || nextMove.getState().sT == stateType::blackCheck || nextMove.getState().sT == stateType::bothCheck){
             return false;

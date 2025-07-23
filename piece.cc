@@ -47,6 +47,8 @@ char Piece::getType() const {
         } else {
             return 'r';
         }
+    } else {
+        return ' ';
     }
 }
 
@@ -120,7 +122,7 @@ State Piece::getState(){
 
 vector<Position> Piece::nextMove(){ // to Board Class can get the vector of possible next move point who are not repeatable
     vector<Position> nextmove;
-    for(int i = 0; i < mT.size(); ++i){
+    for(size_t i = 0; i < mT.size(); ++i){
         Position next{pos.col + mT[i].colChange, pos.row + mT[i].rowChange};
         nextmove.emplace_back(next);
     }

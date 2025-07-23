@@ -43,7 +43,7 @@ public:
     Colour getPieceColor(char piece);
 
     // convert string position into vector of size_t (row,col)
-    std::vector<int> intPos(const std::string& pos);
+    std::vector<int> intPos(std::string pos);
 
     void setUp(string cmd, char type, string position, string c);
 

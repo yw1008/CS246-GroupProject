@@ -35,11 +35,11 @@ void Computer::move(Board &board) {
 void Computer::moveLevel1(Board &board) {
     std::srand(std::time(nullptr));
     bool isWhite = Player::isWhite();
-    int fromC;
-    int fromR;
-    int toC;
-    int toR;
-    int randomPick;
+    int fromC = 0;
+    int fromR = 0;
+    int toC = 0;
+    int toR = 0;
+    int randomPick = 0;
 
     std::vector<std::vector<Piece>> current = board.getBoard();
     for (int attempts = 0; attempts < 500; ++attempts) {
