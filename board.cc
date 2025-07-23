@@ -25,7 +25,7 @@ Board::~Board() {
     // delete gd;
 }
 
-vector<int> intPos(string pos) {
+vector<int> Board::intPos(string pos) {
     if (pos.size() != 2) {
         throw invalid_argument("Position must be 2 characters long.");
     }
@@ -55,7 +55,7 @@ vector<int> intPos(string pos) {
     return intPos;
 }
 
-pieceType getPieceType(char piece) {
+pieceType Board::getPieceType(char piece) {
     switch (toupper(piece)) {
         case 'K': return pieceType::King;
         case 'Q': return pieceType::Queen;
@@ -68,7 +68,7 @@ pieceType getPieceType(char piece) {
     }
 }
 
-Colour getPieceColor(char piece) {
+Colour Board::getPieceColor(char piece) {
     if (piece == 'P' || piece == 'K' || piece == 'Q' || piece == 'N' || piece == 'B' || piece == 'R') {
         return Colour::Black;
     } else if (piece == 'p' || piece == 'k' || piece == 'q' || piece == 'n' || piece == 'b' || piece == 'r') {
@@ -265,11 +265,11 @@ void Board::makeMove(string startPos, string endPos) {
 
     // check it the movement is correct for the piece type
     Position toPos{endc, endr};
-    bool isValid = theBoard[startr][startc].isValid(toPos);
-    if(!isValid) {
-        cerr << "Invalid move for the piece type" << endl;
-        return;
-    }
+    // bool isValid = theBoard[startr][startc].isValid(toPos);
+    // if(!isValid) {
+    //     cerr << "Invalid move for the piece type" << endl;
+    //     return;
+    // }
 
     Position diffPos;
     diffPos.col = endc - startc;

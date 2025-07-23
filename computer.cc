@@ -19,12 +19,12 @@ void Computer::move(Board &board) {
         case 1:
             moveLevel1(board);
             break;
-        case 2:
-            moveLevel2(board);
-            break;
-        case 3:
-            moveLevel3(board);
-            break;
+        // case 2:
+        //     moveLevel2(board);
+        //     break;
+        // case 3:
+        //     moveLevel3(board);
+        //     break;
         default:
             moveLevel1(board);
             break;

@@ -21,6 +21,7 @@ int main() {
             cout << "Final Score: " << endl;
             cout << "White: " << game.getScore("White") << endl;
             cout << "Black: " << game.getScore("Black") << endl;
+            break;
         }
         if(cmd == "game") {
             // set board
