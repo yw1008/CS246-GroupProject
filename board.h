@@ -2,6 +2,7 @@
 #define BOARD_H
 #include <vector>
 #include <string>
+#include <memory>
 #include "piece.h"
 #include "player.h"
 #include "textdisplay.h"

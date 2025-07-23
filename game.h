@@ -31,13 +31,13 @@ public:
     // Returns true if the current player is in check
     std::string isInCheck() const;
 
-    bool Game::whiteKingCanMove();
+    bool whiteKingCanMove();
 
-    bool Game::blackKingCanMove();
+    bool blackKingCanMove();
 
     // Returns true if the current player is in checkmate
     bool isWhiteInCheckmate() const;
-    
+
     bool isBlackInCheckmate() const;
 
     // Undoes the last move made

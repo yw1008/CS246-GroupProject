@@ -8,9 +8,10 @@ using namespace std;
 
 int main() {
     string cmd;
-    Board board;
+    Board *board;
     Game game;
-    Player whiteP, blackP;
+    Player *whiteP;
+    Player *blackP;
     string whosTurn = "White";
     bool isSetup = 0;
 
@@ -18,7 +19,7 @@ int main() {
         cin >> cmd;
         if(cin.eof()) {
             cout << "Final Score: " << endl;
-            cout << "White: " << game.getScor("White") << endl;
+            cout << "White: " << game.getScore("White") << endl;
             cout << "Black: " << game.getScore("Black") << endl;
         }
         if(cmd == "game") {
@@ -31,20 +32,18 @@ int main() {
             string wp, bp;
             if (!(cin >> wp >> bp)) cerr << "Invalid input: must enter two players" << endl; // enter two players
             if (wp == "human") {
-                whiteP.isHuman = true;
-                whiteP.isWhite = true;
+                whiteP = Player(true, true);
             } // white human
-            else if (wp == "") {
+        //else if (wp == "") {
 
-            } // white computer
+            //} // white computer
             else cerr << "Invalid inputer: player should be computer or human" << endl; // invalid white player
             if (bp == "human") {
-                blackP.isHuman = true;
-                blackP.isWhite = false;
+                blackP = Player(true, false);
             } // black human
-            else if (bp == ) {
+        //else if (bp == ) {
 
-            } // black computer
+        //} // black computer
             else cerr << "Invalid inputer: player should be computer or human" << endl; // invalid black player
 
             // start the game
@@ -58,7 +57,7 @@ int main() {
                     isSetup = false;                    
                 }
                 else if (cmd == "move") {
-                    if ((whosTurn == "White" && !(game.whitePlayer->isHuman())) || (whosTurn == "Black" && !(game.blackPlayer->isHuman()))) {
+                    if ((whosTurn == "White" && !(whiteP->isHuman())) || (whosTurn == "Black" && !(blackP->isHuman()))) {
                         //computer player
                         //call makeMove(?) method of the computer class
                     }
@@ -70,15 +69,15 @@ int main() {
                     // castling, pawn promotion
                     game.makeMove(startPos, endPos);
 
-                    if (game.isInCheck) {
-                        if (game.isInCheckmate) { // if opponent is in checkmate end the game
-                            game.setIsFinished(whosTurn);
-                            game.addScore(whosTurn);
-                            isSetup = false;
-                        }
-                    }
-                    else { // check if the game is in stalemate
-                    }
+                    // if (game.isInCheck()) {
+                    //     if (game.isInCheckmate) { // if opponent is in checkmate end the game
+                    //         game.setIsFinished(whosTurn);
+                    //         game.addScore(whosTurn);
+                    //         isSetup = false;
+                    //     }
+                    // }
+                    // else { // check if the game is in stalemate
+                    // }
                     whosTurn = whosTurn == "Black" ? "White" : "Black";
                 }
                 else if (cmd == "undo") {
@@ -128,7 +127,7 @@ int main() {
         } //setup
         else {
             cerr << "Invalid command" << endl;
-            continue
+            continue;
         }
     }
 }

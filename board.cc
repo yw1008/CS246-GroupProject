@@ -4,7 +4,6 @@
 #include <iostream>
 #include <sstream>
 #include "info.h"
-#include <memory>
 
 using namespace std;
 

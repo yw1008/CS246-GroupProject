@@ -1,7 +1,6 @@
 #ifndef INFO_H
 #define INFO_H
 #include <vector>
-#include "state.h"
 
 /* 
 
