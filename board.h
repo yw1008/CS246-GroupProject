@@ -76,7 +76,9 @@ public:
 
     std::vector<Position> allPossibleMoves();
 
-    std::unique_ptr<std::vector<Position>> getNextMove(std::string startPos);
+    std::vector<Position> getNextMove(std::string startPos);
+
+    friend std::ostream &operator<<(std::ostream &out, const Board &b);
 };
 
 // need ostream?
