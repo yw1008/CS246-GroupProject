@@ -56,11 +56,6 @@ public:
     // move piece from startpos to endpos
     void makeMove(std::string startPos, std::string endPos);
 
-    // // add char type of piece on the string position
-    // void addPiece(char piece, std::string pos);
-    // // remove piece on the string position
-    // void removePiece(std::string pos);
-
     // change the turn of player
     void changeTurn();
 

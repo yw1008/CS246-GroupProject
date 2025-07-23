@@ -149,6 +149,10 @@ void Board::setUp() {
             }
 
         } else if (cmd == "done") { // done
+            // need to check if the board is in the correct condition
+            // kings are not in check
+            // pawns are not in the first or the last row
+            // cannot leave until those conditions are satisfied
             break;
         } else { // input command error
             std::cerr << "Unknown command.\n"; 
@@ -237,6 +241,7 @@ char Board::getPiece(std::string pos) {
 }
 
 void Board::makeMove(std::string startPos, std::string endPos) {
+    // need to check if the move make player him/herself check
     int startr, startc, endr, endc;
 
     try {

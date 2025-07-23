@@ -7,7 +7,7 @@
 #include "piece.h"
 
 class Game {
-    std::vector<int> score;
+    std::vector<int> score; // score[0] is white, score[1] is black
     bool isWhiteTurn;
     bool isFinished;
 
