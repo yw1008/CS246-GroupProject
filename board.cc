@@ -157,6 +157,10 @@ void Board::setUp() {
     std::cout << "Exited setup mode.\n"; // finish the setup
 }
 
+std::vector<std::vector<Piece>> Board::getBoard(){
+    return theBoard;
+}
+
 
 void Board::defBoard() { // use add piece to place default pieces
     // black
@@ -453,7 +457,7 @@ std::vector<std::unique_ptr<Position>> Board::getNextMove(std::string startPos){
         for(int i = 1; i < BOARD_SIZE + 1; ++i){
             int tempR = startr + i*tempMT.rowChange;
             int tempC = startc + i*tempMT.colChange;
-            if(tempR =< 8 && tempC =< 8 && tempR >= 0 && tempC >= 0){
+            if(tempR < 8 && tempC < 8 && tempR >= 0 && tempC >= 0){
                 Position next{tempC, tempR};
                 nextPos.emplace_back(next);
             }

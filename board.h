@@ -16,7 +16,7 @@ struct History {
     pieceType removedPiece; // pieceType of the removed piece (if no piece is removed, Nothing)
     Colour removedColour; // piece colour of the removed piece
     bool isEmpty = true; // check if there is a last move (no first move is made / have done undo once)
-}
+};
 
 class Board {
     std::vector<std::vector<Piece>> theBoard; // The actual board
@@ -32,6 +32,8 @@ class Board {
 public:
     // construct empty board without pieces
     // Board(); // default ctor
+
+    std::vector<std::vector<Piece>> getBoard();
 
     ~Board(); // dtor
 

@@ -1,8 +1,8 @@
 #ifndef COMPUTER_H
 #define COMPUTER_H
 
-#include "Player.h"
-#include "Board.h"
+#include "player.h"
+#include "board.h"
 
 class Computer : public Player {
     int level;
