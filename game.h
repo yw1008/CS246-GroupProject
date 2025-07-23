@@ -31,9 +31,9 @@ public:
     // Returns true if the current player is in check
     std::string isInCheck() const;
 
-    bool whiteKingCanMove();
+    bool whiteKingCanMove() const;
 
-    bool blackKingCanMove();
+    bool blackKingCanMove() const;
 
     // Returns true if the current player is in checkmate
     bool isWhiteInCheckmate() const;

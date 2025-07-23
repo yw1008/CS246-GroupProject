@@ -38,11 +38,11 @@ void Game::start(Player* white, Player* black, Board* b) {
 // Make a move from startPos to endPos
 void Game::makeMove(const string &startPos, const string &endPos) {
     if (isFinished) {
-        cout << "Game is already finished.\n";
+        cout << "Game is already finished." << endl;
         return;
     }
     if (!board) {
-        cout << "Board is not initialized.\n";
+        cout << "Board is not initialized." << endl;
         return;
     }
 
@@ -50,22 +50,22 @@ void Game::makeMove(const string &startPos, const string &endPos) {
     char type = board->getPiece(startPos);
     board->makeMove(startPos, endPos);
     if(isWhiteInCheckmate()){
-        cout << "Checkmate! Black wins!\n";
+        cout << "Checkmate! Black wins!" << endl;
         isFinished = true;
     } else if(isBlackInCheckmate()){
-        cout << "Checkmate! White wins!\n";
+        cout << "Checkmate! White wins!" << endl;
         isFinished = true;
     } else {
-        if(isInCheck() = "white"){
-            cout << "White is in check.\n";
-        } else if(isInCheck() = "black"){
-            cout << "Black is in check.\n";
-        } else if(isInCheck() = "both"){
-            cout << "White is in check.\n";
-            cout << "Black is in check.\n";
+        if(isInCheck() == "white"){
+            cout << "White is in check." << endl;
+        } else if(isInCheck() == "black"){
+            cout << "Black is in check." << endl;
+        } else if(isInCheck() == "both"){
+            cout << "White is in check." << endl;
+            cout << "Black is in check." << endl;
         } else {
-            if(board->isInStalemate()){
-            cout << "Stalemate!\n"
+            if(board->isStalemate()){
+            cout << "Stalemate!" << endl;
             isFinished = true;
             }
         }
@@ -76,9 +76,6 @@ void Game::makeMove(const string &startPos, const string &endPos) {
 
 // Check if current player is in check
 string Game::isInCheck() const {
-    if (!board) {
-        return false;
-    }
     return board->isInCheck();
 }
 
