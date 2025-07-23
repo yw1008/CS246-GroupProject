@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <sstream>
 #include "game.h"
 #include "board.h"
 #include "player.h"
@@ -7,8 +8,8 @@
 using namespace std;
 
 int main() {
-    string cmd;
-    Board *board;
+    string line, cmd;
+    Board *board = new Board();    
     Game game;
     Player *whiteP;
     Player *blackP;
@@ -16,7 +17,11 @@ int main() {
     bool isSetup = 0;
 
     while(true) {
-        cin >> cmd;
+        string line; // must get a whole line of the command
+        getline (cin, line);
+
+        istringstream issProgram(line);
+        issProgram >> cmd;
         if(cin.eof()) {
             cout << "Final Score: " << endl;
             cout << "White: " << game.getScore("White") << endl;
@@ -24,35 +29,55 @@ int main() {
             break;
         }
         if(cmd == "game") {
-            // set board
-            if (!isSetup) {
-                board->defBoard();
-            } 
-
             // set players
             string wp, bp;
-            if (!(cin >> wp >> bp)) cerr << "Invalid input: must enter two players" << endl; // enter two players
+            if (!(issProgram >> wp >> bp)) {
+                cerr << "Invalid input: must enter two players" << endl; // enter two players
+                continue;
+            }
+            
+            // check if white player is human or computer
             if (wp == "human") {
-                *whiteP = Player(true, true);
+                whiteP = new Player(true, true);
             } // white human
-        //else if (wp == "") {
-
+            //else if (wp == "") {
             //} // white computer
-            else cerr << "Invalid inputer: player should be computer or human" << endl; // invalid white player
-            if (bp == "human") {
-                *blackP = Player(true, false);
-            } // black human
-        //else if (bp == ) {
+            else {
+                cerr << "Invalid inputer: player should be computer or human" << endl; // invalid white player
+                continue;
+            }
 
-        //} // black computer
-            else cerr << "Invalid inputer: player should be computer or human" << endl; // invalid black player
+            // check if black player is human or computer
+            if (bp == "human") {
+                blackP = new Player(true, false);
+            } // black human
+            //else if (bp == ) {
+            //} // black computer
+            else {
+                cerr << "Invalid inputer: player should be computer or human" << endl; // invalid black player
+                continue;
+            } 
+
+            // set default board if it is not setup
+            if (!isSetup) {
+                board->init();
+                board->defBoard();
+            } 
 
             // // start the game
             // game.start(whiteP, blackP, board);
             game.setBoard(board);
             game.setPlayers(whiteP, blackP);
+
+            cout << "The game is started" << endl;
+            // need to print starting board
             while(!game.getIsFinished()) {
-                cin >> cmd;
+                // cout << "Enter move/resign/undo for the game" << endl;
+                
+                // read new input
+                getline(cin, line);
+                istringstream issGame(line);
+                issGame >> cmd;
                 if (cmd == "resign") {
                     string whoWon = whosTurn == "Black" ? "White" : "Black";
                     game.setIsFinished(whoWon);
@@ -65,7 +90,7 @@ int main() {
                         //call makeMove(?) method of the computer class
                     }
                     string startPos, endPos;
-                    if (!(cin >> startPos >> endPos)) {
+                    if (!(issGame >> startPos >> endPos)) {
                         cerr << "Invalid input: must enter to positions" << endl;
                         continue;
                     }
@@ -94,23 +119,27 @@ int main() {
         else if (cmd == "setup") {
             cout << "Entered setup mode. Type 'done' when you're finished." << endl;
             isSetup = true;
+            board->init();
 
-            while (std::cin >> cmd) {
-                char piece;
-                std::string pos, colour;
+            while (true) {
+                getline(cin, line);
+                istringstream issSetup(line);
+                issSetup >> cmd;
+                
+                std::string piece, pos, colour;
 
                 if (cmd == "+") {
-                    if (!(cin >> piece >> pos)) {
+                    if (!(issSetup >> piece >> pos)) {
                         cerr << "Invalid command: enter correct number of arguments for +" << endl;
                         continue;
                     }
                 } else if (cmd == "-") {
-                    if (!(cin >> pos)) {
+                    if (!(issSetup >> pos)) {
                         cerr << "Invalid command: enter correct number of arguments for -" << endl;
                         continue;
                     }
                 } else if (cmd == "=") {
-                    if (!(cin >> colour)) {
+                    if (!(issSetup >> colour)) {
                         cerr << "Invalid command: enter correct number of arguments for =" << endl;
                         continue;
                     }

@@ -78,9 +78,9 @@ Colour Board::getPieceColor(char piece) {
     }
 }
 
-void Board::setUp(string cmd, char type, string position, string c) {
+void Board::setUp(string cmd, string type, string position, string c) {
     if (cmd == "+") { // add piece
-        char piece = type;
+        char piece = type[0];
         string pos = position;
 
         try {
@@ -102,7 +102,7 @@ void Board::setUp(string cmd, char type, string position, string c) {
 
     } else if (cmd == "-") { // remove piece
         string pos = position;
-        char piece = type;
+        char piece = type[0];
 
         try {
             vector<int> coords = intPos(pos);
@@ -148,6 +148,7 @@ void Board::setUp(string cmd, char type, string position, string c) {
             }
         }
     }
+    cout << "setup successful - board" << endl;
 } //setup
 
 std::vector<std::vector<Piece>> Board::getBoard(){
@@ -214,6 +215,7 @@ void Board::init() {
 
     // clear existing board if necessary
     theBoard.clear();
+    theBoard.resize(BOARD_SIZE);
     for (int r = 0; r < BOARD_SIZE; ++r) {
         theBoard[r].reserve(BOARD_SIZE);
         for (int c = 0; c < BOARD_SIZE; ++c) {

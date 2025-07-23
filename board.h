@@ -45,7 +45,7 @@ public:
     // convert string position into vector of size_t (row,col)
     std::vector<int> intPos(std::string pos);
 
-    void setUp(string cmd, char type, string position, string c);
+    void setUp(string cmd, string type, string position, string c);
 
     // construct board with pieces in the default position
     void defBoard(); // ctor

@@ -9,7 +9,7 @@
 
 class TextDisplay: public Observer {
     std::vector<std::vector<char>> theTD;
-    const std::size_t BOARD_SIZE = 8;
+    // const std::size_t BOARD_SIZE = 8;
     
   public:
     TextDisplay();
