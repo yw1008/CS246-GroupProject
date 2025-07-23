@@ -26,7 +26,7 @@ class Piece: public Subject {
     public:
         Piece(int r, int c);
 
-        bool isValid(const Position &to); // Check the received move is in 
+        // bool isValid(const Position &to); // Check the received move is in 
 
         Info getInfo() const override;
 

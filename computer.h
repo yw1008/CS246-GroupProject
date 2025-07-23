@@ -15,8 +15,8 @@ public:
 
 private:
     void moveLevel1(Board &board);
-    void moveLevel2(Board &board);
-    void moveLevel3(Board &board);
+    // void moveLevel2(Board &board);
+    // void moveLevel3(Board &board);
 };
 
 #endif

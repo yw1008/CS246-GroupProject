@@ -2,6 +2,7 @@
 #define TEXTDISPLAY_H
 #include <iostream>
 #include <vector>
+#include "subject.h"
 #include "observer.h"
 #include "state.h"
 #include "info.h"
