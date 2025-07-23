@@ -9,8 +9,8 @@ public:
     // Constructor
     Human(bool isWhite);
 
-    // Perform a move 
-    void move(Game &game);
+    // // Perform a move 
+    // void move(Game &game);
     
     // Destructor
     ~Human() override;

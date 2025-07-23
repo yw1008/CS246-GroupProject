@@ -21,9 +21,14 @@ public:
 
     // Destructor
     ~Game();
+    
+    // set the board for each game
+    void setBoard(Board* b);
+    // set the player for each game
+    void setPlayers(Player* white, Player* black);
 
-    // Starts a new game with the given white and black players
-    void start(Player* white, Player* black, Board* b);
+    // // Starts a new game with the given white and black players
+    // void start(Player* white, Player* black, Board* b);
 
     // Makes a move from startPos to endPos
     void makeMove(const std::string &startPos, const std::string &endPos);

@@ -47,8 +47,10 @@ int main() {
         //} // black computer
             else cerr << "Invalid inputer: player should be computer or human" << endl; // invalid black player
 
-            // start the game
-            game.start(whiteP, blackP, board);
+            // // start the game
+            // game.start(whiteP, blackP, board);
+            game.setBoard(board);
+            game.setPlayers(whiteP, blackP);
             while(!game.getIsFinished()) {
                 cin >> cmd;
                 if (cmd == "resign") {
