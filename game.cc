@@ -50,43 +50,83 @@ void Game::makeMove(const string &startPos, const string &endPos) {
     // Move piece from startPos to endPos
     char type = board->getPiece(startPos);
     board->makeMove(startPos, endPos);
-
-    if (isInCheckmate()) {
-        if (isWhiteTurn) {
-            cout << "White wins by checkmate!\n";
-        } else {
-            cout << "Black wins by checkmate!\n";
-        }
+    if(isWhiteInCheckmate()){
+        cout << "Checkmate! Black wins!\n";
         isFinished = true;
-    } else if (isInCheck()) {
-        if (isWhiteTurn) {
+    } else if(isBlackInCheckmate()){
+        cout << "Checkmate! White wins!\n";
+        isFinished = true;
+    } else {
+        if(isInCheck() = "white"){
+            cout << "White is in check.\n";
+        } else if(isInCheck() = "black"){
+            cout << "Black is in check.\n";
+        } else if(isInCheck() = "both"){
+            cout << "White is in check.\n";
             cout << "Black is in check.\n";
         } else {
-            cout << "White is in check.\n";
+            if(board->isInStalemate()){
+            cout << "Stalemate!\n"
+            isFinished = true;
+            }
         }
-    } else if (board->isInStalemate()) {
-        cout << "Game is a stalemate!\n";
-        isFinished = true;
     }
-
     // Change turn
     isWhiteTurn = !isWhiteTurn;
 }
 
 // Check if current player is in check
-bool Game::isInCheck() const {
+string Game::isInCheck() const {
     if (!board) {
         return false;
     }
-    return board->isInCheck(isWhiteTurn);
+    return board->isInCheck();
 }
 
-// Check if current player is in checkmate
-bool Game::isInCheckmate() const {
+bool Game::whiteKingCanMove() const {
     if (!board) {
         return false;
     }
-    return board->isInCheckmate(isWhiteTurn);
+    return board->whiteKingCanMove();
+}
+
+bool Game::blackKingCanMove() const {
+    if (!board) {
+        return false;
+    }
+    return board->blackKingCanMove();
+}
+
+// Check if white player is in checkmate
+bool Game::isWhiteInCheckmate() const {
+    if (!board) {
+        return false;
+    }
+    if(isInCheck() == "white"){
+        if(!whiteKingCanMove()) return true;
+        return false;
+    } else if(isInCheck()  == "both"){
+        if(!whiteKingCanMove()) return true;
+        return false;
+    } else {
+        return false;
+    }
+}
+
+// Check if black player is in checkmate
+bool Game::isBlackInCheckmate() const {
+    if (!board) {
+        return false;
+    }
+    if(isInCheck() == "black"){
+        if(!blackKingCanMove()) return true;
+        return false;
+    } else if(isInCheck()  == "both"){
+        if(!blackKingCanMove()) return true;
+        return false;
+    } else {
+        return false;
+    }
 }
 
 // Undo the last move

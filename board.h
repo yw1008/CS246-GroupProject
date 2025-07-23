@@ -64,13 +64,16 @@ public:
 
     bool blackKingCanMove();
 
-    bool isInCheck();
+    std::string isInCheck();
 
+    bool isStalemate();
 
     // allow a single undo
     void undo();
 
-    std::unique_ptr<std::vector<Position>> Board::getNextMove(std::string startPos);
+    std::vector<Position> allPossibleMoves();
+
+    std::unique_ptr<std::vector<Position>> getNextMove(std::string startPos);
 };
 
 // need ostream?
