@@ -418,7 +418,12 @@ vector<Position> Board::allPossibleMoves(){
 } //allPossibleMove
 
 bool Board::isStalemate(){
-    return allPossibleMoves().empty();
+    if(theBoard[whiteK.row][whiteK.col].getState().sT == stateType::Nothing || theBoard[whiteK.row][whiteK.col].getState().sT == stateType::blackCheck){
+        return allPossibleMoves().empty();
+    } else if(theBoard[blackK.row][blackK.col].getState().sT == stateType::Nothing || theBoard[blackK.row][blackK.col].getState().sT == stateType::whiteCheck){
+        return allPossibleMoves().empty();
+    }
+    return false;
 } //isStalemate
 
 vector<Position> Board::getNextMove(string startPos){
