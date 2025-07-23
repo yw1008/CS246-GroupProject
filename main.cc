@@ -25,21 +25,21 @@ int main() {
         if(cmd == "game") {
             // set board
             if (!isSetup) {
-                board.defBoard();
+                board->defBoard();
             } 
 
             // set players
             string wp, bp;
             if (!(cin >> wp >> bp)) cerr << "Invalid input: must enter two players" << endl; // enter two players
             if (wp == "human") {
-                whiteP = Player(true, true);
+                *whiteP = Player(true, true);
             } // white human
         //else if (wp == "") {
 
             //} // white computer
             else cerr << "Invalid inputer: player should be computer or human" << endl; // invalid white player
             if (bp == "human") {
-                blackP = Player(true, false);
+                *blackP = Player(true, false);
             } // black human
         //else if (bp == ) {
 
@@ -114,7 +114,7 @@ int main() {
                 }
 
                 try {
-                    board.setUp(cmd, piece, pos, colour);
+                    board->setUp(cmd, piece, pos, colour);
                     if (cmd == "done") {
                         break; // only break if setup is valid
                     }

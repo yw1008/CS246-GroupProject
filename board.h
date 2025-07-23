@@ -6,7 +6,7 @@
 #include "piece.h"
 #include "player.h"
 #include "textdisplay.h"
-#include "graphicdisplay.h"
+//#include "graphicdisplay.h"
 
 class TextDisplay;
 class GraphicDisplay;
