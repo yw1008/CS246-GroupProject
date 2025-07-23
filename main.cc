@@ -8,8 +8,9 @@ using namespace std;
 
 int main() {
     string cmd;
-    // Board board;
+    Board board;
     Game game;
+    Player whiteP, blackP;
     string whosTurn = "White";
     bool isSetup = 0;
 
@@ -21,30 +22,40 @@ int main() {
             cout << "Black: " << game.getScore("Black") << endl;
         }
         if(cmd == "game") {
-            string whiteP, blackP;
-            if (!(cin >> whiteP >> blackP)) cerr << "Invalid input: must enter two players" << endl; // enter two players
-            if (whiteP == "human") {
-                
+            // set board
+            if (!isSetup) {
+                board.defBoard();
+            } 
+
+            // set players
+            string wp, bp;
+            if (!(cin >> wp >> bp)) cerr << "Invalid input: must enter two players" << endl; // enter two players
+            if (wp == "human") {
+                whiteP.isHuman = true;
+                whiteP.isWhite = true;
             } // white human
-            else if (whiteP == "") {
+            else if (wp == "") {
 
             } // white computer
             else cerr << "Invalid inputer: player should be computer or human" << endl; // invalid white player
-            if (blackP == "human") {
-
+            if (bp == "human") {
+                blackP.isHuman = true;
+                blackP.isWhite = false;
             } // black human
-            else if (blackP == ) {
+            else if (bp == ) {
 
             } // black computer
             else cerr << "Invalid inputer: player should be computer or human" << endl; // invalid black player
 
             // start the game
+            game.start(whiteP, blackP, board);
             while(!game.getIsFinished()) {
                 cin >> cmd;
                 if (cmd == "resign") {
                     string whoWon = whosTurn == "Black" ? "White" : "Black";
-                    game.addScore(whoWon);
                     game.setIsFinished(whoWon);
+                    game.addScore(whoWon);
+                    isSetup = false;                    
                 }
                 else if (cmd == "move") {
                     if ((whosTurn == "White" && !(game.whitePlayer->isHuman())) || (whosTurn == "Black" && !(game.blackPlayer->isHuman()))) {
@@ -63,6 +74,7 @@ int main() {
                         if (game.isInCheckmate) { // if opponent is in checkmate end the game
                             game.setIsFinished(whosTurn);
                             game.addScore(whosTurn);
+                            isSetup = false;
                         }
                     }
                     else { // check if the game is in stalemate
@@ -78,7 +90,41 @@ int main() {
             } // end the game
         }
         else if (cmd == "setup") {
-            game.setUp();
+            cout << "Entered setup mode. Type 'done' when you're finished." << endl;
+            isSetup = true;
+
+            while (std::cin >> cmd) {
+                char piece;
+                std::string pos, colour;
+
+                if (cmd == "+") {
+                    if (!(cin >> piece >> pos)) {
+                        cerr << "Invalid command: enter correct number of arguments for +" << endl;
+                        continue;
+                    }
+                } else if (cmd == "-") {
+                    if (!(cin >> pos)) {
+                        cerr << "Invalid command: enter correct number of arguments for -" << endl;
+                        continue;
+                    }
+                } else if (cmd == "=") {
+                    if (!(cin >> colour)) {
+                        cerr << "Invalid command: enter correct number of arguments for =" << endl;
+                        continue;
+                    }
+                }
+
+                try {
+                    board.setUp(cmd, piece, pos, colour);
+                    if (cmd == "done") {
+                        break; // only break if setup is valid
+                    }
+                } catch (std::invalid_argument &e) {
+                    cerr << "Setup error: " << e.what() << endl;
+                    continue; // do not break on error
+                }
+            }
+            std::cout << "Exited setup mode.\n"; // finish the setup
         } //setup
         else {
             cerr << "Invalid command" << endl;

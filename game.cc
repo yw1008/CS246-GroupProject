@@ -18,23 +18,22 @@ Game::~Game() {
 }
 
 // Start a new game with given players
-void Game::start(Player* white, Player* black) {
+void Game::start(Player* white, Player* black, Board* b) {
     whitePlayer = white;
     blackPlayer = black;
-    board = new Board();
-    setUp();
+    board = b;
     isWhiteTurn = true;
     isFinished = false;
     score[0] = 0;
     score[1] = 0;
 }
 
-// Set up the board at the beginning of the game
-void Game::setUp() {
-    board.init();
-    // board gets the command for setUp
-    board->setUp();
-}
+// // Set up the board at the beginning of the game
+// void Game::setUp() {
+//     board.init();
+//     // board gets the command for setUp
+//     board->setUp();
+// }
 
 // Make a move from startPos to endPos
 void Game::makeMove(const string &startPos, const string &endPos) {
