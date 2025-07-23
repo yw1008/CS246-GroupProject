@@ -1,7 +1,7 @@
 #include "human.h"
 #include <iostream>
 #include <string>
-#include "Game.h"
+#include "game.h"
 
 Human::Human(bool isWhite) : Player{true, isWhite} {}
 
