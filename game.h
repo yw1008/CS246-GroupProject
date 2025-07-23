@@ -7,7 +7,7 @@
 #include "piece.h"
 
 class Game {
-    std::vector<int> score;
+    std::vector<int> score; // score[0] is white, score[1] is black
     bool isWhiteTurn;
     bool isFinished;
 
@@ -23,10 +23,7 @@ public:
     ~Game();
 
     // Starts a new game with the given white and black players
-    void start(Player* white, Player* black);
-
-    // Sets up the game board and pieces before starting
-    void setUp();
+    void start(Player* white, Player* black, Board* b);
 
     // Makes a move from startPos to endPos
     void makeMove(const std::string &startPos, const std::string &endPos);

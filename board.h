@@ -22,8 +22,8 @@ class Board {
     std::vector<std::vector<Piece>> theBoard; // The actual board
     bool isWhite;
     bool isFinish;
-    Position whiteK; // position of white King
-    Position blackK; // position of black King
+    Position whiteK = {-1, -1}; // position of white King
+    Position blackK = {-1, -1}; // position of black King
     History prev; // storing previous move and removed piece (if it exists)
 
     TextDisplay *td = nullptr;
@@ -44,7 +44,7 @@ public:
     // convert string position into vector of size_t (row,col)
     std::vector<int> intPos(const std::string& pos);
 
-    void setUp();
+    void setUp(string cmd, char type, string position, string c);
 
     // construct board with pieces in the default position
     void defBoard(); // ctor
@@ -57,11 +57,6 @@ public:
 
     // move piece from startpos to endpos
     void makeMove(std::string startPos, std::string endPos);
-
-    // // add char type of piece on the string position
-    // void addPiece(char piece, std::string pos);
-    // // remove piece on the string position
-    // void removePiece(std::string pos);
 
     // change the turn of player
     void changeTurn();

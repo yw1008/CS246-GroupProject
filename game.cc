@@ -18,23 +18,22 @@ Game::~Game() {
 }
 
 // Start a new game with given players
-void Game::start(Player* white, Player* black) {
+void Game::start(Player* white, Player* black, Board* b) {
     whitePlayer = white;
     blackPlayer = black;
-    board = new Board();
-    setUp();
+    board = b;
     isWhiteTurn = true;
     isFinished = false;
     score[0] = 0;
     score[1] = 0;
 }
 
-// Set up the board at the beginning of the game
-void Game::setUp() {
-    if (board) {
-        board->setUp();
-    }
-}
+// // Set up the board at the beginning of the game
+// void Game::setUp() {
+//     board.init();
+//     // board gets the command for setUp
+//     board->setUp();
+// }
 
 // Make a move from startPos to endPos
 void Game::makeMove(const string &startPos, const string &endPos) {
@@ -142,18 +141,18 @@ void Game::undo() {
 
 // Add a point to the score of the given color
 void Game::addScore(const std::string &color) {
-    if (color == "white") {
+    if (color == "White") {
         ++score[0];
-    } else if (color == "black") {
+    } else if ("Black") {
         ++score[1];
     }
 }
 
 // Get the score for the given color
 int Game::getScore(const std::string &color) const {
-    if (color == "white") {
+    if (color == "White") {
         return score[0];
-    } else if (color == "black") {
+    } else if (color == "Black") {
         return score[1];
     }
     return 0;
