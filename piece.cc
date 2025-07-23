@@ -6,6 +6,10 @@
 
 using namespace std;
 
+Piece::Piece(int r, int c): 
+    pT{pieceType::Nothing}, colour{Colour::Nothing}, pos{c, r}, mT{}, state{stateType::Nothing, Colour::Nothing}, 
+    isFirstMove{true}, isEnPassant{false} {} 
+
 char Piece::getType() const {
     if(pT == pieceType::Bishop){
         if(colour == Colour::White){
@@ -58,7 +62,7 @@ void Piece::setMoveType(){
     } else if(pT == pieceType::Bishop){
         mT = {moveType{1, 1, true}, moveType{1, -1, true}, moveType{-1, 1, true}, moveType{-1, -1, true}};
     } else if(pT == pieceType::Pawn){
-        if(colour = Colour::White){
+        if(colour == Colour::White){
             if(isFirstMove){
             if(isEnPassant){
                 mT = {moveType{0, 1, false}, moveType{1, 1, false}, moveType{-1, 1, false}, moveType{0, 2, false}};

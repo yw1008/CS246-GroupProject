@@ -43,9 +43,10 @@ void Computer::moveLevel1(Board &board) {
 
     std::vector<std::vector<Piece>> current = board.getBoard();
     for (int attempts = 0; attempts < 500; ++attempts) {
-        int vecSize = current.size() * current.size();
-        int randomPick = std::rand() % vecSize;
-        Piece picked = current[randomPick];
+        int vecSize = current.size();
+        int randomPickC = std::rand() % vecSize;
+        int randomPickR = std::rand() % vecSize;
+        Piece picked = current[randomPickR][randomPickC];
         if(isWhite){
             if(picked.getColour() == Colour::White){
                 int fromC = picked.getInfo().pos.col;
@@ -60,13 +61,13 @@ void Computer::moveLevel1(Board &board) {
             }
         }
     }
-    char from[];
+    char from[] = "  ";
     from[0] = 'a' + fromC;
     from[1] = '0' + fromR;
     std::string sFrom(from);
 
     if(board.getBoard()[fromR][fromC].getMoveType()[0].repeatable){
-        std::vector<std::unique_ptr<Position>> nextmove = board.getNextMove(sFrom);
+        std::vector<Position> nextmove = board.getNextMove(sFrom);
         int size = nextmove.size();
         randomPick = std::rand() % size;
         Position nextP = nextmove[randomPick];
@@ -80,7 +81,7 @@ void Computer::moveLevel1(Board &board) {
         toC = fromC + pickedMT.colChange;
         toR = fromR + pickedMT.rowChange;
     }
-    char to[];
+    char to[] = "  ";
     to[0] = 'a' + toC;
     to[1] = '0' + toR;
     std::string sTo(to);
@@ -89,7 +90,7 @@ void Computer::moveLevel1(Board &board) {
 
     std::cout << "Computer (Level 1) moves: " << sFrom << " " << sTo << std::endl;
 }
-
+/*
 // Level 2
 void Computer::moveLevel2(Board &board) {
     std::srand(std::time(nullptr));
@@ -172,3 +173,4 @@ void Computer::moveLevel3(Board &board) {
     std::cout << "No safe captures — falling back to Level 2...\n";
     moveLevel2(board);
 }
+*/

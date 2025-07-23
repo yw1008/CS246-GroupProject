@@ -1,7 +1,6 @@
 #ifndef PIECE_H
 #define PIECE_H
 #include "subject.h"
-#include "observer.h"
 #include "state.h"
 #include "info.h"
 #include <vector>
@@ -14,7 +13,7 @@ struct moveType{
     bool repeatable; // true for sliders (B,R,Q), false for “leapers” (N,K,P)
 };
 
-class Piece: public Subject, public Observer {
+class Piece: public Subject {
     protected:
         pieceType pT;
         Colour colour;
@@ -25,7 +24,9 @@ class Piece: public Subject, public Observer {
         bool isEnPassant; //for the Pawn class
         //bool isAlive;
     public:
-        virtual bool isValid(const Position &to) = 0; // Check the received move is in 
+        Piece(int r, int c);
+
+        bool isValid(const Position &to); // Check the received move is in 
 
         Info getInfo() const override;
 
