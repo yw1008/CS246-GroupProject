@@ -8,40 +8,28 @@
 using namespace std;
 
 // Constructor
-Game::Game() : score{0, 0}, isWhiteTurn{true}, isFinished{true}, whitePlayer{nullptr}, blackPlayer{nullptr}, board{nullptr} {}
+Game::Game() : score{0, 0}, isWhiteTurn{true}, isFinished{false}, whitePlayer{nullptr}, blackPlayer{nullptr}, board{nullptr} {}
 
 // Destructor
-// Game::~Game() {
-//     delete whitePlayer;
-//     delete blackPlayer;
-//     delete board;
-// }
-
-void Game::setBoard(unique_ptr<Board> b) {
-    board = move(b);
+Game::~Game() {
+    delete whitePlayer;
+    delete blackPlayer;
+    delete board;
 }
 
-void Game::setPlayers(unique_ptr<Player> white, unique_ptr<Player> black) {
-    whitePlayer = move(white);
-    blackPlayer = move(black);
+void Game::setBoard(Board* b) {
+    board = b;
 }
-// // Start a new game with given players
-// void Game::start(Player* white, Player* black, Board* b) {
-//     whitePlayer = white;
-//     blackPlayer = black;
-//     board = b;
-//     isWhiteTurn = true;
-//     isFinished = false;
-//     score[0] = 0;
-//     score[1] = 0;
-// }
 
-// // Set up the board at the beginning of the game
-// void Game::setUp() {
-//     board.init();
-//     // board gets the command for setUp
-//     board->setUp();
-// }
+void Game::setPlayers(Player* white, Player* black) {
+    whitePlayer = white;
+    blackPlayer = black;
+}
+
+// check if the move is valid
+bool Game::isValidMove(const std::string &startPos, const std::string &endPos) {
+    return board->isValidMove(startPos, endPos);
+}
 
 // Make a move from startPos to endPos
 void Game::makeMove(const string &startPos, const string &endPos) {
@@ -53,7 +41,11 @@ void Game::makeMove(const string &startPos, const string &endPos) {
         cout << "Board is not initialized." << endl;
         return;
     }
+
+    // Move piece from startPos to endPos
     board->makeMove(startPos, endPos);
+    // Change turn
+    isWhiteTurn = !isWhiteTurn;
 }
 
 // Check if current player is in check
@@ -148,9 +140,4 @@ void Game::setIsFinished() {
 // Returns true if game is finished
 bool Game::getIsFinished() const {
     return isFinished;
-}
-
-void Game::changeTurn() {
-    isWhiteTurn = !isWhiteTurn;
-    board->changeTurn();
 }

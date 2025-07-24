@@ -9,17 +9,6 @@ using namespace std;
 
 const int BOARD_SIZE = 8;
 
-// Board::Board(): 
-//         theBoard{BOARD_SIZE, vector<Piece>(BOARD_SIZE)}, 
-//         isWhite{true}, isFinish{false}, prev{""} {
-//     for (int r = 0; r < BOARD_SIZE; ++r) {
-//         for (int c = 0; c < BOARD_SIZE; ++c) {
-//             if (c%2 == 0) theBoard[r][c].type = ' ';
-//             else theBoard[r][c].type = '_';
-//         }
-//     }
-// } // not sure about the player for now
-
 Board::~Board() {
     delete td;
     // delete gd;
@@ -240,7 +229,7 @@ char Board::getPiece(string pos) {
     return theBoard[r][c].getType();
 }
 
-void Board::makeMove(string startPos, string endPos) {
+bool Board::isValidMove(string startPos, string endPos) {
     // need to check if the move make player him/herself check
     int startr, startc, endr, endc;
 
@@ -250,7 +239,7 @@ void Board::makeMove(string startPos, string endPos) {
         startr = intStartPos[1];
     } catch (const invalid_argument& e) {
         cerr << "Invalid move: start position error - " << e.what() << endl;
-        return;
+        return false;
     }
 
     try {
@@ -259,7 +248,7 @@ void Board::makeMove(string startPos, string endPos) {
         endr = intEndPos[1];
     } catch (const invalid_argument& e) {
         cerr << "Invalid move: end position error - " << e.what() << endl;
-        return;
+        return false;
     }
 
     Colour c;
@@ -268,7 +257,7 @@ void Board::makeMove(string startPos, string endPos) {
 
     if (theBoard[startr][startc].getColour() != c) {
         cerr << "Invalid move: must move piece of your colour" << endl;
-        return;
+        return false;
     }
 
     // check it the movement is correct for the piece type
@@ -321,7 +310,7 @@ void Board::makeMove(string startPos, string endPos) {
             
             if (theBoard[tempr][tempc].getPieceType() != pieceType::Nothing) {
                 cerr << "Invalid move: another piece blocks the way" << endl;
-                return;
+                return false;
             }
         } 
     }
@@ -330,10 +319,29 @@ void Board::makeMove(string startPos, string endPos) {
         // catching the same coloured piece
         if (theBoard[endr][endc].getColour() == c) {
             cerr << "Invalid move: Catching the same coloured piece" << endl;
-            return;
+            return false;
         }
-        //if the move catch the other piece
-        else {
+    }
+    return true;
+}
+
+
+void Board::makeMove(string startPos, string endPos) {
+    int startr, startc, endr, endc;
+
+    vector<int> intStartPos = intPos(startPos);
+    startc = intStartPos[0];
+    startr = intStartPos[1];
+    vector<int> intEndPos = intPos(endPos);
+    endc = intEndPos[0];
+    endr = intEndPos[1];
+
+    Colour c;
+    if (isWhite) c = Colour::White;
+    else c = Colour::Black;
+        
+    if (theBoard[endr][endc].getPieceType() != pieceType::Nothing) {
+        if (theBoard[endr][endc].getColour() != c) {
             prev.removedPiece = theBoard[endr][endc].getPieceType();
             prev.removedColour = theBoard[endr][endc].getColour();
             theBoard[endr][endc].removePiece();
