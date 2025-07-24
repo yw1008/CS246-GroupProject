@@ -30,62 +30,67 @@ void Computer::move(std::string startPos, std::string endPos, Board *board) {
 
 // Level 1
 void Computer::moveLevel1(Board *board) {
-    std::srand(std::time(nullptr));
-    bool isWhite = Player::isWhite();
-    int fromC = 0;
-    int fromR = 0;
-    int toC = 0;
-    int toR = 0;
-    int randomPick = 0;
+    while(true){
+        std::srand(std::time(nullptr));
+        bool isWhite = Player::isWhite();
+        int fromC = 0;
+        int fromR = 0;
+        int toC = 0;
+        int toR = 0;
+        int randomPick = 0;
 
-    std::vector<std::vector<Piece>> current = board->getBoard();
-    for (int attempts = 0; attempts < 500; ++attempts) {
-        int vecSize = current.size();
-        int randomPickC = std::rand() % vecSize;
-        int randomPickR = std::rand() % vecSize;
-        Piece picked = current[randomPickR][randomPickC];
-        if(isWhite){
-            if(picked.getColour() == Colour::White){
-                int fromC = picked.getInfo().pos.col;
-                int fromR = picked.getInfo().pos.row;
-                break;
-            }
-        } else{
-            if(picked.getColour() == Colour::Black){
-                int fromC = picked.getInfo().pos.col;
-                int fromR = picked.getInfo().pos.row;
-                break;
+        std::vector<std::vector<Piece>> current = board->getBoard();
+        for (int attempts = 0; attempts < 500; ++attempts) {
+            int vecSize = current.size();
+            int randomPickC = std::rand() % vecSize;
+            int randomPickR = std::rand() % vecSize;
+            Piece picked = current[randomPickR][randomPickC];
+            if(isWhite){
+                if(picked.getColour() == Colour::White && !picked.getMoveType().empty()){
+                    int fromC = picked.getInfo().pos.col;
+                    int fromR = picked.getInfo().pos.row;
+                    break;
+                }
+            } else{
+                if(picked.getColour() == Colour::Black && !picked.getMoveType().empty()){
+                    int fromC = picked.getInfo().pos.col;
+                    int fromR = picked.getInfo().pos.row;
+                    break;
+                }
             }
         }
+        char from[] = "  ";
+        from[0] = 'a' + fromC;
+        from[1] = '1' + fromR;
+        std::string sFrom(from);
+
+        if(board->getBoard()[fromR][fromC].getMoveType()[0].repeatable){
+            std::vector<Position> nextmove = board->getNextMove(sFrom);
+            int size = nextmove.size();
+            randomPick = std::rand() % size;
+            Position nextP = nextmove[randomPick];
+            toC = nextP.col;
+            toR = nextP.row;
+        } else{
+            std::vector<moveType> notrepeatable = board->getBoard()[fromR][fromC].getMoveType();
+            int size = notrepeatable.size();
+            randomPick = std::rand() % size;
+            moveType pickedMT = notrepeatable[randomPick];
+            toC = fromC + pickedMT.colChange;
+            toR = fromR + pickedMT.rowChange;
+        }
+        char to[] = "  ";
+        to[0] = 'a' + toC;
+        to[1] = '1' + toR;
+        std::string sTo(to);
+        if(board->isValidMove(sFrom, sTo)){
+            board->makeMove(sFrom, sTo);
+            std::cout << "Computer (Level 1) moves: " << sFrom << " " << sTo << std::endl;
+            break;
+        } else {
+            continue;
+        }
     }
-    char from[] = "  ";
-    from[0] = 'a' + fromC;
-    from[1] = '0' + fromR;
-    std::string sFrom(from);
-
-    if(board->getBoard()[fromR][fromC].getMoveType()[0].repeatable){
-        std::vector<Position> nextmove = board->getNextMove(sFrom);
-        int size = nextmove.size();
-        randomPick = std::rand() % size;
-        Position nextP = nextmove[randomPick];
-        toC = nextP.col;
-        toR = nextP.row;
-    } else{
-        std::vector<moveType> notrepeatable = board->getBoard()[fromR][fromC].getMoveType();
-        int size = notrepeatable.size();
-        randomPick = std::rand() % size;
-        moveType pickedMT = notrepeatable[randomPick];
-        toC = fromC + pickedMT.colChange;
-        toR = fromR + pickedMT.rowChange;
-    }
-    char to[] = "  ";
-    to[0] = 'a' + toC;
-    to[1] = '0' + toR;
-    std::string sTo(to);
-
-    board->makeMove(sFrom, sTo);
-
-    std::cout << "Computer (Level 1) moves: " << sFrom << " " << sTo << std::endl;
 }
 
 /*
