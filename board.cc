@@ -9,17 +9,6 @@ using namespace std;
 
 const int BOARD_SIZE = 8;
 
-// Board::Board(): 
-//         theBoard{BOARD_SIZE, vector<Piece>(BOARD_SIZE)}, 
-//         isWhite{true}, isFinish{false}, prev{""} {
-//     for (int r = 0; r < BOARD_SIZE; ++r) {
-//         for (int c = 0; c < BOARD_SIZE; ++c) {
-//             if (c%2 == 0) theBoard[r][c].type = ' ';
-//             else theBoard[r][c].type = '_';
-//         }
-//     }
-// } // not sure about the player for now
-
 Board::~Board() {
     delete td;
     // delete gd;
@@ -350,13 +339,6 @@ void Board::makeMove(string startPos, string endPos) {
     Colour c;
     if (isWhite) c = Colour::White;
     else c = Colour::Black;
-
-    // Position toPos{endc, endr};
-    // Position diffPos;
-    // diffPos.col = endc - startc;
-    // diffPos.row = endr - startr;
-    // vector<moveType> possibleMove = theBoard[startr][startc].getMoveType();
-    // moveType correctMove;
         
     if (theBoard[endr][endc].getPieceType() != pieceType::Nothing) {
         if (theBoard[endr][endc].getColour() != c) {
