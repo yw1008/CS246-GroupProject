@@ -43,16 +43,18 @@ vector<int> Board::intPos(string pos) {
         throw invalid_argument("Row must be between '1' and '8'.");
     }
 
-    vector<int> intPos(2);
+    vector<int> ip(2);
 
     // Convert column character 'a'–'h' to integer 0–7
-    intPos[0] = col - 'a';
+    ip[0] = col - 'a';
 
     // Convert row character '1'–'8' to integer 0–7
     // You can simplify conversion by subtracting '1'
-    intPos[1] = row - '1';
+    ip[1] = row - '1';
+    // the chess board is in reverse order for the row
+    ip[1] = 7 - ip[1];
 
-    return intPos;
+    return ip;
 }
 
 pieceType Board::getPieceType(char piece) {
@@ -79,6 +81,7 @@ Colour Board::getPieceColor(char piece) {
 }
 
 void Board::setUp(string cmd, string type, string position, string c) {
+    // invalid input if board already has that piece
     if (cmd == "+") { // add piece
         char piece = type[0];
         string pos = position;
