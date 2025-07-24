@@ -23,6 +23,7 @@ int main() {
     while(true) {
         string line; // must get a whole line of the command
         getline (cin, line);
+        // game should be initialized after the first game is called
         whiteScore += game.getScore("White");
         blackScore += game.getScore("Black");
 
@@ -35,6 +36,7 @@ int main() {
             break;
         }
         if(cmd == "game") {
+            // should initialize the game 
             // set players
             string wp, bp;
             if (!(issProgram >> wp >> bp)) {
@@ -73,11 +75,12 @@ int main() {
             // game.start(whiteP, blackP, board);
             game.setBoard(board);
             game.setPlayers(whiteP, blackP);
-            game.setIsFinished();
+            // game.setIsFinished();
 
             cout << "The game is started" << endl;
             // need to print starting board
             while(!game.getIsFinished()) {
+                cout << *board << endl;
                 // cout << "Enter move/resign/undo for the game" << endl;
                 
                 // read new input
@@ -88,29 +91,35 @@ int main() {
                     string whoWon = whosTurn == "Black" ? "White" : "Black";
                     game.setIsFinished();
                     game.addScore(whoWon);
-                    isSetup = false;                    
+                    isSetup = false;
+                    cout << *board << endl;              
                 } else if (cmd == "move") {
-                        if ((whosTurn == "White" && !(whiteP->getLevel() == 0)) || (whosTurn == "Black" && !(blackP->getLevel() == 0))) {
-                            if((whosTurn == "White" && (whiteP->getLevel() == 1))) {
-                                whiteP->move(*board);
-                            } else if(whosTurn == "Black" && (blackP->getLevel() == 1)) {
-                                blackP->move(*board);
-                            }
-                        } 
-                        // else {
-                        //     if((whosTurn == "White" && (whiteP->getLevel() == 0))) {
-                        //         whiteP->move(*board);
-                        //     } else if(whosTurn == "Black" && (blackP->getLevel() == 0)) {
-                        //         blackP->move(*board);
-                        //     }
-                        // }
                         string startPos, endPos;
                         if (!(issGame >> startPos >> endPos)) {
                             cerr << "Invalid input: must enter to positions" << endl;
                             continue;
                         }
+                        
                         // castling, pawn promotion
-                        game.makeMove(startPos, endPos);
+                        if (!game.isValidMove(startPos, endPos)) {
+                            continue;
+                        } 
+                        if ((whosTurn == "White" && !(whiteP->getLevel() == 0)) || (whosTurn == "Black" && !(blackP->getLevel() == 0))) {
+                            if((whosTurn == "White" && (whiteP->getLevel() == 1))) {
+                                whiteP->move(startPos, endPos, board);
+                            } else if(whosTurn == "Black" && (blackP->getLevel() == 1)) {
+                                blackP->move(startPos, endPos, board);
+                            }
+                        } 
+                        else {
+                            if((whosTurn == "White" && (whiteP->getLevel() == 0))) {
+                                whiteP->move(startPos, endPos, board);
+                            } else if(whosTurn == "Black" && (blackP->getLevel() == 0)) {
+                                blackP->move(startPos, endPos, board);
+                            }
+                        }
+                        // game.makeMove(startPos, endPos);
+
                         if(game.isWhiteInCheckmate()){
                             cout << "Checkmate! Black wins!" << endl;
                             whiteP->~Player();
@@ -133,7 +142,7 @@ int main() {
                                 cout << "White is in check." << endl;
                                 cout << "Black is in check." << endl;
                             } else {
-                                if(board->isStalemate()){
+                                if(board->isStalemate()){ // segmentation fault -> getState
                                 cout << "Stalemate!" << endl;
                                 whiteP->~Player();
                                 blackP->~Player();
@@ -143,6 +152,8 @@ int main() {
                         }
 
                         whosTurn = whosTurn == "Black" ? "White" : "Black";
+                        board->changeTurn();
+                        // cout << *board << endl;
                     }
                     else if (cmd == "undo") {
                         game.undo();
@@ -190,6 +201,7 @@ int main() {
                     cerr << "Setup error: " << e.what() << endl;
                     continue; // do not break on error
                 }
+                cout << *board << endl;
             }
             std::cout << "Exited setup mode.\n"; // finish the setup
         } //setup

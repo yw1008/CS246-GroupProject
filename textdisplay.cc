@@ -20,6 +20,9 @@ void TextDisplay::notify(Subject &whoNotified) {
     Info info = whoNotified.getInfo();
     Colour c = info.colour;
     pieceType type = info.piecetype;
+    if (type == pieceType::Nothing) {
+        theTD[info.pos.row][info.pos.col] = (info.pos.row % 2 == info.pos.col % 2) ? '_' : ' ';
+    }
     if (c == Colour::White) {
         if (type == pieceType::King) theTD[info.pos.row][info.pos.col] = 'K';
         else if (type == pieceType::Queen) theTD[info.pos.row][info.pos.col] = 'Q';
@@ -27,7 +30,6 @@ void TextDisplay::notify(Subject &whoNotified) {
         else if (type == pieceType::Knight) theTD[info.pos.row][info.pos.col] = 'N';
         else if (type == pieceType::Bishop) theTD[info.pos.row][info.pos.col] = 'B';
         else if (type == pieceType::Pawn) theTD[info.pos.row][info.pos.col] = 'P';
-        else theTD[info.pos.row][info.pos.col] = ' ';
     }
     else {
         if (type == pieceType::King) theTD[info.pos.row][info.pos.col] = 'k';
@@ -36,7 +38,6 @@ void TextDisplay::notify(Subject &whoNotified) {
         else if (type == pieceType::Knight) theTD[info.pos.row][info.pos.col] = 'n';
         else if (type == pieceType::Bishop) theTD[info.pos.row][info.pos.col] = 'b';
         else if (type == pieceType::Pawn) theTD[info.pos.row][info.pos.col] = 'p';
-        else theTD[info.pos.row][info.pos.col] = '_';
     }
 }
 

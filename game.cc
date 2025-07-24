@@ -25,23 +25,11 @@ void Game::setPlayers(Player* white, Player* black) {
     whitePlayer = white;
     blackPlayer = black;
 }
-// // Start a new game with given players
-// void Game::start(Player* white, Player* black, Board* b) {
-//     whitePlayer = white;
-//     blackPlayer = black;
-//     board = b;
-//     isWhiteTurn = true;
-//     isFinished = false;
-//     score[0] = 0;
-//     score[1] = 0;
-// }
 
-// // Set up the board at the beginning of the game
-// void Game::setUp() {
-//     board.init();
-//     // board gets the command for setUp
-//     board->setUp();
-// }
+// check if the move is valid
+bool Game::isValidMove(const std::string &startPos, const std::string &endPos) {
+    return board->isValidMove(startPos, endPos);
+}
 
 // Make a move from startPos to endPos
 void Game::makeMove(const string &startPos, const string &endPos) {
@@ -55,7 +43,6 @@ void Game::makeMove(const string &startPos, const string &endPos) {
     }
 
     // Move piece from startPos to endPos
-    char type = board->getPiece(startPos);
     board->makeMove(startPos, endPos);
     // Change turn
     isWhiteTurn = !isWhiteTurn;

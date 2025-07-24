@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include "state.h"
 #include "piece.h"
 #include "player.h"
 #include "textdisplay.h"
@@ -21,7 +22,7 @@ struct History {
 
 class Board {
     std::vector<std::vector<Piece>> theBoard; // The actual board
-    bool isWhite;
+    bool isWhite = true;
     bool isFinish;
     Position whiteK = {-1, -1}; // position of white King
     Position blackK = {-1, -1}; // position of black King
@@ -55,6 +56,9 @@ public:
 
     // get the name of the type (distinguish piece type and color)
     char getPiece (std::string pos);
+
+    // check if the move is valid
+    bool isValidMove(std::string startPos, std::string endPos);
 
     // move piece from startpos to endpos
     void makeMove(std::string startPos, std::string endPos);

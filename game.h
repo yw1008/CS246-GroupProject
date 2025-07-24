@@ -27,8 +27,8 @@ public:
     // set the player for each game
     void setPlayers(Player* white, Player* black);
 
-    // // Starts a new game with the given white and black players
-    // void start(Player* white, Player* black, Board* b);
+    // check if the move is valid
+    bool isValidMove(const std::string &startPos, const std::string &endPos);
 
     // Makes a move from startPos to endPos
     void makeMove(const std::string &startPos, const std::string &endPos);

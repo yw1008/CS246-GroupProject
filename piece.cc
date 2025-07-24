@@ -140,4 +140,6 @@ void Piece::setState(stateType sT, Colour c){
 void Piece::removePiece(){
     pT = pieceType::Nothing;
     colour = Colour::Nothing;
+    setMoveType();
+    notifyObservers();
 }

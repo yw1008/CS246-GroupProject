@@ -9,17 +9,6 @@ using namespace std;
 
 const int BOARD_SIZE = 8;
 
-// Board::Board(): 
-//         theBoard{BOARD_SIZE, vector<Piece>(BOARD_SIZE)}, 
-//         isWhite{true}, isFinish{false}, prev{""} {
-//     for (int r = 0; r < BOARD_SIZE; ++r) {
-//         for (int c = 0; c < BOARD_SIZE; ++c) {
-//             if (c%2 == 0) theBoard[r][c].type = ' ';
-//             else theBoard[r][c].type = '_';
-//         }
-//     }
-// } // not sure about the player for now
-
 Board::~Board() {
     delete td;
     // delete gd;
@@ -43,19 +32,22 @@ vector<int> Board::intPos(string pos) {
         throw invalid_argument("Row must be between '1' and '8'.");
     }
 
-    vector<int> intPos(2);
+    vector<int> ip(2);
 
     // Convert column character 'a'–'h' to integer 0–7
-    intPos[0] = col - 'a';
+    ip[0] = col - 'a';
 
     // Convert row character '1'–'8' to integer 0–7
     // You can simplify conversion by subtracting '1'
-    intPos[1] = row - '1';
+    ip[1] = row - '1';
+    // the chess board is in reverse order for the row
+    ip[1] = 7 - ip[1];
 
-    return intPos;
+    return ip;
 }
 
 pieceType Board::getPieceType(char piece) {
+    if (piece == '\0') return pieceType::Nothing; // if piece is empty
     switch (toupper(piece)) {
         case 'K': return pieceType::King;
         case 'Q': return pieceType::Queen;
@@ -70,15 +62,18 @@ pieceType Board::getPieceType(char piece) {
 
 Colour Board::getPieceColor(char piece) {
     if (piece == 'P' || piece == 'K' || piece == 'Q' || piece == 'N' || piece == 'B' || piece == 'R') {
-        return Colour::Black;
-    } else if (piece == 'p' || piece == 'k' || piece == 'q' || piece == 'n' || piece == 'b' || piece == 'r') {
         return Colour::White;
+    } else if (piece == 'p' || piece == 'k' || piece == 'q' || piece == 'n' || piece == 'b' || piece == 'r') {
+        return Colour::Black;
+    } else if (piece == '\0') { // if piece is empty
+        return Colour::Nothing;
     } else {
         throw invalid_argument("Invalid piece color.");
     }
 }
 
 void Board::setUp(string cmd, string type, string position, string c) {
+    // invalid input if board already has that piece
     if (cmd == "+") { // add piece
         char piece = type[0];
         string pos = position;
@@ -103,13 +98,13 @@ void Board::setUp(string cmd, string type, string position, string c) {
     } else if (cmd == "-") { // remove piece
         string pos = position;
         char piece = type[0];
-
+        
         try {
             vector<int> coords = intPos(pos);
             int row = coords[1];
             int col = coords[0];
             if (theBoard[row][col].getPieceType() != pieceType::Nothing) {
-                theBoard[row][col].removePiece(); 
+                theBoard[row][col].removePiece(); // piece is not removed
             }
             // track king position
             pieceType pt = getPieceType(piece);
@@ -119,7 +114,7 @@ void Board::setUp(string cmd, string type, string position, string c) {
                 else blackK = {-1, -1};
             }
         } catch (invalid_argument &e) {
-            cerr << "Error: " << e.what() << endl;
+            cerr << "Error: " << e.what() << endl; // print invalid piece type error
         }
 
     } else if (cmd == "=") { // change turn (colour)
@@ -234,7 +229,7 @@ char Board::getPiece(string pos) {
     return theBoard[r][c].getType();
 }
 
-void Board::makeMove(string startPos, string endPos) {
+bool Board::isValidMove(string startPos, string endPos) {
     // need to check if the move make player him/herself check
     int startr, startc, endr, endc;
 
@@ -244,7 +239,7 @@ void Board::makeMove(string startPos, string endPos) {
         startr = intStartPos[1];
     } catch (const invalid_argument& e) {
         cerr << "Invalid move: start position error - " << e.what() << endl;
-        return;
+        return false;
     }
 
     try {
@@ -253,7 +248,7 @@ void Board::makeMove(string startPos, string endPos) {
         endr = intEndPos[1];
     } catch (const invalid_argument& e) {
         cerr << "Invalid move: end position error - " << e.what() << endl;
-        return;
+        return false;
     }
 
     Colour c;
@@ -262,7 +257,7 @@ void Board::makeMove(string startPos, string endPos) {
 
     if (theBoard[startr][startc].getColour() != c) {
         cerr << "Invalid move: must move piece of your colour" << endl;
-        return;
+        return false;
     }
 
     // check it the movement is correct for the piece type
@@ -315,7 +310,7 @@ void Board::makeMove(string startPos, string endPos) {
             
             if (theBoard[tempr][tempc].getPieceType() != pieceType::Nothing) {
                 cerr << "Invalid move: another piece blocks the way" << endl;
-                return;
+                return false;
             }
         } 
     }
@@ -324,10 +319,29 @@ void Board::makeMove(string startPos, string endPos) {
         // catching the same coloured piece
         if (theBoard[endr][endc].getColour() == c) {
             cerr << "Invalid move: Catching the same coloured piece" << endl;
-            return;
+            return false;
         }
-        //if the move catch the other piece
-        else {
+    }
+    return true;
+}
+
+
+void Board::makeMove(string startPos, string endPos) {
+    int startr, startc, endr, endc;
+
+    vector<int> intStartPos = intPos(startPos);
+    startc = intStartPos[0];
+    startr = intStartPos[1];
+    vector<int> intEndPos = intPos(endPos);
+    endc = intEndPos[0];
+    endr = intEndPos[1];
+
+    Colour c;
+    if (isWhite) c = Colour::White;
+    else c = Colour::Black;
+        
+    if (theBoard[endr][endc].getPieceType() != pieceType::Nothing) {
+        if (theBoard[endr][endc].getColour() != c) {
             prev.removedPiece = theBoard[endr][endc].getPieceType();
             prev.removedColour = theBoard[endr][endc].getColour();
             theBoard[endr][endc].removePiece();
@@ -356,8 +370,7 @@ void Board::makeMove(string startPos, string endPos) {
 } //makeMove
 
 void Board::changeTurn() {
-    if (isWhite) isWhite = false;
-    else isWhite = true;
+    isWhite = !isWhite;
 } //changeTurn
 
 vector<Position> Board::allPossibleMoves(){
@@ -375,7 +388,7 @@ vector<Position> Board::allPossibleMoves(){
             for(size_t k = 0; k < next.size(); ++k){
                 if(next[k].repeatable){
                     for(int w = 1; w < BOARD_SIZE + 1; ++w){
-                        if(j + w * next[k].colChange < 9 && i + w * next[k].rowChange < 9 && i + w * next[k].rowChange > 0 && j + w * next[k].colChange > 0){
+                        if(j + w * next[k].colChange < 8 && i + w * next[k].rowChange < 8 && i + w * next[k].rowChange > -1 && j + w * next[k].colChange > -1){
                             Position nextP{j + w * next[k].colChange, i + w * next[k].rowChange};
                             if(theBoard[i][j].getColour() == Colour::White){
                                 if(theBoard[i + next[k].rowChange][j + next[k].colChange].getState().sT == stateType::blackCheck){ // blackCheck is the piece where black piece can check
@@ -383,19 +396,20 @@ vector<Position> Board::allPossibleMoves(){
                                 } else{
                                     theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::whiteCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
                                 }
-                            } else {
+                            } else if(theBoard[i][j].getColour() == Colour::Black){
                                 if(theBoard[i + next[k].rowChange][j].getState().sT == stateType::whiteCheck){
                                     theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::bothCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
                                 } else {
                                     theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::blackCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
                                 }
+                            } else {
+                                break;
                             }
                             nextmoves.emplace_back(nextP);
                         }
-                        break;
                     }
                 } else {
-                    if(j + next[k].colChange < 9 && i + next[k].rowChange < 9 && i + next[k].rowChange > 0 && j + next[k].colChange > 0){
+                    if(j + next[k].colChange < 8 && i + next[k].rowChange < 8 && i + next[k].rowChange > -1 && j + next[k].colChange > -1){
                         Position nextP{j + next[k].colChange, i + next[k].rowChange};
                         if(theBoard[i][j].getColour() == Colour::White){
                             if(theBoard[i + next[k].rowChange][j + next[k].colChange].getState().sT == stateType::blackCheck){ // blackCheck is the piece where black piece can check
@@ -403,7 +417,7 @@ vector<Position> Board::allPossibleMoves(){
                             } else{
                                 theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::whiteCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
                             }
-                        } else {
+                        } else if(theBoard[i][j].getColour() == Colour::Black) {
                             if(theBoard[i + next[k].rowChange][j].getState().sT == stateType::whiteCheck){
                                 theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::bothCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
                             } else {
@@ -428,17 +442,29 @@ bool Board::isStalemate(){
     return false;
 } //isStalemate
 
-vector<Position> Board::getNextMove(string startPos){
+vector<Position> Board::getNextMove(string startPos){ //return next move for chosen piece's pieceType
     vector<Position> nextPos;
     vector intStartPos = intPos(startPos);
     int startr = intStartPos[1];
     int startc= intStartPos[0];
     vector<moveType> movetypes = theBoard[startr][startc].getMoveType();
-    for(size_t j = 0; j < movetypes.size(); ++j){
-        moveType tempMT = movetypes[j];
-        for(int i = 1; i < BOARD_SIZE + 1; ++i){
-            int tempR = startr + i*tempMT.rowChange;
-            int tempC = startc + i*tempMT.colChange;
+    if(movetypes[0].repeatable){
+        for(size_t j = 0; j < movetypes.size(); ++j){
+            moveType tempMT = movetypes[j];
+            for(int i = 1; i < BOARD_SIZE + 1; ++i){
+                int tempR = startr + i*tempMT.rowChange;
+                int tempC = startc + i*tempMT.colChange;
+                if(tempR < 8 && tempC < 8 && tempR >= 0 && tempC >= 0){
+                    Position next{tempC, tempR};
+                    nextPos.emplace_back(next);
+                }
+            }
+        }
+    } else {
+        for(size_t j = 0; j < movetypes.size(); ++j){
+            moveType tempMT = movetypes[j];
+            int tempR = startr + tempMT.rowChange;
+            int tempC = startc + tempMT.colChange;
             if(tempR < 8 && tempC < 8 && tempR >= 0 && tempC >= 0){
                 Position next{tempC, tempR};
                 nextPos.emplace_back(next);
@@ -470,27 +496,39 @@ string Board::isInCheck(){
     }
 } //isInCheck
 
-bool Board::whiteKingCanMove(){ // true when whiteKingCanMove
+bool Board::whiteKingCanMove() {
     vector<Position> nextW = theBoard[whiteK.row][whiteK.col].nextMove();
-    for(size_t i = 0; i < nextW.size(); ++i){
-        Piece nextMove = theBoard[whiteK.row + nextW[i].row][whiteK.col + nextW[i].col];
-        if(nextMove.getColour() == Colour::White || nextMove.getState().sT == stateType::whiteCheck || nextMove.getState().sT == stateType::bothCheck){
-            return false;
-        }
-    }
-    return true;
-} //whiteKingCanMove
+    for(size_t i = 0; i < nextW.size(); ++i) {
+        int r = whiteK.row + nextW[i].row;
+        int c = whiteK.col + nextW[i].col;
+        if (r < 0 || r >= BOARD_SIZE || c < 0 || c >= BOARD_SIZE) continue;
 
-bool Board::blackKingCanMove(){ // true when blackKingCanMove
-    vector<Position> nextB = theBoard[blackK.row][blackK.col].nextMove();
-    for(size_t i = 0; i < nextB.size(); ++i){
-        Piece nextMove = theBoard[blackK.row + nextB[i].row][blackK.col + nextB[i].col];
-        if(nextMove.getColour() == Colour::Black || nextMove.getState().sT == stateType::blackCheck || nextMove.getState().sT == stateType::bothCheck){
+        Piece &nextMove = theBoard[r][c];  // Use reference to avoid copying
+        if (nextMove.getColour() == Colour::White
+            || nextMove.getState().sT == stateType::whiteCheck
+            || nextMove.getState().sT == stateType::bothCheck) {
             return false;
         }
     }
     return true;
-} //blackKingCanMove
+} // whiteKingCanMove
+
+bool Board::blackKingCanMove() {
+    vector<Position> nextB = theBoard[blackK.row][blackK.col].nextMove();
+    for(size_t i = 0; i < nextB.size(); ++i) {
+        int r = blackK.row + nextB[i].row;
+        int c = blackK.col + nextB[i].col;
+        if (r < 0 || r >= BOARD_SIZE || c < 0 || c >= BOARD_SIZE) continue;
+
+        Piece &nextMove = theBoard[r][c];  // Use reference
+        if (nextMove.getColour() == Colour::Black
+            || nextMove.getState().sT == stateType::blackCheck
+            || nextMove.getState().sT == stateType::bothCheck) {
+            return false;
+        }
+    }
+    return true;
+} // blackKingCanMove
 
 // allow a single undo
 void Board::undo() {
