@@ -4,6 +4,7 @@
 #include "board.h"
 #include <string>
 
+
 class Pawn : public Piece {
     bool isFirstMove;
     bool isEnPassant;
@@ -27,7 +28,25 @@ public:
 
 #endif
 
+
 /*
+class Pawn : public Piece {
+    bool isFirstMove;
+    bool isEnPassant;
+    std::vector<moveType> possibleWays;
+
+public:
+    Pawn(bool fm, bool ep, std::vector<moveType> pW);
+    bool isValid(int fromRow, int fromCol, int toRow, int toCol, const std::vector<std::vector<Piece>> &board) override;
+    char getName() override;
+    std::vector<moveType> getMoveType() override;
+    bool getIsFirstMove() const;
+    bool EnPassant(int fromRow, int fromCol, int toRow, int toCol, const std::vector<std::vector<Piece>> &board) const;
+    char promotion();
+};
+
+#endif
+
 class Pawn : public Piece {
 public:
     Pawn(int r, int c, Colour col);
