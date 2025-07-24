@@ -75,7 +75,7 @@ int main() {
             // game.start(whiteP, blackP, board);
             game.setBoard(board);
             game.setPlayers(whiteP, blackP);
-            game.setIsFinished();
+            // game.setIsFinished();
 
             cout << "The game is started" << endl;
             // need to print starting board
@@ -91,22 +91,9 @@ int main() {
                     string whoWon = whosTurn == "Black" ? "White" : "Black";
                     game.setIsFinished();
                     game.addScore(whoWon);
-                    isSetup = false;                    
+                    isSetup = false;
+                    cout << *board << endl;              
                 } else if (cmd == "move") {
-                        if ((whosTurn == "White" && !(whiteP->getLevel() == 0)) || (whosTurn == "Black" && !(blackP->getLevel() == 0))) {
-                            if((whosTurn == "White" && (whiteP->getLevel() == 1))) {
-                                whiteP->move(*board);
-                            } else if(whosTurn == "Black" && (blackP->getLevel() == 1)) {
-                                blackP->move(*board);
-                            }
-                        } 
-                        // else {
-                        //     if((whosTurn == "White" && (whiteP->getLevel() == 0))) {
-                        //         whiteP->move(*board);
-                        //     } else if(whosTurn == "Black" && (blackP->getLevel() == 0)) {
-                        //         blackP->move(*board);
-                        //     }
-                        // }
                         string startPos, endPos;
                         if (!(issGame >> startPos >> endPos)) {
                             cerr << "Invalid input: must enter to positions" << endl;
@@ -114,7 +101,25 @@ int main() {
                         }
                         
                         // castling, pawn promotion
-                        game.makeMove(startPos, endPos);
+                        if (!game.isValidMove(startPos, endPos)) {
+                            continue;
+                        } 
+                        if ((whosTurn == "White" && !(whiteP->getLevel() == 0)) || (whosTurn == "Black" && !(blackP->getLevel() == 0))) {
+                            if((whosTurn == "White" && (whiteP->getLevel() == 1))) {
+                                whiteP->move(startPos, endPos, board);
+                            } else if(whosTurn == "Black" && (blackP->getLevel() == 1)) {
+                                blackP->move(startPos, endPos, board);
+                            }
+                        } 
+                        else {
+                            if((whosTurn == "White" && (whiteP->getLevel() == 0))) {
+                                whiteP->move(startPos, endPos, board);
+                            } else if(whosTurn == "Black" && (blackP->getLevel() == 0)) {
+                                blackP->move(startPos, endPos, board);
+                            }
+                        }
+                        // game.makeMove(startPos, endPos);
+
                         if(game.isWhiteInCheckmate()){
                             cout << "Checkmate! Black wins!" << endl;
                             whiteP->~Player();

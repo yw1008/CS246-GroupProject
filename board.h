@@ -32,6 +32,9 @@ class Board {
     GraphicDisplay *gd = nullptr;
     
 public:
+    // construct empty board without pieces
+    // Board(); // default ctor
+
     std::vector<std::vector<Piece>> getBoard();
 
     ~Board(); // dtor

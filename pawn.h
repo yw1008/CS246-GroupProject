@@ -13,6 +13,8 @@ class Pawn: public Piece {
         // Pawn(bool fm, bool ep, std::vector<moveType> mt);
         Pawn(bool fm, bool ep, std::vector<moveType> pW);
 
+        bool isValid(const string &to) override;
+
         char getName();
 
         std::vector<moveType> getMoveType();

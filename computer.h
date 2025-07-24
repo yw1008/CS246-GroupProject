@@ -10,10 +10,10 @@ class Computer : public Player {
 public:
     Computer(bool isWhite, int level);
     int getLevel() const;
-    void move(Board &board) override;
-    ~Computer() override;
+    void move(std::string startPos, std::string endPos, Board *board) override;
+    //~Computer() override;
 
-    void moveLevel1(Board &board);
+    void moveLevel1(Board *board);
     // void moveLevel2(Board &board);
     // void moveLevel3(Board &board);
 };

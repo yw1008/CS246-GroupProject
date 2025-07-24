@@ -16,9 +16,9 @@ int Computer::getLevel() const {
     return Player::getLevel();
 }
 
-void Computer::move(Board &board) {
+void Computer::move(std::string startPos, std::string endPos, Board *board) {
     if(getLevel() == 1){
-        moveLevel1(std::move(board));
+        moveLevel1(board);
     // } else if(getLevel() == 2){
 
     // }else if(getLevel() == 3){
@@ -29,7 +29,7 @@ void Computer::move(Board &board) {
 }
 
 // Level 1
-void Computer::moveLevel1(Board &board) {
+void Computer::moveLevel1(Board *board) {
     std::srand(std::time(nullptr));
     bool isWhite = Player::isWhite();
     int fromC = 0;
