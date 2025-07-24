@@ -4,13 +4,17 @@
 #include "game.h"
 #include "board.h"
 
+using namespace std;
+
 Human::Human(bool isWhite, int lv) : Player(isWhite, lv) {}
 
 Human::~Human() = default;
 
 void Human::move(Board &b) {
-    std::string from, to;
-    std::cout << "Enter your move: ";
-    std::cin >> from >> to;
-    b.makeMove(from, to);
+    string startPos, endPos;
+    if (!(cin >> startPos >> endPos)) {
+        cerr << "Invalid input: must enter to positions" << endl;
+    }
+    // castling, pawn promotion
+    
 }

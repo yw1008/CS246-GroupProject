@@ -57,27 +57,6 @@ void Game::makeMove(const string &startPos, const string &endPos) {
     // Move piece from startPos to endPos
     char type = board->getPiece(startPos);
     board->makeMove(startPos, endPos);
-    if(isWhiteInCheckmate()){
-        cout << "Checkmate! Black wins!" << endl;
-        isFinished = true;
-    } else if(isBlackInCheckmate()){
-        cout << "Checkmate! White wins!" << endl;
-        isFinished = true;
-    } else {
-        if(isInCheck() == "white"){
-            cout << "White is in check." << endl;
-        } else if(isInCheck() == "black"){
-            cout << "Black is in check." << endl;
-        } else if(isInCheck() == "both"){
-            cout << "White is in check." << endl;
-            cout << "Black is in check." << endl;
-        } else {
-            if(board->isStalemate()){
-            cout << "Stalemate!" << endl;
-            isFinished = true;
-            }
-        }
-    }
     // Change turn
     isWhiteTurn = !isWhiteTurn;
 }
@@ -164,13 +143,11 @@ int Game::getScore(const std::string &color) const {
 }
 
 // Marks game as finished, specifying the winner
-void Game::setIsFinished(const std::string &color) {
+void Game::setIsFinished() {
     if (isFinished) {
-        return;
+        isFinished = false;
     }
-
     isFinished = true;
-    std::cout << color << " wins!\n";
 }
 
 // Returns true if game is finished
