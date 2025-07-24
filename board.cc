@@ -488,27 +488,39 @@ string Board::isInCheck(){
     }
 } //isInCheck
 
-bool Board::whiteKingCanMove(){ // true when whiteKingCanMove
+bool Board::whiteKingCanMove() {
     vector<Position> nextW = theBoard[whiteK.row][whiteK.col].nextMove();
-    for(size_t i = 0; i < nextW.size(); ++i){
-        Piece nextMove = theBoard[whiteK.row + nextW[i].row][whiteK.col + nextW[i].col];
-        if(nextMove.getColour() == Colour::White || nextMove.getState().sT == stateType::whiteCheck || nextMove.getState().sT == stateType::bothCheck){
-            return false;
-        }
-    }
-    return true;
-} //whiteKingCanMove
+    for(size_t i = 0; i < nextW.size(); ++i) {
+        int r = whiteK.row + nextW[i].row;
+        int c = whiteK.col + nextW[i].col;
+        if (r < 0 || r >= BOARD_SIZE || c < 0 || c >= BOARD_SIZE) continue;
 
-bool Board::blackKingCanMove(){ // true when blackKingCanMove
-    vector<Position> nextB = theBoard[blackK.row][blackK.col].nextMove();
-    for(size_t i = 0; i < nextB.size(); ++i){
-        Piece nextMove = theBoard[blackK.row + nextB[i].row][blackK.col + nextB[i].col];
-        if(nextMove.getColour() == Colour::Black || nextMove.getState().sT == stateType::blackCheck || nextMove.getState().sT == stateType::bothCheck){
+        Piece &nextMove = theBoard[r][c];  // Use reference to avoid copying
+        if (nextMove.getColour() == Colour::White
+            || nextMove.getState().sT == stateType::whiteCheck
+            || nextMove.getState().sT == stateType::bothCheck) {
             return false;
         }
     }
     return true;
-} //blackKingCanMove
+} // whiteKingCanMove
+
+bool Board::blackKingCanMove() {
+    vector<Position> nextB = theBoard[blackK.row][blackK.col].nextMove();
+    for(size_t i = 0; i < nextB.size(); ++i) {
+        int r = blackK.row + nextB[i].row;
+        int c = blackK.col + nextB[i].col;
+        if (r < 0 || r >= BOARD_SIZE || c < 0 || c >= BOARD_SIZE) continue;
+
+        Piece &nextMove = theBoard[r][c];  // Use reference
+        if (nextMove.getColour() == Colour::Black
+            || nextMove.getState().sT == stateType::blackCheck
+            || nextMove.getState().sT == stateType::bothCheck) {
+            return false;
+        }
+    }
+    return true;
+} // blackKingCanMove
 
 // allow a single undo
 void Board::undo() {
