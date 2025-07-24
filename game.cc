@@ -27,12 +27,12 @@ void Game::setPlayers(Player* white, Player* black) {
 }
 
 // check if the move is valid
-bool Game::isValidMove(const std::string &startPos, const std::string &endPos) {
+bool Game::isValidMove(std::string &startPos, std::string &endPos) {
     return board->isValidMove(startPos, endPos);
 }
 
 // Make a move from startPos to endPos
-void Game::makeMove(const string &startPos, const string &endPos) {
+void Game::makeMove(string &startPos, string &endPos) {
     if (isFinished) {
         cout << "Game is already finished." << endl;
         return;

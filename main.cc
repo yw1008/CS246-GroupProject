@@ -94,9 +94,13 @@ int main() {
                         // castling, pawn promotion
                         if ((whosTurn == "White" && !(whiteP->getLevel() == 0)) || (whosTurn == "Black" && !(blackP->getLevel() == 0))) {
                             if((whosTurn == "White" && (whiteP->getLevel() == 1))) {
-                                whiteP->move(" ", " ", board);
+                                string temp = " ";
+                                string temp1 = " ";
+                                whiteP->move(temp, temp1, board);
                             } else if(whosTurn == "Black" && (blackP->getLevel() == 1)) {
-                                blackP->move(" ", " ", board);
+                                string temp = " ";
+                                string temp1 = " ";
+                                blackP->move(temp, temp1, board);
                             }
                         } 
                         else {

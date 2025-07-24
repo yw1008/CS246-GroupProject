@@ -28,10 +28,10 @@ public:
     void setPlayers(Player* white, Player* black);
 
     // check if the move is valid
-    bool isValidMove(const std::string &startPos, const std::string &endPos);
+    bool isValidMove(std::string &startPos, std::string &endPos);
 
     // Makes a move from startPos to endPos
-    void makeMove(const std::string &startPos, const std::string &endPos);
+    void makeMove(std::string &startPos, std::string &endPos);
 
     // Returns true if the current player is in check
     std::string isInCheck() const;

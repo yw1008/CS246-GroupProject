@@ -16,7 +16,91 @@ int Computer::getLevel() const {
     return Player::getLevel();
 }
 
-void Computer::move(std::string startPos, std::string endPos, Board *board) {
+bool Computer::isValid(string &startPos, string &endPos, Board *board) {
+    // need to check if the move make player him/herself check
+    int startr, startc, endr, endc;
+
+    try {
+        vector<int> intStartPos = board->intPos(startPos);
+        startc = intStartPos[0];
+        startr = intStartPos[1];
+    } catch (const invalid_argument& e) {
+        return false;
+    }
+
+    try {
+        vector<int> intEndPos = board->intPos(endPos);
+        endc = intEndPos[0];
+        endr = intEndPos[1];
+    } catch (const invalid_argument& e) {
+        return false;
+    }
+
+    Colour c;
+    if (Player::isWhite()) c = Colour::White;
+    else c = Colour::Black;
+
+    if (board->getBoard()[startr][startc].getColour() != c) {
+        return false;
+    }
+    Position toPos{endc, endr};
+
+    Position diffPos;
+    diffPos.col = endc - startc;
+    diffPos.row = endr - startr;
+    vector<moveType> possibleMove = board->getBoard()[startr][startc].getMoveType();
+    moveType correctMove;
+    if (possibleMove[1].repeatable) {
+        for (size_t i = 0; i < possibleMove.size(); ++i) {
+            if (possibleMove[i].rowChange < 0 && diffPos.row < 0) {
+                if (possibleMove[i].colChange < 0 && diffPos.col < 0) {
+                    correctMove = possibleMove[i];
+                } else if (possibleMove[i].colChange > 0 && diffPos.col > 0) {
+                    correctMove = possibleMove[i];
+                } else if (possibleMove[i].colChange == 0 && diffPos.col == 0) {
+                    correctMove = possibleMove[i];
+                }
+            } else if (possibleMove[i].rowChange > 0 && diffPos.row > 0) {
+                if (possibleMove[i].colChange < 0 && diffPos.col < 0) {
+                    correctMove = possibleMove[i];
+                } else if (possibleMove[i].colChange > 0 && diffPos.col > 0) {
+                    correctMove = possibleMove[i];
+                } else if (possibleMove[i].colChange == 0 && diffPos.col == 0) {
+                    correctMove = possibleMove[i];
+                }
+            } else if (possibleMove[i].rowChange == 0 && diffPos.row == 0) {
+                if (possibleMove[i].colChange < 0 && diffPos.col < 0) {
+                    correctMove = possibleMove[i];
+                } else if (possibleMove[i].colChange > 0 && diffPos.col > 0) {
+                    correctMove = possibleMove[i];
+                } else if (possibleMove[i].colChange == 0 && diffPos.col == 0) {
+                    correctMove = possibleMove[i];                
+                }
+            }
+        }
+        
+        for (size_t j = 1; j < 9; ++j) {
+            int tempc = correctMove.colChange * j + startc;
+            int tempr = correctMove.rowChange * j + startr;
+
+            if (tempc == endc && tempr == endr) break; // escape if the loop gets to the end posisiton
+            
+            if (board->getBoard()[tempr][tempc].getPieceType() != pieceType::Nothing) {
+                return false;
+            }
+        } 
+    }
+
+    if (board->getBoard()[endr][endc].getPieceType() != pieceType::Nothing) {
+        // catching the same coloured piece
+        if (board->getBoard()[endr][endc].getColour() == c) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void Computer::move(std::string &startPos, std::string &endPos, Board *board) {
     if(getLevel() == 1){
         moveLevel1(board);
     // } else if(getLevel() == 2){
@@ -83,7 +167,7 @@ void Computer::moveLevel1(Board *board) {
         to[0] = 'a' + toC;
         to[1] = '1' + toR;
         std::string sTo(to);
-        if(board->isValidMove(sFrom, sTo)){
+        if(isValid(sFrom, sTo, board)){
             board->makeMove(sFrom, sTo);
             std::cout << "Computer (Level 1) moves: " << sFrom << " " << sTo << std::endl;
             break;

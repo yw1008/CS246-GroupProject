@@ -283,7 +283,7 @@ char Board::getPiece(string pos) {
     return theBoard[r][c].getType();
 }
 
-bool Board::isValidMove(string startPos, string endPos) {
+bool Board::isValidMove(string &startPos, string &endPos) {
     // need to check if the move make player him/herself check
     int startr, startc, endr, endc;
 
@@ -424,7 +424,7 @@ bool Board::isValidMove(string startPos, string endPos) {
 }
 
 
-void Board::makeMove(string startPos, string endPos) {
+void Board::makeMove(string &startPos, string &endPos) {
     int startr, startc, endr, endc;
 
     vector<int> intStartPos = intPos(startPos);
