@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include <map>
 #include "state.h"
 #include "piece.h"
 #include "player.h"
@@ -22,6 +23,8 @@ struct History {
 
 class Board {
     std::vector<std::vector<Piece>> theBoard; // The actual board
+    std::map<pieceType, int> whitePieceCount;
+    std::map<pieceType, int> blackPieceCount;
     bool isWhite = true;
     bool isFinish;
     Position whiteK = {-1, -1}; // position of white King
@@ -32,6 +35,9 @@ class Board {
     GraphicDisplay *gd = nullptr;
     
 public:
+    // construct empty board without pieces
+    // Board(); // default ctor
+
     std::vector<std::vector<Piece>> getBoard();
 
     ~Board(); // dtor
@@ -39,6 +45,9 @@ public:
     pieceType getPieceType(char piece);
 
     Colour getPieceColor(char piece);
+
+    void addPieceCount(pieceType pt, Colour c);
+    void removePieceCount(pieceType pt, Colour c);
 
     // convert string position into vector of size_t (row,col)
     std::vector<int> intPos(std::string pos);

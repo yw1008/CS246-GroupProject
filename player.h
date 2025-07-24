@@ -1,6 +1,7 @@
 #ifndef PLAYER_H
 #define PLAYER_H
 #include <memory>
+#include <string>
 
 class Board;
 
