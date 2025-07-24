@@ -5,12 +5,14 @@
 #include "board.h"
 
 class Human : public Player {
+
 public:
     // Constructor
-    Human(bool isWhite);
+    Human(bool isWhite, int lv);
 
     // // Perform a move 
     // void move(Game &game);
+    void move(Board &board) override;
     
     // Destructor
     ~Human() override;

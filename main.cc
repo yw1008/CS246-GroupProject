@@ -4,6 +4,8 @@
 #include "game.h"
 #include "board.h"
 #include "player.h"
+#include "human.h"
+#include "computer.h"
 
 using namespace std;
 
@@ -14,18 +16,22 @@ int main() {
     Player *whiteP;
     Player *blackP;
     string whosTurn = "White";
+    int whiteScore = 0;
+    int blackScore = 0;
     bool isSetup = 0;
 
     while(true) {
         string line; // must get a whole line of the command
         getline (cin, line);
+        whiteScore += game.getScore("White");
+        blackScore += game.getScore("Black");
 
         istringstream issProgram(line);
         issProgram >> cmd;
         if(cin.eof()) {
             cout << "Final Score: " << endl;
-            cout << "White: " << game.getScore("White") << endl;
-            cout << "Black: " << game.getScore("Black") << endl;
+            cout << "White: " << whiteScore << endl;
+            cout << "Black: " << blackScore << endl;
             break;
         }
         if(cmd == "game") {
@@ -38,10 +44,10 @@ int main() {
             
             // check if white player is human or computer
             if (wp == "human") {
-                whiteP = new Player(true, true);
-            } // white human
-            //else if (wp == "") {
-            //} // white computer
+                whiteP = new Human(true, 0);
+            } else if(wp == "comuter[1]") {
+                whiteP = new Computer(true, 1);
+            }
             else {
                 cerr << "Invalid inputer: player should be computer or human" << endl; // invalid white player
                 continue;
@@ -49,11 +55,10 @@ int main() {
 
             // check if black player is human or computer
             if (bp == "human") {
-                blackP = new Player(true, false);
-            } // black human
-            //else if (bp == ) {
-            //} // black computer
-            else {
+                blackP = new Human(false, 0);
+            } else if(bp == "computer[1]") {
+                blackP = new Computer(false, 1);
+            } else {
                 cerr << "Invalid inputer: player should be computer or human" << endl; // invalid black player
                 continue;
             } 
@@ -85,9 +90,12 @@ int main() {
                     isSetup = false;                    
                 }
                 else if (cmd == "move") {
-                    if ((whosTurn == "White" && !(whiteP->isHuman())) || (whosTurn == "Black" && !(blackP->isHuman()))) {
-                        //computer player
-                        //call makeMove(?) method of the computer class
+                    if ((whosTurn == "White" && !(whiteP->getLevel() == 0)) || (whosTurn == "Black" && !(blackP->getLevel() == 0))) {
+                        if((whosTurn == "White" && (whiteP->getLevel() == 1))) {
+                            whiteP->move(*board);
+                        } else if(whosTurn == "Black" && (blackP->getLevel() == 1)) {
+                            blackP->move(*board);
+                        }
                     }
                     string startPos, endPos;
                     if (!(issGame >> startPos >> endPos)) {

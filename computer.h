@@ -5,15 +5,13 @@
 #include "board.h"
 
 class Computer : public Player {
-    int level;
 
 public:
     Computer(bool isWhite, int level);
     int getLevel() const;
-    void move(Board &board);
+    void move(Board &board) override;
     ~Computer() override;
 
-private:
     void moveLevel1(Board &board);
     // void moveLevel2(Board &board);
     // void moveLevel3(Board &board);

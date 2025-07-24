@@ -2,18 +2,15 @@
 #include <iostream>
 #include <string>
 #include "game.h"
+#include "board.h"
 
-Human::Human(bool isWhite) : Player{true, isWhite} {}
+Human::Human(bool isWhite, int lv) : Player(isWhite, lv) {}
 
-Human::~Human() {}
+Human::~Human() = default;
 
-// void Human::move(Game &game) {
-//     std::string from, to;
-//     std::cout << "Enter your move: ";
-//     std::cin >> from >> to;
-
-//     while (!game.makeMove(from, to)) {
-//         std::cout << "Invalid move. Try again: ";
-//         std::cin >> from >> to;
-//     }
-// }
+void Human::move(Board &b) {
+    std::string from, to;
+    std::cout << "Enter your move: ";
+    std::cin >> from >> to;
+    b.makeMove(from, to);
+}

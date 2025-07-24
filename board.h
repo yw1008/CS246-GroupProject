@@ -81,6 +81,5 @@ public:
     friend std::ostream &operator<<(std::ostream &out, const Board &b);
 };
 
-// need ostream?
 std::ostream &operator<<(std::ostream &out, const Board &b);
 #endif

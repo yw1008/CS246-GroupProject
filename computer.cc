@@ -1,4 +1,5 @@
 #include "computer.h"
+#include "board.h"
 #include <iostream>
 #include <vector>
 #include <string>
@@ -6,28 +7,23 @@
 #include <ctime>
 #include <cctype>
 
-Computer::Computer(bool isWhite, int lvl) : Player{false, isWhite}, level{lvl} {}
+Computer::Computer(bool isWhite, int lvl) : Player(isWhite, lvl) {}
 
-Computer::~Computer() {}
+Computer::~Computer() = default;
 
 int Computer::getLevel() const {
-    return level;
+    return Player::getLevel();
 }
 
 void Computer::move(Board &board) {
-    switch (level) {
-        case 1:
-            moveLevel1(board);
-            break;
-        // case 2:
-        //     moveLevel2(board);
-        //     break;
-        // case 3:
-        //     moveLevel3(board);
-        //     break;
-        default:
-            moveLevel1(board);
-            break;
+    if(getLevel() == 1){
+        moveLevel1(board);
+    // } else if(getLevel() == 2){
+
+    // }else if(getLevel() == 3){
+
+    // }else {
+        
     }
 }
 
@@ -90,6 +86,7 @@ void Computer::moveLevel1(Board &board) {
 
     std::cout << "Computer (Level 1) moves: " << sFrom << " " << sTo << std::endl;
 }
+
 /*
 // Level 2
 void Computer::moveLevel2(Board &board) {
