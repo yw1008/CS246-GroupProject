@@ -8,7 +8,7 @@
 using namespace std;
 
 // Constructor
-Game::Game() : score{0, 0}, isWhiteTurn{true}, isFinished{false}, whitePlayer{nullptr}, blackPlayer{nullptr}, board{nullptr} {}
+Game::Game() : score{0, 0}, isWhiteTurn{true}, isFinished{true}, whitePlayer{nullptr}, blackPlayer{nullptr}, board{nullptr} {}
 
 // Destructor
 // Game::~Game() {

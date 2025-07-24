@@ -10,7 +10,7 @@
 class Game {
     std::vector<int> score; // score[0] is white, score[1] is black
     bool isWhiteTurn;
-    bool isFinished;
+    bool isFinished = true;
 
     unique_ptr<Player> whitePlayer;
     unique_ptr<Player> blackPlayer;
