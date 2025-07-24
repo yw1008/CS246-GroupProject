@@ -64,10 +64,10 @@ public:
     char getPiece (std::string pos);
 
     // check if the move is valid
-    bool isValidMove(std::string startPos, std::string endPos);
+    bool isValidMove(std::string &startPos, std::string &endPos);
 
     // move piece from startpos to endpos
-    void makeMove(std::string startPos, std::string endPos);
+    void makeMove(std::string &startPos, std::string &endPos);
 
     // change the turn of player
     void changeTurn();
