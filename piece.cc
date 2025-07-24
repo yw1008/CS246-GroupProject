@@ -120,13 +120,11 @@ State Piece::getState(){
     return state;
 }
 
-vector<Position> Piece::nextMove(){ // to Board Class can get the vector of possible next move point who are not repeatable eg. King
+vector<Position> Piece::nextMove(){ // to Board Class can get the vector of possible next move point who are not repeatable
     vector<Position> nextmove;
     for(size_t i = 0; i < mT.size(); ++i){
-        if(pos.col + mT[i].colChange < 8 && pos.col + mT[i].colChange >= 0 && pos.row + mT[i].rowChange < 8 && pos.row + mT[i].rowChange >= 0){
         Position next{pos.col + mT[i].colChange, pos.row + mT[i].rowChange};
-        nextmove.emplace_back(next);         
-        }
+        nextmove.emplace_back(next);
     }
     return nextmove;
 }

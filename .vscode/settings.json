@@ -66,6 +66,16 @@
         "__tuple": "cpp",
         "__verbose_abort": "cpp",
         "variant": "cpp",
-        "chrono": "cpp"
+        "chrono": "cpp",
+        "deque": "cpp",
+        "array": "cpp",
+        "functional": "cpp",
+        "memory_resource": "cpp",
+        "random": "cpp",
+        "string_view": "cpp",
+        "cwctype": "cpp",
+        "numbers": "cpp",
+        "span": "cpp",
+        "text_encoding": "cpp"
     }
 }
