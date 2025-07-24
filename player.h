@@ -21,7 +21,7 @@ public:
     int getLevel() const;
 
     // Destructor
-    virtual ~Player();
+    virtual ~Player() = 0;
 };
 
 #endif

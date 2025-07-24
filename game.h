@@ -55,7 +55,7 @@ public:
     int getScore(const std::string &color) const;
 
     // Marks the game as finished specifying which color won
-    void setIsFinished(const std::string &color);
+    void setIsFinished();
 
     // Returns true if the game is finished
     bool getIsFinished() const;
