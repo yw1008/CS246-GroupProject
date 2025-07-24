@@ -72,6 +72,56 @@ Colour Board::getPieceColor(char piece) {
     }
 }
 
+void Board::addPieceCount(pieceType pt, Colour c) {
+    if (c == Colour::White) {
+        if (pt == pieceType::King || pt == pieceType::Queen) {
+            if (whitePieceCount[pt] == 1) {
+                throw invalid_argument("Cannot add pieceType - over the limit");
+                return;
+            }
+        } else if (pt == pieceType::Bishop || pt == pieceType::Rook || pt == pieceType::Knight) {
+            if (whitePieceCount[pt] == 2) {
+                throw invalid_argument("Cannot add pieceType - over the limit");
+                return;
+            }
+        } else if (pt == pieceType::Pawn) {
+            if (whitePieceCount[pt] == 8) {
+                throw invalid_argument("Cannot add pieceType - over the limit");
+                return;
+            }
+        }
+        whitePieceCount[pt]++;
+    } else {
+        if (pt == pieceType::King || pt == pieceType::Queen) {
+            if (blackPieceCount[pt] == 1) {
+                throw invalid_argument("Cannot add pieceType - over the limit");
+                return;
+            }
+        } else if (pt == pieceType::Bishop || pt == pieceType::Rook || pt == pieceType::Knight) {
+            if (blackPieceCount[pt] == 2) {
+                throw invalid_argument("Cannot add pieceType - over the limit");
+                return;
+            }
+        } else if (pt == pieceType::Pawn) {
+            if (blackPieceCount[pt] == 8) {
+                throw invalid_argument("Cannot add pieceType - over the limit");
+                return;
+            }
+        }
+        blackPieceCount[pt]++;
+    }
+}
+
+void Board::removePieceCount(pieceType pt, Colour c) {
+    if (c == Colour::White) {
+        if (whitePieceCount[pt] == 0) return;
+        else whitePieceCount[pt]++;
+    } else  {
+        if (blackPieceCount[pt] == 0) return;
+        else blackPieceCount[pt]++;
+    }
+}
+
 void Board::setUp(string cmd, string type, string position, string c) {
     // invalid input if board already has that piece
     if (cmd == "+") { // add piece
@@ -83,9 +133,10 @@ void Board::setUp(string cmd, string type, string position, string c) {
             int r = coords[1];
             int c = coords[0];
             pieceType pt = getPieceType(piece);     // may throw
-            Colour colour = getPieceColor(piece);        // may throw
-            theBoard[r][c].addPiece(pt, colour);     // assumes no throw
-            theBoard[r][c].setMoveType();       // sets en passant, etc.
+            Colour colour = getPieceColor(piece);   // may throw
+            addPieceCount(pt, colour);                       // add number of that piece type
+            theBoard[r][c].addPiece(pt, colour);    // assumes no throw
+            theBoard[r][c].setMoveType();           // sets en passant, etc.
             // track king position
             if (pt == pieceType::King) {
                 if (colour == Colour::White) whiteK = {c, r}; 
@@ -104,7 +155,10 @@ void Board::setUp(string cmd, string type, string position, string c) {
             int row = coords[1];
             int col = coords[0];
             if (theBoard[row][col].getPieceType() != pieceType::Nothing) {
-                theBoard[row][col].removePiece(); // piece is not removed
+                theBoard[row][col].removePiece();   // piece is not removed
+                pieceType pt = theBoard[row][col].getPieceType();
+                Colour colour = theBoard[row][col].getColour();
+                removePieceCount(pt, colour);        // remove the number of pieces
             }
             // track king position
             pieceType pt = getPieceType(piece);
