@@ -1,6 +1,5 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-#include <memory>
 
 class Board;
 
@@ -14,7 +13,7 @@ public:
     // Returns true if the player is human
     //bool isHuman() const;
 
-    virtual void move(std::string startPos, std::string endPos, std::unique_ptr<Board> b) = 0;
+    virtual void move(Board &b) = 0;
 
     // Returns true if the player is white
     bool isWhite() const;
