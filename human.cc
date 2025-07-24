@@ -8,9 +8,9 @@ using namespace std;
 
 Human::Human(bool isWhite, int lv) : Player(isWhite, lv) {}
 
-Human::~Human() = default;
+//Human::~Human() = default;
 
-void Human::move(Board &b) {
+void Human::move(unique_ptr<Board> b) {
     string startPos, endPos;
     if (!(cin >> startPos >> endPos)) {
         cerr << "Invalid input: must enter to positions" << endl;

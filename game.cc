@@ -11,19 +11,19 @@ using namespace std;
 Game::Game() : score{0, 0}, isWhiteTurn{true}, isFinished{false}, whitePlayer{nullptr}, blackPlayer{nullptr}, board{nullptr} {}
 
 // Destructor
-Game::~Game() {
-    delete whitePlayer;
-    delete blackPlayer;
-    delete board;
+// Game::~Game() {
+//     delete whitePlayer;
+//     delete blackPlayer;
+//     delete board;
+// }
+
+void Game::setBoard(unique_ptr<Board> b) {
+    board = move(b);
 }
 
-void Game::setBoard(Board* b) {
-    board = b;
-}
-
-void Game::setPlayers(Player* white, Player* black) {
-    whitePlayer = white;
-    blackPlayer = black;
+void Game::setPlayers(unique_ptr<Player> white, unique_ptr<Player> black) {
+    whitePlayer = move(white);
+    blackPlayer = move(black);
 }
 // // Start a new game with given players
 // void Game::start(Player* white, Player* black, Board* b) {

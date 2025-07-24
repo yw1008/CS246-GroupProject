@@ -6,18 +6,19 @@
 #include <cstdlib>
 #include <ctime>
 #include <cctype>
+#include <memory>
 
 Computer::Computer(bool isWhite, int lvl) : Player(isWhite, lvl) {}
 
-Computer::~Computer() = default;
+//Computer::~Computer() = default;
 
 int Computer::getLevel() const {
     return Player::getLevel();
 }
 
-void Computer::move(Board &board) {
+void Computer::move(std::unique_ptr<Board> board) {
     if(getLevel() == 1){
-        moveLevel1(board);
+        moveLevel1(std::move(board));
     // } else if(getLevel() == 2){
 
     // }else if(getLevel() == 3){
@@ -28,7 +29,7 @@ void Computer::move(Board &board) {
 }
 
 // Level 1
-void Computer::moveLevel1(Board &board) {
+void Computer::moveLevel1(std::unique_ptr<Board> board) {
     std::srand(std::time(nullptr));
     bool isWhite = Player::isWhite();
     int fromC = 0;
@@ -37,7 +38,7 @@ void Computer::moveLevel1(Board &board) {
     int toR = 0;
     int randomPick = 0;
 
-    std::vector<std::vector<Piece>> current = board.getBoard();
+    std::vector<std::vector<Piece>> current = board->getBoard();
     for (int attempts = 0; attempts < 500; ++attempts) {
         int vecSize = current.size();
         int randomPickC = std::rand() % vecSize;
@@ -62,15 +63,15 @@ void Computer::moveLevel1(Board &board) {
     from[1] = '0' + fromR;
     std::string sFrom(from);
 
-    if(board.getBoard()[fromR][fromC].getMoveType()[0].repeatable){
-        std::vector<Position> nextmove = board.getNextMove(sFrom);
+    if(board->getBoard()[fromR][fromC].getMoveType()[0].repeatable){
+        std::vector<Position> nextmove = board->getNextMove(sFrom);
         int size = nextmove.size();
         randomPick = std::rand() % size;
         Position nextP = nextmove[randomPick];
         toC = nextP.col;
         toR = nextP.row;
     } else{
-        std::vector<moveType> notrepeatable = board.getBoard()[fromR][fromC].getMoveType();
+        std::vector<moveType> notrepeatable = board->getBoard()[fromR][fromC].getMoveType();
         int size = notrepeatable.size();
         randomPick = std::rand() % size;
         moveType pickedMT = notrepeatable[randomPick];
@@ -82,7 +83,7 @@ void Computer::moveLevel1(Board &board) {
     to[1] = '0' + toR;
     std::string sTo(to);
 
-    board.makeMove(sFrom, sTo);
+    board->makeMove(sFrom, sTo);
 
     std::cout << "Computer (Level 1) moves: " << sFrom << " " << sTo << std::endl;
 }
