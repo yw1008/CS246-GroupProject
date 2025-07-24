@@ -3,6 +3,7 @@
 
 #include "player.h"
 #include "board.h"
+#include <memory>
 
 class Human : public Player {
 
@@ -12,10 +13,10 @@ public:
 
     // // Perform a move 
     // void move(Game &game);
-    void move(Board &board) override;
+    void move(unique_ptr<Board> board) override;
     
     // Destructor
-    ~Human() override;
+    //~Human() override;
 };
 
 #endif

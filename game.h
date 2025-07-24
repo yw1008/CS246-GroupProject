@@ -5,27 +5,28 @@
 #include "player.h"
 #include "board.h"
 #include "piece.h"
+#include <memory>
 
 class Game {
     std::vector<int> score; // score[0] is white, score[1] is black
     bool isWhiteTurn;
     bool isFinished;
 
-    Player* whitePlayer;
-    Player* blackPlayer;
-    Board* board;
+    unique_ptr<Player> whitePlayer;
+    unique_ptr<Player> blackPlayer;
+    unique_ptr<Board> board;
 
 public:
     // Constructor
     Game();
 
     // Destructor
-    ~Game();
+    //~Game();
     
     // set the board for each game
-    void setBoard(Board* b);
+    void setBoard(unique_ptr<Board> b);
     // set the player for each game
-    void setPlayers(Player* white, Player* black);
+    void setPlayers(unique_ptr<Player> white, unique_ptr<Player> black);
 
     // // Starts a new game with the given white and black players
     // void start(Player* white, Player* black, Board* b);
