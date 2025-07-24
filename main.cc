@@ -69,16 +69,13 @@ int main() {
             } 
 
             // // start the game
-            // game.start(whiteP, blackP, board);
             game->setBoard(board);
             game->setPlayers(whiteP, blackP);
-            // game.setIsFinished();
 
             cout << "The game is started" << endl;
             // need to print starting board
             while(!game->getIsFinished()) {
                 cout << *board << endl;
-                // cout << "Enter move/resign/undo for the game" << endl;
                 
                 // read new input
                 getline(cin, line);
@@ -89,7 +86,7 @@ int main() {
                     game->setIsFinished();
                     game->addScore(whoWon);
                     isSetup = false;
-                    cout << *board << endl;              
+                    cout << "Game is resigned. " << whoWon << " is Win!" << endl;
                 } else if (cmd == "move") {
                         string startPos, endPos;
                         if (!(issGame >> startPos >> endPos)) {
@@ -139,7 +136,7 @@ int main() {
                                 cout << "White is in check." << endl;
                                 cout << "Black is in check." << endl;
                             } else {
-                                if(board->isStalemate()){ // segmentation fault -> getState
+                                if(board->isStalemate()){ 
                                 cout << "Stalemate!" << endl;
                                 whiteP->~Player();
                                 blackP->~Player();
@@ -151,11 +148,8 @@ int main() {
                         whiteScore += game->getScore("White");
                         blackScore += game->getScore("Black");
 
-
-
                         whosTurn = whosTurn == "Black" ? "White" : "Black";
                         board->changeTurn();
-                        // cout << *board << endl;
                     }
                     else if (cmd == "undo") {
                         game->undo();
