@@ -15,6 +15,6 @@ void Human::move(unique_ptr<Board> b) {
     if (!(cin >> startPos >> endPos)) {
         cerr << "Invalid input: must enter to positions" << endl;
     }
-    // castling, pawn promotion
+    b->makeMove(startPos, endPos);
     
 }

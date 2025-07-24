@@ -60,6 +60,8 @@ public:
 
     // Returns true if the game is finished
     bool getIsFinished() const;
+
+    void changeTurn();
 };
 
 #endif

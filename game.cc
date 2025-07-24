@@ -53,12 +53,7 @@ void Game::makeMove(const string &startPos, const string &endPos) {
         cout << "Board is not initialized." << endl;
         return;
     }
-
-    // Move piece from startPos to endPos
-    char type = board->getPiece(startPos);
     board->makeMove(startPos, endPos);
-    // Change turn
-    isWhiteTurn = !isWhiteTurn;
 }
 
 // Check if current player is in check
@@ -153,4 +148,9 @@ void Game::setIsFinished() {
 // Returns true if game is finished
 bool Game::getIsFinished() const {
     return isFinished;
+}
+
+void Game::changeTurn() {
+    isWhiteTurn = !isWhiteTurn;
+    board->changeTurn();
 }

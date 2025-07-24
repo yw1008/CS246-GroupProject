@@ -362,8 +362,7 @@ void Board::makeMove(string startPos, string endPos) {
 } //makeMove
 
 void Board::changeTurn() {
-    if (isWhite) isWhite = false;
-    else isWhite = true;
+    isWhite = !isWhite;
 } //changeTurn
 
 vector<Position> Board::allPossibleMoves(){

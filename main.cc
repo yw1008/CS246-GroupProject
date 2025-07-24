@@ -116,8 +116,10 @@ int main() {
                     if ((whosTurn == "White" && !(whiteP->getLevel() == 0)) || (whosTurn == "Black" && !(blackP->getLevel() == 0))) {
                         if((whosTurn == "White" && (whiteP->getLevel() == 1))) {
                             whiteP->move(move(board));
+                            game.changeTurn();
                         } else if(whosTurn == "Black" && (blackP->getLevel() == 1)) {
                             blackP->move(move(board));
+                            game.changeTurn();
                         }
                     } else{
                         string startPos, endPos;
@@ -137,6 +139,7 @@ int main() {
                         // }
 
                     whosTurn = whosTurn == "Black" ? "White" : "Black";
+                    game.changeTurn();
                 }
                 else if (cmd == "undo") {
                     game.undo();
