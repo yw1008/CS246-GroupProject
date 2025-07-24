@@ -4,26 +4,45 @@
 #include "board.h"
 #include <string>
 
-class Pawn: public Piece {
+class Pawn : public Piece {
     bool isFirstMove;
-    bool isEnPassant; //for the Pawn class
-    const std::vector<moveType> possibleWays;
+    bool isEnPassant;
+    std::vector<moveType> possibleWays;
 
-    public:
-        // Pawn(bool fm, bool ep, std::vector<moveType> mt);
-        Pawn(bool fm, bool ep, std::vector<moveType> pW);
+public:
+    Pawn(bool fm, bool ep, std::vector<moveType> pW);
 
-        bool isValid(const string &to) override;
+    bool isValid(int fromRow, int fromCol, int toRow, int toCol, const std::vector<std::vector<Piece>> &board) override;
 
-        char getName();
+    char getName() override;
 
-        std::vector<moveType> getMoveType();
+    std::vector<moveType> getMoveType() override;
 
-        bool getIsFirstMove();
+    bool getIsFirstMove() const;
 
-        bool EnPassant(const string &from, const string &to, const board &b);
+    bool EnPassant(int fromRow, int fromCol, int toRow, int toCol, const std::vector<std::vector<Piece>> &board) const;
 
-        char promotion();
+    char promotion();
 };
 
 #endif
+
+/*
+class Pawn : public Piece {
+public:
+    Pawn(int r, int c, Colour col);
+
+    std::vector<Position> nextMove() const override;
+    char getType() const override;
+
+    bool getIsFirstMove() const;
+    void setFirstMove(bool val);
+    void setEnPassant(bool val);
+    bool canEnPassant(const Position &target) const;
+
+    char promotionChoice() const; // To ask user which piece to promote to
+};
+
+#endif
+*/
+
