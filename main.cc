@@ -113,10 +113,10 @@ int main() {
                 } else if(cmd == "move") {
                     if ((whosTurn == "White" && !(whiteP->getLevel() == 0)) || (whosTurn == "Black" && !(blackP->getLevel() == 0))) {
                         if((whosTurn == "White" && (whiteP->getLevel() == 1))) {
-                            whiteP->move(move(board));
+                            whiteP->move(" ", " ", move(board));
                             game->changeTurn();
                         } else if(whosTurn == "Black" && (blackP->getLevel() == 1)) {
-                            blackP->move(move(board));
+                            blackP->move(" ", " ", move(board));
                             game->changeTurn();
                         }
                     } else{
@@ -125,8 +125,14 @@ int main() {
                             cerr << "Invalid input: must enter to positions" << endl;
                             continue;
                         }
+                        if((whosTurn == "White" && (whiteP->getLevel() == 0))) {
+                            whiteP->move(startPos, endPos, move(board));
+                            game->changeTurn();
+                        } else if(whosTurn == "Black" && (blackP->getLevel() == 0)) {
+                            blackP->move(startPos, endPos, move(board));
+                            game->changeTurn();
+                        }
                         // castling, pawn promotion
-                        game->makeMove(startPos, endPos);
                     } 
                         // else {
                         //     if((whosTurn == "White" && (whiteP->getLevel() == 0))) {
