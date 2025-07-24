@@ -29,6 +29,9 @@ int main() {
             cout << "Final Score: " << endl;
             cout << "White: " << whiteScore << endl;
             cout << "Black: " << blackScore << endl;
+            delete board;
+            delete whiteP;
+            delete blackP;
             break;
         }
         if(cmd == "game") {
@@ -44,7 +47,7 @@ int main() {
             // check if white player is human or computer
             if (wp == "human") {
                 whiteP = new Human(true, 0);
-            } else if(wp == "comuter[1]") {
+            } else if(wp == "computer[1]") {
                 whiteP = new Computer(true, 1);
             }
             else {
@@ -91,24 +94,23 @@ int main() {
                     isSetup = false;
                     cout << *board << endl;              
                 } else if (cmd == "move") {
-                        string startPos, endPos;
-                        if (!(issGame >> startPos >> endPos)) {
-                            cerr << "Invalid input: must enter to positions" << endl;
-                            continue;
-                        }
-                        
                         // castling, pawn promotion
-                        if (!game->isValidMove(startPos, endPos)) {
-                            continue;
-                        } 
                         if ((whosTurn == "White" && !(whiteP->getLevel() == 0)) || (whosTurn == "Black" && !(blackP->getLevel() == 0))) {
                             if((whosTurn == "White" && (whiteP->getLevel() == 1))) {
-                                whiteP->move(startPos, endPos, board);
+                                whiteP->move(" ", " ", board);
                             } else if(whosTurn == "Black" && (blackP->getLevel() == 1)) {
-                                blackP->move(startPos, endPos, board);
+                                blackP->move(" ", " ", board);
                             }
                         } 
                         else {
+                            string startPos, endPos;
+                            if (!(issGame >> startPos >> endPos)) {
+                            cerr << "Invalid input: must enter two positions" << endl;
+                            continue;
+                            }
+                            if (!game->isValidMove(startPos, endPos)) {
+                            continue;
+                            } 
                             if((whosTurn == "White" && (whiteP->getLevel() == 0))) {
                                 whiteP->move(startPos, endPos, board);
                             } else if(whosTurn == "Black" && (blackP->getLevel() == 0)) {
