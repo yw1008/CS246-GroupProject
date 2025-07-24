@@ -5,31 +5,30 @@
 #include "player.h"
 #include "board.h"
 #include "piece.h"
-#include <memory>
 
 class Game {
     std::vector<int> score; // score[0] is white, score[1] is black
     bool isWhiteTurn;
-    bool isFinished = true;
+    bool isFinished;
 
-    unique_ptr<Player> whitePlayer;
-    unique_ptr<Player> blackPlayer;
-    unique_ptr<Board> board;
+    Player* whitePlayer;
+    Player* blackPlayer;
+    Board* board;
 
 public:
     // Constructor
     Game();
 
     // Destructor
-    //~Game();
+    ~Game();
     
     // set the board for each game
-    void setBoard(unique_ptr<Board> b);
+    void setBoard(Board* b);
     // set the player for each game
-    void setPlayers(unique_ptr<Player> white, unique_ptr<Player> black);
+    void setPlayers(Player* white, Player* black);
 
-    // // Starts a new game with the given white and black players
-    // void start(Player* white, Player* black, Board* b);
+    // check if the move is valid
+    bool isValidMove(const std::string &startPos, const std::string &endPos);
 
     // Makes a move from startPos to endPos
     void makeMove(const std::string &startPos, const std::string &endPos);
@@ -60,8 +59,6 @@ public:
 
     // Returns true if the game is finished
     bool getIsFinished() const;
-
-    void changeTurn();
 };
 
 #endif

@@ -240,7 +240,7 @@ char Board::getPiece(string pos) {
     return theBoard[r][c].getType();
 }
 
-void Board::makeMove(string startPos, string endPos) {
+bool Board::isValidMove(string startPos, string endPos) {
     // need to check if the move make player him/herself check
     int startr, startc, endr, endc;
 
@@ -250,7 +250,7 @@ void Board::makeMove(string startPos, string endPos) {
         startr = intStartPos[1];
     } catch (const invalid_argument& e) {
         cerr << "Invalid move: start position error - " << e.what() << endl;
-        return;
+        return false;
     }
 
     try {
@@ -259,7 +259,7 @@ void Board::makeMove(string startPos, string endPos) {
         endr = intEndPos[1];
     } catch (const invalid_argument& e) {
         cerr << "Invalid move: end position error - " << e.what() << endl;
-        return;
+        return false;
     }
 
     Colour c;
@@ -268,7 +268,7 @@ void Board::makeMove(string startPos, string endPos) {
 
     if (theBoard[startr][startc].getColour() != c) {
         cerr << "Invalid move: must move piece of your colour" << endl;
-        return;
+        return false;
     }
 
     // check it the movement is correct for the piece type
@@ -321,7 +321,7 @@ void Board::makeMove(string startPos, string endPos) {
             
             if (theBoard[tempr][tempc].getPieceType() != pieceType::Nothing) {
                 cerr << "Invalid move: another piece blocks the way" << endl;
-                return;
+                return false;
             }
         } 
     }
@@ -330,10 +330,36 @@ void Board::makeMove(string startPos, string endPos) {
         // catching the same coloured piece
         if (theBoard[endr][endc].getColour() == c) {
             cerr << "Invalid move: Catching the same coloured piece" << endl;
-            return;
+            return false;
         }
-        //if the move catch the other piece
-        else {
+    }
+    return true;
+}
+
+
+void Board::makeMove(string startPos, string endPos) {
+    int startr, startc, endr, endc;
+
+    vector<int> intStartPos = intPos(startPos);
+    startc = intStartPos[0];
+    startr = intStartPos[1];
+    vector<int> intEndPos = intPos(endPos);
+    endc = intEndPos[0];
+    endr = intEndPos[1];
+
+    Colour c;
+    if (isWhite) c = Colour::White;
+    else c = Colour::Black;
+
+    // Position toPos{endc, endr};
+    // Position diffPos;
+    // diffPos.col = endc - startc;
+    // diffPos.row = endr - startr;
+    // vector<moveType> possibleMove = theBoard[startr][startc].getMoveType();
+    // moveType correctMove;
+        
+    if (theBoard[endr][endc].getPieceType() != pieceType::Nothing) {
+        if (theBoard[endr][endc].getColour() != c) {
             prev.removedPiece = theBoard[endr][endc].getPieceType();
             prev.removedColour = theBoard[endr][endc].getColour();
             theBoard[endr][endc].removePiece();
@@ -360,6 +386,127 @@ void Board::makeMove(string startPos, string endPos) {
         }
     }
 } //makeMove
+
+// void Board::makeMove(string startPos, string endPos) {
+//     // need to check if the move make player him/herself check
+//     int startr, startc, endr, endc;
+
+//     try {
+//         vector<int> intStartPos = intPos(startPos);
+//         startc = intStartPos[0];
+//         startr = intStartPos[1];
+//     } catch (const invalid_argument& e) {
+//         cerr << "Invalid move: start position error - " << e.what() << endl;
+//         return;
+//     }
+
+//     try {
+//         vector<int> intEndPos = intPos(endPos);
+//         endc = intEndPos[0];
+//         endr = intEndPos[1];
+//     } catch (const invalid_argument& e) {
+//         cerr << "Invalid move: end position error - " << e.what() << endl;
+//         return;
+//     }
+
+//     Colour c;
+//     if (isWhite) c = Colour::White;
+//     else c = Colour::Black;
+
+//     if (theBoard[startr][startc].getColour() != c) {
+//         cerr << "Invalid move: must move piece of your colour" << endl;
+//         return;
+//     }
+
+//     // check it the movement is correct for the piece type
+//     Position toPos{endc, endr};
+//     // bool isValid = theBoard[startr][startc].isValid(toPos);
+//     // if(!isValid) {
+//     //     cerr << "Invalid move for the piece type" << endl;
+//     //     return;
+//     // }
+
+//     Position diffPos;
+//     diffPos.col = endc - startc;
+//     diffPos.row = endr - startr;
+//     vector<moveType> possibleMove = theBoard[startr][startc].getMoveType();
+//     moveType correctMove;
+//     if (possibleMove[1].repeatable) {
+//         for (size_t i = 0; i < possibleMove.size(); ++i) {
+//             if (possibleMove[i].rowChange < 0 && diffPos.row < 0) {
+//                 if (possibleMove[i].colChange < 0 && diffPos.col < 0) {
+//                     correctMove = possibleMove[i];
+//                 } else if (possibleMove[i].colChange > 0 && diffPos.col > 0) {
+//                     correctMove = possibleMove[i];
+//                 } else if (possibleMove[i].colChange == 0 && diffPos.col == 0) {
+//                     correctMove = possibleMove[i];
+//                 }
+//             } else if (possibleMove[i].rowChange > 0 && diffPos.row > 0) {
+//                 if (possibleMove[i].colChange < 0 && diffPos.col < 0) {
+//                     correctMove = possibleMove[i];
+//                 } else if (possibleMove[i].colChange > 0 && diffPos.col > 0) {
+//                     correctMove = possibleMove[i];
+//                 } else if (possibleMove[i].colChange == 0 && diffPos.col == 0) {
+//                     correctMove = possibleMove[i];
+//                 }
+//             } else if (possibleMove[i].rowChange == 0 && diffPos.row == 0) {
+//                 if (possibleMove[i].colChange < 0 && diffPos.col < 0) {
+//                     correctMove = possibleMove[i];
+//                 } else if (possibleMove[i].colChange > 0 && diffPos.col > 0) {
+//                     correctMove = possibleMove[i];
+//                 } else if (possibleMove[i].colChange == 0 && diffPos.col == 0) {
+//                     correctMove = possibleMove[i];                
+//                 }
+//             }
+//         }
+        
+//         for (size_t j = 1; j < BOARD_SIZE + 1; ++j) {
+//             int tempc = correctMove.colChange * j + startc;
+//             int tempr = correctMove.rowChange * j + startr;
+
+//             if (tempc == endc && tempr == endr) break; // escape if the loop gets to the end posisiton
+            
+//             if (theBoard[tempr][tempc].getPieceType() != pieceType::Nothing) {
+//                 cerr << "Invalid move: another piece blocks the way" << endl;
+//                 return;
+//             }
+//         } 
+//     }
+
+//     if (theBoard[endr][endc].getPieceType() != pieceType::Nothing) {
+//         // catching the same coloured piece
+//         if (theBoard[endr][endc].getColour() == c) {
+//             cerr << "Invalid move: Catching the same coloured piece" << endl;
+//             return;
+//         }
+//         //if the move catch the other piece
+//         else {
+//             prev.removedPiece = theBoard[endr][endc].getPieceType();
+//             prev.removedColour = theBoard[endr][endc].getColour();
+//             theBoard[endr][endc].removePiece();
+//         }
+//     }
+//     else {
+//         prev.removedPiece = theBoard[endr][endc].getPieceType();
+//         prev.removedColour = theBoard[endr][endc].getColour();
+//     }
+//     prev.startPos.col = startc;
+//     prev.startPos.row = startr;
+//     prev.endPos.col = endc;
+//     prev.endPos.row = endr;
+//     prev.isEmpty = false;
+//     pieceType piece = theBoard[startr][startc].getPieceType();
+//     theBoard[startr][startc].removePiece();
+//     theBoard[endr][endc].addPiece(piece, c);
+
+//     if(theBoard[endr][endc].getPieceType() == pieceType::King){
+//         if(theBoard[endr][endc].getColour() == Colour::White){
+//             whiteK = {endc, endr};
+//         } else {
+//             blackK = {endc, endr};
+//         }
+//     }
+// } //makeMove
 
 void Board::changeTurn() {
     isWhite = !isWhite;
