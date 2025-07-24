@@ -58,6 +58,7 @@ vector<int> Board::intPos(string pos) {
 }
 
 pieceType Board::getPieceType(char piece) {
+    if (piece == '\0') return pieceType::Nothing; // if piece is empty
     switch (toupper(piece)) {
         case 'K': return pieceType::King;
         case 'Q': return pieceType::Queen;
@@ -75,6 +76,8 @@ Colour Board::getPieceColor(char piece) {
         return Colour::White;
     } else if (piece == 'p' || piece == 'k' || piece == 'q' || piece == 'n' || piece == 'b' || piece == 'r') {
         return Colour::Black;
+    } else if (piece == '\0') { // if piece is empty
+        return Colour::Nothing;
     } else {
         throw invalid_argument("Invalid piece color.");
     }
@@ -106,13 +109,13 @@ void Board::setUp(string cmd, string type, string position, string c) {
     } else if (cmd == "-") { // remove piece
         string pos = position;
         char piece = type[0];
-
+        
         try {
             vector<int> coords = intPos(pos);
             int row = coords[1];
             int col = coords[0];
             if (theBoard[row][col].getPieceType() != pieceType::Nothing) {
-                theBoard[row][col].removePiece(); 
+                theBoard[row][col].removePiece(); // piece is not removed
             }
             // track king position
             pieceType pt = getPieceType(piece);
@@ -122,7 +125,7 @@ void Board::setUp(string cmd, string type, string position, string c) {
                 else blackK = {-1, -1};
             }
         } catch (invalid_argument &e) {
-            cerr << "Error: " << e.what() << endl;
+            cerr << "Error: " << e.what() << endl; // print invalid piece type error
         }
 
     } else if (cmd == "=") { // change turn (colour)
