@@ -32,7 +32,7 @@ class Board {
     
 public:
     // construct empty board without pieces
-    Board(); // default ctor
+    //Board(); // default ctor
 
     std::vector<std::vector<Piece>> getBoard();
 

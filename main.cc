@@ -80,7 +80,29 @@ int main() {
             // need to print starting board
             while(!game.getIsFinished()) {
                 // cout << "Enter move/resign/undo for the game" << endl;
-                
+                if(game.isWhiteInCheckmate()){
+                        cout << "Checkmate! Black wins!" << endl;
+                        game.setIsFinished();
+                        game.addScore("Black");
+                } else if(game.isBlackInCheckmate()){
+                        cout << "Checkmate! White wins!" << endl;
+                        game.setIsFinished();
+                        game.addScore("White");
+                } else {
+                    if(game.isInCheck() == "white"){
+                        cout << "White is in check." << endl;
+                    } else if(game.isInCheck() == "black"){
+                        cout << "Black is in check." << endl;
+                    } else if(game.isInCheck() == "both"){
+                        cout << "White is in check." << endl;
+                        cout << "Black is in check." << endl;
+                    } else {
+                        if(board->isStalemate()){
+                        cout << "Stalemate!" << endl;
+                        game.setIsFinished();
+                        }
+                    }
+                }
                 // read new input
                 getline(cin, line);
                 istringstream issGame(line);
@@ -113,29 +135,6 @@ int main() {
                         //         blackP->move(*board);
                         //     }
                         // }
-                    if(game.isWhiteInCheckmate()){
-                        cout << "Checkmate! Black wins!" << endl;
-                        game.setIsFinished();
-                        game.addScore("Black");
-                    } else if(game.isBlackInCheckmate()){
-                        cout << "Checkmate! White wins!" << endl;
-                        game.setIsFinished();
-                        game.addScore("White");
-                    } else {
-                        if(game.isInCheck() == "white"){
-                            cout << "White is in check." << endl;
-                        } else if(game.isInCheck() == "black"){
-                           cout << "Black is in check." << endl;
-                        } else if(game.isInCheck() == "both"){
-                            cout << "White is in check." << endl;
-                            cout << "Black is in check." << endl;
-                        } else {
-                            if(board->isStalemate()){
-                            cout << "Stalemate!" << endl;
-                            game.setIsFinished();
-                            }
-                        }
-                    }
 
                     whosTurn = whosTurn == "Black" ? "White" : "Black";
                 }

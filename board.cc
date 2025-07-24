@@ -381,7 +381,7 @@ vector<Position> Board::allPossibleMoves(){
             for(size_t k = 0; k < next.size(); ++k){
                 if(next[k].repeatable){
                     for(int w = 1; w < BOARD_SIZE + 1; ++w){
-                        if(j + w * next[k].colChange < 9 && i + w * next[k].rowChange < 9 && i + w * next[k].rowChange > 0 && j + w * next[k].colChange > 0){
+                        if(j + w * next[k].colChange < 8 && i + w * next[k].rowChange < 8 && i + w * next[k].rowChange > -1 && j + w * next[k].colChange > -1){
                             Position nextP{j + w * next[k].colChange, i + w * next[k].rowChange};
                             if(theBoard[i][j].getColour() == Colour::White){
                                 if(theBoard[i + next[k].rowChange][j + next[k].colChange].getState().sT == stateType::blackCheck){ // blackCheck is the piece where black piece can check
@@ -389,19 +389,20 @@ vector<Position> Board::allPossibleMoves(){
                                 } else{
                                     theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::whiteCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
                                 }
-                            } else {
+                            } else if(theBoard[i][j].getColour() == Colour::Black){
                                 if(theBoard[i + next[k].rowChange][j].getState().sT == stateType::whiteCheck){
                                     theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::bothCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
                                 } else {
                                     theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::blackCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
                                 }
+                            } else {
+                                break;
                             }
                             nextmoves.emplace_back(nextP);
                         }
-                        break;
                     }
                 } else {
-                    if(j + next[k].colChange < 9 && i + next[k].rowChange < 9 && i + next[k].rowChange > 0 && j + next[k].colChange > 0){
+                    if(j + next[k].colChange < 8 && i + next[k].rowChange < 8 && i + next[k].rowChange > -1 && j + next[k].colChange > -1){
                         Position nextP{j + next[k].colChange, i + next[k].rowChange};
                         if(theBoard[i][j].getColour() == Colour::White){
                             if(theBoard[i + next[k].rowChange][j + next[k].colChange].getState().sT == stateType::blackCheck){ // blackCheck is the piece where black piece can check
@@ -409,7 +410,7 @@ vector<Position> Board::allPossibleMoves(){
                             } else{
                                 theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::whiteCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
                             }
-                        } else {
+                        } else if(theBoard[i][j].getColour() == Colour::Black) {
                             if(theBoard[i + next[k].rowChange][j].getState().sT == stateType::whiteCheck){
                                 theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::bothCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
                             } else {
@@ -434,17 +435,29 @@ bool Board::isStalemate(){
     return false;
 } //isStalemate
 
-vector<Position> Board::getNextMove(string startPos){
+vector<Position> Board::getNextMove(string startPos){ //return next move for chosen piece's pieceType
     vector<Position> nextPos;
     vector intStartPos = intPos(startPos);
     int startr = intStartPos[1];
     int startc= intStartPos[0];
     vector<moveType> movetypes = theBoard[startr][startc].getMoveType();
-    for(size_t j = 0; j < movetypes.size(); ++j){
-        moveType tempMT = movetypes[j];
-        for(int i = 1; i < BOARD_SIZE + 1; ++i){
-            int tempR = startr + i*tempMT.rowChange;
-            int tempC = startc + i*tempMT.colChange;
+    if(movetypes[0].repeatable){
+        for(size_t j = 0; j < movetypes.size(); ++j){
+            moveType tempMT = movetypes[j];
+            for(int i = 1; i < BOARD_SIZE + 1; ++i){
+                int tempR = startr + i*tempMT.rowChange;
+                int tempC = startc + i*tempMT.colChange;
+                if(tempR < 8 && tempC < 8 && tempR >= 0 && tempC >= 0){
+                    Position next{tempC, tempR};
+                    nextPos.emplace_back(next);
+                }
+            }
+        }
+    } else {
+        for(size_t j = 0; j < movetypes.size(); ++j){
+            moveType tempMT = movetypes[j];
+            int tempR = startr + tempMT.rowChange;
+            int tempC = startc + tempMT.colChange;
             if(tempR < 8 && tempC < 8 && tempR >= 0 && tempC >= 0){
                 Position next{tempC, tempR};
                 nextPos.emplace_back(next);
