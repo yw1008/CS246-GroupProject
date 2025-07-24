@@ -72,8 +72,8 @@ int main() {
 
             // // start the game
             // game.start(whiteP, blackP, board);
-            game.setBoard(board);
-            game.setPlayers(whiteP, blackP);
+            game.setBoard(move(board));
+            game.setPlayers(move(whiteP), move(blackP));
 
             cout << "The game is started" << endl;
             // need to print starting board
