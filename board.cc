@@ -70,9 +70,9 @@ pieceType Board::getPieceType(char piece) {
 
 Colour Board::getPieceColor(char piece) {
     if (piece == 'P' || piece == 'K' || piece == 'Q' || piece == 'N' || piece == 'B' || piece == 'R') {
-        return Colour::Black;
-    } else if (piece == 'p' || piece == 'k' || piece == 'q' || piece == 'n' || piece == 'b' || piece == 'r') {
         return Colour::White;
+    } else if (piece == 'p' || piece == 'k' || piece == 'q' || piece == 'n' || piece == 'b' || piece == 'r') {
+        return Colour::Black;
     } else {
         throw invalid_argument("Invalid piece color.");
     }
