@@ -132,9 +132,9 @@ int main() {
                             if((whosTurn == "White" && (whiteP->getLevel() == 0))) {
                                 if (startPos == "e1" && endPos == "g1") {
                                     if(board->getBoard()[0][4].getPieceType() == pieceType::King){
-                                        if(board->getBoard()[0][5].getPieceType == pieceType::Nothing 
-                                        && board->getBoard()[0][6].getPieceType == pieceType::Nothing
-                                        && board->getBoard()[0][7].getPieceType == pieceType::Rook){
+                                        if(board->getBoard()[0][5].getPieceType() == pieceType::Nothing 
+                                        && board->getBoard()[0][6].getPieceType() == pieceType::Nothing
+                                        && board->getBoard()[0][7].getPieceType() == pieceType::Rook){
                                             board->getBoard()[0][5].addPiece(pieceType::Rook, Colour::White);
                                             board->getBoard()[0][6].addPiece(pieceType::King, Colour::White);
                                             board->setWhiteK(0, 6);
@@ -146,10 +146,10 @@ int main() {
                                     }
                                 } else if(startPos == "e1" && endPos == "c1"){
                                     if(board->getBoard()[0][4].getPieceType() == pieceType::King){
-                                        if(board->getBoard()[0][3].getPieceType == pieceType::Nothing 
-                                        && board->getBoard()[0][2].getPieceType == pieceType::Nothing
-                                        && board->getBoard()[0][1].getPieceType == pieceType::Nothing
-                                        && board->getBoard()[0][0].getPieceType == pieceType::Rook){
+                                        if(board->getBoard()[0][3].getPieceType() == pieceType::Nothing 
+                                        && board->getBoard()[0][2].getPieceType() == pieceType::Nothing
+                                        && board->getBoard()[0][1].getPieceType() == pieceType::Nothing
+                                        && board->getBoard()[0][0].getPieceType() == pieceType::Rook){
                                             board->getBoard()[0][3].addPiece(pieceType::Rook, Colour::White);
                                             board->getBoard()[0][2].addPiece(pieceType::King, Colour::White);
                                             board->setWhiteK(0, 2);
@@ -165,9 +165,9 @@ int main() {
                             } else if(whosTurn == "Black" && (blackP->getLevel() == 0)) {
                                 if (startPos == "e8" && endPos == "g8") {
                                     if(board->getBoard()[0][4].getPieceType() == pieceType::King){
-                                        if(board->getBoard()[7][5].getPieceType == pieceType::Nothing 
-                                        && board->getBoard()[7][6].getPieceType == pieceType::Nothing
-                                        && board->getBoard()[7][7].getPieceType == pieceType::Rook){
+                                        if(board->getBoard()[7][5].getPieceType() == pieceType::Nothing 
+                                        && board->getBoard()[7][6].getPieceType() == pieceType::Nothing
+                                        && board->getBoard()[7][7].getPieceType() == pieceType::Rook){
                                             board->getBoard()[7][5].addPiece(pieceType::Rook, Colour::White);
                                             board->getBoard()[7][6].addPiece(pieceType::King, Colour::White);
                                             board->setWhiteK(7, 6);
@@ -179,10 +179,10 @@ int main() {
                                     }
                                 } else if(startPos == "e8" && endPos == "c8"){
                                     if(board->getBoard()[0][4].getPieceType() == pieceType::King){
-                                        if(board->getBoard()[7][3].getPieceType == pieceType::Nothing 
-                                        && board->getBoard()[7][2].getPieceType == pieceType::Nothing
-                                        && board->getBoard()[7][1].getPieceType == pieceType::Nothing
-                                        && board->getBoard()[7][0].getPieceType == pieceType::Rook){
+                                        if(board->getBoard()[7][3].getPieceType() == pieceType::Nothing 
+                                        && board->getBoard()[7][2].getPieceType() == pieceType::Nothing
+                                        && board->getBoard()[7][1].getPieceType() == pieceType::Nothing
+                                        && board->getBoard()[7][0].getPieceType() == pieceType::Rook){
                                             board->getBoard()[7][3].addPiece(pieceType::Rook, Colour::Black);
                                             board->getBoard()[7][2].addPiece(pieceType::King, Colour::Black);
                                             board->setWhiteK(7, 2);
