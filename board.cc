@@ -651,6 +651,7 @@ bool Board::isValidMoveC(string &startPos, string &endPos) {
 
 void Board::makeMove(string &startPos, string &endPos) {
     int startr, startc, endr, endc;
+    vector<pair<Position, Position>> posMove = allPossibleMoves();
 
     vector<int> intStartPos = intPos(startPos);
     startc = intStartPos[0];
@@ -721,6 +722,8 @@ vector<pair<Position, Position>> Board::allPossibleMoves(){
         }
     }
 
+    string sFrom;
+    string sTo;
     vector<pair<Position, Position>> nextmoves;
 
     for(int i = 0; i < BOARD_SIZE; ++i){
@@ -734,11 +737,11 @@ vector<pair<Position, Position>> Board::allPossibleMoves(){
                             char from[] = "  ";
                             from[0] = 'a' + j;
                             from[1] = '1' + i;
-                            string sFrom(from);
+                            sFrom = from;
                             char to[] = "  ";
                             to[0] = 'a' + nextP.col;
                             to[1] = '1' + nextP.row;
-                            string sTo(to); 
+                            sTo = to; 
                             if(isValidMoveC(sFrom, sTo)){
                                 if(theBoard[i][j].getColour() == Colour::White){
                                     if(theBoard[i + next[k].rowChange][j + next[k].colChange].getState().sT == stateType::blackCheck){ // blackCheck is the piece where black piece can check
@@ -770,11 +773,11 @@ vector<pair<Position, Position>> Board::allPossibleMoves(){
                         char from[] = "  ";
                         from[0] = 'a' + j;
                         from[1] = '1' + i;
-                        string sFrom(from);
+                        sFrom = from;
                         char to[] = "  ";
                         to[0] = 'a' + nextP.col;
                         to[1] = '1' + nextP.row;
-                        string sTo(to); 
+                        sTo = to; 
                         if(isValidMoveC(sFrom, sTo)){
                             if(theBoard[i][j].getColour() == Colour::White){
                                 if(theBoard[i + next[k].rowChange][j + next[k].colChange].getState().sT == stateType::blackCheck){ // blackCheck is the piece where black piece can check
