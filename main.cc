@@ -162,7 +162,7 @@ int main() {
                                 cout << "Black is in check." << endl;
                             } else {
                                 if(board->isStalemate()){ 
-                                cout << *board << endl;
+                                game->setIsFinished();
                                 cout << "Stalemate!" << endl;
                                 whiteP->~Player();
                                 blackP->~Player();
