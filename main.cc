@@ -106,11 +106,13 @@ int main() {
                         else {
                             string startPos, endPos;
                             if (!(issGame >> startPos >> endPos)) {
-                            cerr << "Invalid input: must enter two positions" << endl;
-                            continue;
+                                cerr << "Invalid input: must enter two positions" << endl;
+                                continue;
+                            }
+                            if (startPos[1] == '7' && endPos[1] == '8') {
                             }
                             if (!game->isValidMove(startPos, endPos)) {
-                            continue;
+                                continue;
                             } 
                             if((whosTurn == "White" && (whiteP->getLevel() == 0))) {
                                 whiteP->move(startPos, endPos, board);
@@ -118,7 +120,6 @@ int main() {
                                 blackP->move(startPos, endPos, board);
                             }
                         }
-                        // game.makeMove(startPos, endPos);
 
                         if(game->isWhiteInCheckmate()){
                             cout << "Checkmate! Black wins!" << endl;

@@ -260,7 +260,7 @@ void Board::init() {
     // delete gd; // clean Graphic display observer
     // define text and graphics
     td = new TextDisplay();
-    // gd = new GraphicDisplay();
+    // gd = new GraphicsDisplay();
 
     // clear existing board if necessary
     theBoard.clear();
@@ -270,7 +270,7 @@ void Board::init() {
         for (int c = 0; c < BOARD_SIZE; ++c) {
             theBoard[r].emplace_back(Piece(r, c));
             theBoard[r][c].attach(td); // text
-            //theBoard[r][c].attach(gd); // graphics
+            // theBoard[r][c].attach(gd); // graphics
         }
     }
 } //init
@@ -350,6 +350,11 @@ bool Board::isValidMove(string &startPos, string &endPos) {
         return false;
     }
 
+    if (startc == endc && startr == endr) {
+        cerr << "Invalid move: cannot move piece to the same place" << endl;
+        return false;
+    }
+
     Colour c;
     if (isWhite) c = Colour::White;
     else c = Colour::Black;
@@ -361,11 +366,10 @@ bool Board::isValidMove(string &startPos, string &endPos) {
 
     // check it the movement is correct for the piece type
     Position toPos{endc, endr};
-    // bool isValid = theBoard[startr][startc].isValid(toPos);
-    // if(!isValid) {
-    //     cerr << "Invalid move for the piece type" << endl;
-    //     return;
-    // }
+    if(!theBoard[startr][startc].isValid(toPos)) {
+        cerr << "Invalid move for the " << getPiece(startPos) << endl;
+        return false;
+    }
 
     Position diffPos;
     diffPos.col = endc - startc;
@@ -505,11 +509,20 @@ void Board::makeMove(string &startPos, string &endPos) {
     theBoard[startr][startc].removePiece();
     theBoard[endr][endc].addPiece(piece, c);
 
-    if(theBoard[endr][endc].getPieceType() == pieceType::King){
+    if (theBoard[endr][endc].getPieceType() == pieceType::King){
         if(theBoard[endr][endc].getColour() == Colour::White){
             whiteK = {endc, endr};
         } else {
             blackK = {endc, endr};
+        }
+    }
+
+    if (theBoard[endr][endc].getPieceType() == pieceType::Pawn) {
+        if (theBoard[endr][endc].getColour() == Colour::White && endr == 7) {
+            // white pawn promotion
+        }
+        else if (theBoard[endr][endc].getColour() == Colour::Black && endr == 0) {
+            // black pawn promotion
         }
     }
 } //makeMove
