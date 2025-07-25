@@ -531,14 +531,14 @@ void Board::changeTurn() {
     isWhite = !isWhite;
 } //changeTurn
 
-vector<Position> Board::allPossibleMoves(){
+vector<pair<Position, Position>> Board::allPossibleMoves(){
     for(int i = 0; i < BOARD_SIZE; ++i){
         for(int j = 0; j < BOARD_SIZE; ++j){
             theBoard[i][j].setState(stateType::Nothing, theBoard[i][j].getState().colour);
         }
     }
 
-    vector<Position> nextmoves;
+    vector<pair<Position, Position>> nextmoves;
 
     for(int i = 0; i < BOARD_SIZE; ++i){
         for(int j = 0; j < BOARD_SIZE; ++j){
@@ -563,7 +563,17 @@ vector<Position> Board::allPossibleMoves(){
                             } else {
                                 break;
                             }
-                            nextmoves.emplace_back(nextP);
+                            char from[] = "  ";
+                            from[0] = 'a' + j;
+                            from[1] = '1' + i;
+                            string sFrom(from);
+                            char to[] = "  ";
+                            to[0] = 'a' + nextP.col;
+                            to[1] = '1' + nextP.row;
+                            string sTo(to);                            
+                            if(isValidMoveC(sFrom, sTo)){
+                                nextmoves.emplace_back(Position{j, i},nextP);
+                            }
                         }
                     }
                 } else {
@@ -582,7 +592,17 @@ vector<Position> Board::allPossibleMoves(){
                                 theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::blackCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
                             }
                         }
-                        nextmoves.emplace_back(nextP);
+                        char from[] = "  ";
+                        from[0] = 'a' + j;
+                        from[1] = '1' + i;
+                        string sFrom(from);
+                        char to[] = "  ";
+                        to[0] = 'a' + nextP.col;
+                        to[1] = '1' + nextP.row;
+                        string sTo(to);
+                        if(isValidMoveC(sFrom, sTo)){
+                                nextmoves.emplace_back(Position{j, i},nextP);
+                        }
                     }
                 }
             }
