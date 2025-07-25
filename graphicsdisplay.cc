@@ -9,7 +9,8 @@ GraphicsDisplay::GraphicsDisplay()
     }
 
     // fill 13x13 blocks with the same color
-    for (size_t r = 0; r < gridSize; ++r) {
+    size_t r =0;
+    // for (size_t r = 0; r < gridSize; ++r) {
         for (size_t c = 0; c < gridSize; ++c) {
             // Determine which 12×12 block we're in
             size_t blockRow = r / 12;
@@ -20,7 +21,7 @@ GraphicsDisplay::GraphicsDisplay()
 
             xw.fillRectangle(c * cellSize, r * cellSize, cellSize, cellSize, color);
         }
-    }
+    // }
 }
 
 
@@ -307,35 +308,37 @@ void GraphicsDisplay::drawBishop(size_t boardr, size_t boardc, int cellSize, con
     xw.fillRectangle((8 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);  
 }
 
-void GraphicsDisplay::notify(Subject &whoFrom) {
-    Info info = whoFrom.getInfo();
-    int row = info.pos.row;
-    int col = info.pos.col;
 
-    int pixelRow = row * cellPixel;
-    int pixelCol = col * cellPixel;
+// incorrect
+// void GraphicsDisplay::notify(Subject &whoFrom) {
+//     Info info = whoFrom.getInfo();
+//     int row = info.pos.row;
+//     int col = info.pos.col;
 
-    // Always redraw the background
-    int bgColor = (row + col) % 2 == 0 ? Xwindow::Green : Xwindow::Blue;
-    xw.fillRectangle(pixelCol, pixelRow, cellPixel, cellPixel, bgColor);
+//     int pixelRow = row * cellPixel;
+//     int pixelCol = col * cellPixel;
 
-    // If there's no piece to draw, stop here
-    if (info.piecetype == pieceType::Nothing) return;
+//     // Always redraw the background
+//     int bgColor = (row + col) % 2 == 0 ? Xwindow::Green : Xwindow::Blue;
+//     xw.fillRectangle(pixelCol, pixelRow, cellPixel, cellPixel, bgColor);
 
-    Colour c = info.colour;
+//     // If there's no piece to draw, stop here
+//     if (info.piecetype == pieceType::Nothing) return;
 
-    // Draw the piece based on type and color
-    if (info.piecetype == pieceType::Pawn) {
-        drawPawn(row, col, cellPixel, c);
-    } else if (info.piecetype == pieceType::King) {
-        drawKing(row, col, cellPixel, c);
-    } else if (info.piecetype == pieceType::Queen) {
-        drawQueen(row, col, cellPixel, c);
-    } else if (info.piecetype == pieceType::Rook) {
-        drawRook(row, col, cellPixel, c);
-    } else if (info.piecetype == pieceType::Knight) {
-        drawKnight(row, col, cellPixel, c);
-    } else if (info.piecetype == pieceType::Bishop) {
-        drawBishop(row, col, cellPixel, c);
-    }
-}
+//     Colour c = info.colour;
+
+//     // Draw the piece based on type and color
+//     if (info.piecetype == pieceType::Pawn) {
+//         drawPawn(row, col, cellPixel, c);
+//     } else if (info.piecetype == pieceType::King) {
+//         drawKing(row, col, cellPixel, c);
+//     } else if (info.piecetype == pieceType::Queen) {
+//         drawQueen(row, col, cellPixel, c);
+//     } else if (info.piecetype == pieceType::Rook) {
+//         drawRook(row, col, cellPixel, c);
+//     } else if (info.piecetype == pieceType::Knight) {
+//         drawKnight(row, col, cellPixel, c);
+//     } else if (info.piecetype == pieceType::Bishop) {
+//         drawBishop(row, col, cellPixel, c);
+//     }
+// }
