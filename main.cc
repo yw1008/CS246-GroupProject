@@ -139,7 +139,6 @@ int main() {
                                 blackP->move(startPos, endPos, board);
                             }
                         }
-
                         if(game->isWhiteInCheckmate()){
                             cout << "Checkmate! Black wins!" << endl;
                             whiteP->~Player();

@@ -651,7 +651,6 @@ bool Board::isValidMoveC(string &startPos, string &endPos) {
 
 void Board::makeMove(string &startPos, string &endPos) {
     int startr, startc, endr, endc;
-    vector<pair<Position, Position>> posMove = allPossibleMoves();
 
     vector<int> intStartPos = intPos(startPos);
     startc = intStartPos[0];
@@ -810,10 +809,11 @@ vector<pair<Position, Position>> Board::allPossibleMoves(){
 }  //allPossibleMove
 
 bool Board::isStalemate(){
+    vector<pair<Position, Position>> posMove = allPossibleMoves();
     if(theBoard[whiteK.row][whiteK.col].getState().sT == stateType::Nothing || theBoard[whiteK.row][whiteK.col].getState().sT == stateType::blackCheck){
-        return allPossibleMoves().empty();
+        return posMove.empty();
     } else if(theBoard[blackK.row][blackK.col].getState().sT == stateType::Nothing || theBoard[blackK.row][blackK.col].getState().sT == stateType::whiteCheck){
-        return allPossibleMoves().empty();
+        return posMove.empty();
     }
     return false;
 } //isStalemate
