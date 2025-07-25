@@ -114,8 +114,10 @@ int main() {
                             if (!game->isValidMove(startPos, endPos)) {
                                 continue;
                             } 
-                            if ((startPos[1] == '7' && endPos[1] == '8') || (startPos[1] == '2' && endPos[1] == '1')) {
-                                if (board->isPawn(startPos)) {
+                            // special move for pawn
+                            if (board->isPawn(startPos)) {
+                                // promotion
+                                if ((startPos[1] == '7' && endPos[1] == '8') || (startPos[1] == '2' && endPos[1] == '1')) {
                                     char promotionType;
                                     if (!(issGame >> promotionType)) {
                                         cerr << "Invalid input: must enter the correct piece type for pawn promotion" << endl;
@@ -124,6 +126,12 @@ int main() {
                                     board->promotion(promotionType, startPos, endPos);
                                     continue;
                                 }
+                                // enpassant
+                                //catching and moving
+                            }
+                            // castling
+                            if (startPos == "e1" && (endPos == "g1" || endPos == "c1")) {
+                                
                             }
                             if((whosTurn == "White" && (whiteP->getLevel() == 0))) {
                                 whiteP->move(startPos, endPos, board);

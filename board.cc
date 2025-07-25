@@ -156,10 +156,10 @@ void Board::setUp(string cmd, string type, string position, string c) {
             int row = coords[1];
             int col = coords[0];
             if (theBoard[row][col].getPieceType() != pieceType::Nothing) {
-                theBoard[row][col].removePiece();   // piece is not removed
                 pieceType pt = theBoard[row][col].getPieceType();
                 Colour colour = theBoard[row][col].getColour();
                 removePieceCount(pt, colour);        // remove the number of pieces
+                theBoard[row][col].removePiece();   // piece is not removed
             }
             // track king position
             pieceType pt = getPieceType(piece);
