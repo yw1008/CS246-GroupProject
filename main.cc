@@ -218,14 +218,12 @@ int main() {
                             } else if(game->isInCheck() == "both"){
                                 cout << "White is in check." << endl;
                                 cout << "Black is in check." << endl;
-                            } else {
-                                if(board->isStalemate()){ 
+                            } else if (board->isStalemate()){
                                 game->setIsFinished();
                                 cout << "Stalemate!" << endl;
                                 whiteP->~Player();
                                 blackP->~Player();
                                 delete board;
-                                }
                             }
                         }
                         // game should be initialized after the first game is called
