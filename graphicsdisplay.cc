@@ -2,26 +2,23 @@
 
 const int cellPixel = 12;
 
-GraphicsDisplay::GraphicsDisplay()
-    : xw{579, 579}, gridSize{96} {
-    if (gridSize > 0) {
-        cellSize = 579 / gridSize;
-    }
+GraphicsDisplay::GraphicsDisplay() {
+    cellSize = 579 / BOARD_SIZE;
 
-    // fill 13x13 blocks with the same color
-    size_t r =0;
-    // for (size_t r = 0; r < gridSize; ++r) {
-        for (size_t c = 0; c < gridSize; ++c) {
+    // fill 8x8 blocks with the same color
+    for (size_t r = 0; r < BOARD_SIZE; ++r) {
+        for (size_t c = 0; c < BOARD_SIZE; ++c) {
             // Determine which 12×12 block we're in
-            size_t blockRow = r / 12;
-            size_t blockCol = c / 12;
+            // size_t blockRow = r / 12;
+            // size_t blockCol = c / 12;
 
             // Alternate colors by block
-            int color = ((blockRow + blockCol) % 2 == 0) ? Xwindow::Green : Xwindow::Blue;
+            int color = ((r + c) % 2 == 0) ? Xwindow::Green : Xwindow::Blue;
 
             xw.fillRectangle(c * cellSize, r * cellSize, cellSize, cellSize, color);
         }
-    // }
+    }
+    cellSize = 579 / 96;
 }
 
 
@@ -308,37 +305,37 @@ void GraphicsDisplay::drawBishop(size_t boardr, size_t boardc, int cellSize, con
     xw.fillRectangle((8 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);  
 }
 
+void GraphicsDisplay::notify(Subject &whoFrom) {
+    Info info = whoFrom.getInfo();
+    int row = info.pos.row;
+    int col = info.pos.col;
 
-// incorrect
-// void GraphicsDisplay::notify(Subject &whoFrom) {
-//     Info info = whoFrom.getInfo();
-//     int row = info.pos.row;
-//     int col = info.pos.col;
+    int pixelRow = row * cellPixel;
+    int pixelCol = col * cellPixel;
 
-//     int pixelRow = row * cellPixel;
-//     int pixelCol = col * cellPixel;
+    cellSize = 579 / BOARD_SIZE;
 
-//     // Always redraw the background
-//     int bgColor = (row + col) % 2 == 0 ? Xwindow::Green : Xwindow::Blue;
-//     xw.fillRectangle(pixelCol, pixelRow, cellPixel, cellPixel, bgColor);
+    // If there's no piece to draw, stop here
+    if (info.piecetype == pieceType::Nothing) {
+        int color = ((row + col) % 2 == 0) ? Xwindow::Green : Xwindow::Blue;
+        xw.fillRectangle(col * cellSize, row * cellSize, cellSize, cellSize, color);
+    }
 
-//     // If there's no piece to draw, stop here
-//     if (info.piecetype == pieceType::Nothing) return;
+    Colour c = info.colour;
+    cellSize = 579 / pixelSize;
 
-//     Colour c = info.colour;
-
-//     // Draw the piece based on type and color
-//     if (info.piecetype == pieceType::Pawn) {
-//         drawPawn(row, col, cellPixel, c);
-//     } else if (info.piecetype == pieceType::King) {
-//         drawKing(row, col, cellPixel, c);
-//     } else if (info.piecetype == pieceType::Queen) {
-//         drawQueen(row, col, cellPixel, c);
-//     } else if (info.piecetype == pieceType::Rook) {
-//         drawRook(row, col, cellPixel, c);
-//     } else if (info.piecetype == pieceType::Knight) {
-//         drawKnight(row, col, cellPixel, c);
-//     } else if (info.piecetype == pieceType::Bishop) {
-//         drawBishop(row, col, cellPixel, c);
-//     }
-// }
+    // Draw the piece based on type and color
+    if (info.piecetype == pieceType::Pawn) {
+        drawPawn(row, col, cellSize, c);
+    } else if (info.piecetype == pieceType::King) {
+        drawKing(row, col, cellSize, c);
+    } else if (info.piecetype == pieceType::Queen) {
+        drawQueen(row, col, cellSize, c);
+    } else if (info.piecetype == pieceType::Rook) {
+        drawRook(row, col, cellSize, c);
+    } else if (info.piecetype == pieceType::Knight) {
+        drawKnight(row, col, cellSize, c);
+    } else if (info.piecetype == pieceType::Bishop) {
+        drawBishop(row, col, cellSize, c);
+    }
+}

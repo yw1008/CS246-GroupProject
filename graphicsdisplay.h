@@ -6,9 +6,10 @@
 #include "subject.h"
 
 class GraphicsDisplay : public Observer {
-    Xwindow xw;
-    size_t BOARD_SIZE = 8;
-    size_t gridSize = 0;
+    Xwindow xw = {579, 579};
+    size_t BOARD_SIZE = 8; // size of the grid
+    size_t cell_size = 12; // pixel size of each cell
+    size_t pixelSize = 96; // size of the pixel drawing for pieces
     int cellSize = 0;
 
 private:
