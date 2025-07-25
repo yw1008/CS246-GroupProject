@@ -10,7 +10,8 @@
 using namespace std;
 
 int main() {
-    string line, cmd;    
+    string line, cmd;
+    Board *board = new Board();    
     Player *whiteP;
     Board *board; = new Board();
     Player *blackP;
@@ -20,6 +21,7 @@ int main() {
     bool isSetup = 0;
 
     while(true) {
+        Board *board = new Board();    
         string line; // must get a whole line of the command
         getline (cin, line);
 
@@ -150,14 +152,12 @@ int main() {
                             } else if(game->isInCheck() == "both"){
                                 cout << "White is in check." << endl;
                                 cout << "Black is in check." << endl;
-                            } else {
-                                if(board->isStalemate()){ 
+                            } else if (board->isStalemate()){
                                 game->setIsFinished();
                                 cout << "Stalemate!" << endl;
                                 whiteP->~Player();
                                 blackP->~Player();
                                 delete board;
-                                }
                             }
                         }
                         // game should be initialized after the first game is called

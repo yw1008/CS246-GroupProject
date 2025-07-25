@@ -905,12 +905,10 @@ vector<pair<Position, Position>> Board::allPossibleMoves(){
 
 bool Board::isStalemate(){
     vector<pair<Position, Position>> posMove = allPossibleMoves();
-    cout << posMove.empty() << endl;
-
     if (isWhite) {
-        if (!whiteKingCanMove() && posMove.empty()) return true;
+        if (whiteKingCanMove() && posMove.empty()) return true;
     } else {
-        if (!blackKingCanMove() && posMove.empty()) return true;
+        if (blackKingCanMove() && posMove.empty()) return true;
     }
     return false;
 }
