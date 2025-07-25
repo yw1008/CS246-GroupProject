@@ -13,7 +13,6 @@ int main() {
     string line, cmd;
     Board *board = new Board();    
     Player *whiteP;
-    Board *board; = new Board();
     Player *blackP;
     string whosTurn = "White";
     int whiteScore = 0;

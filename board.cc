@@ -682,7 +682,7 @@ void Board::makeMove(string &startPos, string &endPos) {
                 theBoard[0][7].removePiece();
                 theBoard[0][6].addPiece(pieceType::King, Colour::White);
                 theBoard[0][5].addPiece(pieceType::Rook, Colour::White);
-                whiteK{0, 6};
+                whiteK = {0, 6};
             }
         } else {
             cerr << "Invalid move" << endl;
@@ -697,7 +697,7 @@ void Board::makeMove(string &startPos, string &endPos) {
                     theBoard[0][0].removePiece();
                     theBoard[0][2].addPiece(pieceType::King, Colour::White);
                     theBoard[0][3].addPiece(pieceType::Rook, Colour::White);
-                    whiteK{0, 2};
+                    whiteK = {0, 2};
                 }
         } else {
             cerr << "Invalid move" << endl;
@@ -711,22 +711,22 @@ void Board::makeMove(string &startPos, string &endPos) {
                     theBoard[7][7].removePiece();
                     theBoard[7][6].addPiece(pieceType::King, Colour::Black);
                     theBoard[7][5].addPiece(pieceType::Rook, Colour::Black);
-                    blackK{7, 6};
+                    blackK = {7, 6};
             }
         } else {
             cerr << "Invalid move" << endl;
         }
     } else if(!isWhite && (startPos == "e8" && endPos == "c8")){
-        if(board->getBoard()[7][4].getPieceType() == pieceType::King){
+        if(theBoard[7][4].getPieceType() == pieceType::King){
             if(theBoard[7][3].getPieceType() == pieceType::Nothing 
                 && theBoard[7][2].getPieceType() == pieceType::Nothing
                 && theBoard[7][1].getPieceType() == pieceType::Nothing
-                && btheBoard[7][0].getPieceType() == pieceType::Rook){
+                && theBoard[7][0].getPieceType() == pieceType::Rook){
                     theBoard[7][4].removePiece();
                     theBoard[7][0].removePiece();
                     theBoard[7][2].addPiece(pieceType::King, Colour::Black);
                     theBoard[7][3].addPiece(pieceType::Rook, Colour::Black);
-                    blackK{7, 2};
+                    blackK = {7, 2};
            }
         } else {
             cerr << "Invalid move" << endl;
@@ -797,25 +797,25 @@ vector<pair<Position, Position>> Board::allPossibleMoves(){
     vector<pair<Position, Position>> nextmoves;
 
     if(theBoard[0][4].getPieceType() == pieceType::King && isWhite){
-        if(board->getBoard()[0][5].getPieceType() == pieceType::Nothing 
-            && board->getBoard()[0][6].getPieceType() == pieceType::Nothing
-            && board->getBoard()[0][7].getPieceType() == pieceType::Rook){
+        if(theBoard[0][5].getPieceType() == pieceType::Nothing 
+            && theBoard[0][6].getPieceType() == pieceType::Nothing
+            && theBoard[0][7].getPieceType() == pieceType::Rook){
                 nextmoves.emplace_back(Position{0, 4}, Position{0,6});
-        } else if(board->getBoard()[0][3].getPieceType() == pieceType::Nothing 
-                    && board->getBoard()[0][2].getPieceType() == pieceType::Nothing
-                    && board->getBoard()[0][1].getPieceType() == pieceType::Nothing
-                    && board->getBoard()[0][0].getPieceType() == pieceType::Rook){
+        } else if(theBoard[0][3].getPieceType() == pieceType::Nothing 
+                    && theBoard[0][2].getPieceType() == pieceType::Nothing
+                    && theBoard[0][1].getPieceType() == pieceType::Nothing
+                    && theBoard[0][0].getPieceType() == pieceType::Rook){
                         nextmoves.emplace_back(Position{0, 4}, Position{0, 2});
         }
     } else if(theBoard[7][4].getPieceType() == pieceType::King && !isWhite){
-        if(board->getBoard()[0][5].getPieceType() == pieceType::Nothing 
-            && board->getBoard()[0][6].getPieceType() == pieceType::Nothing
-            && board->getBoard()[0][7].getPieceType() == pieceType::Rook){
+        if(theBoard[0][5].getPieceType() == pieceType::Nothing 
+            && theBoard[0][6].getPieceType() == pieceType::Nothing
+            && theBoard[0][7].getPieceType() == pieceType::Rook){
                 nextmoves.emplace_back(Position{7, 4}, Position{7, 6});
-        } else if(board->getBoard()[0][3].getPieceType() == pieceType::Nothing 
-                    && board->getBoard()[0][2].getPieceType() == pieceType::Nothing
-                    && board->getBoard()[0][1].getPieceType() == pieceType::Nothing
-                    && board->getBoard()[0][0].getPieceType() == pieceType::Rook){
+        } else if(theBoard[0][3].getPieceType() == pieceType::Nothing 
+                    && theBoard[0][2].getPieceType() == pieceType::Nothing
+                    && theBoard[0][1].getPieceType() == pieceType::Nothing
+                    && theBoard[0][0].getPieceType() == pieceType::Rook){
                         nextmoves.emplace_back(Position{7, 4}, Position{7, 2});
         }
     }
