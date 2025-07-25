@@ -11,7 +11,7 @@ const int BOARD_SIZE = 8;
 
 Board::~Board() {
     delete td;
-    // delete gd;
+    delete gd;
 }
 
 vector<int> Board::intPos(string pos) {
@@ -293,46 +293,6 @@ bool Board::isValidMove(string &startPos, string &endPos) {
     int endc = endInt[0];
     int endr = endInt[1];
 
-    if (theBoard[startr][startc].getPieceType() == pieceType::Pawn) {
-        Colour pieceColour = theBoard[startr][startc].getColour();
-        int dir = (pieceColour == Colour::White) ? -1 : 1;
-
-        bool isForward = (startc == endc);
-        bool isDiagonal = std::abs(startc - endc) == 1 && (endr - startr) == dir;
-
-        // Capture move: must be diagonal and there must be an opponent's piece
-        if (isDiagonal) {
-            if (theBoard[endr][endc].getPieceType() == pieceType::Nothing ||
-                theBoard[endr][endc].getColour() == pieceColour) {
-                cerr << "Invalid move: Pawn can only capture diagonally if opponent's piece exists" << endl;
-                return false;
-            }
-            return true;
-        }
-
-        // Forward move: must be straight and unblocked
-        if (isForward) {
-            if (endr - startr == dir &&
-                theBoard[endr][endc].getPieceType() == pieceType::Nothing) {
-                return true;
-            }
-
-            // First double-step
-            if ((pieceColour == Colour::White && startr == 6 || pieceColour == Colour::Black && startr == 1) &&
-                endr - startr == 2 * dir &&
-                theBoard[startr + dir][startc].getPieceType() == pieceType::Nothing &&
-                theBoard[endr][endc].getPieceType() == pieceType::Nothing) {
-                return true;
-            }
-
-            cerr << "Invalid move: Pawn move blocked or invalid distance" << endl;
-            return false;
-        }
-
-        cerr << "Invalid move: Pawn cannot move this way" << endl;
-        return false;
-    }
-
     try {
         vector<int> intStartPos = intPos(startPos);
         startc = intStartPos[0];
@@ -369,6 +329,45 @@ bool Board::isValidMove(string &startPos, string &endPos) {
     Position toPos{endc, endr};
     if(!theBoard[startr][startc].isValid(toPos)) {
         cerr << "Invalid move for the " << getPiece(startPos) << endl;
+        return false;
+    }
+    if (theBoard[startr][startc].getPieceType() == pieceType::Pawn) {
+        Colour pieceColour = theBoard[startr][startc].getColour();
+        int dir = (pieceColour == Colour::White) ? -1 : 1;
+
+        bool isForward = (startc == endc);
+        bool isDiagonal = std::abs(startc - endc) == 1 && (endr - startr) == dir;
+
+        // Capture move: must be diagonal and there must be an opponent's piece
+        if (isDiagonal) {
+            if (theBoard[endr][endc].getPieceType() == pieceType::Nothing ||
+                theBoard[endr][endc].getColour() == pieceColour) {
+                cerr << "Invalid move: Pawn can only capture diagonally if opponent's piece exists" << endl;
+                return false;
+            }
+            // return true;
+        }
+
+        // Forward move: must be straight and unblocked
+        if (isForward) {
+            if (!(endr - startr == dir &&
+                theBoard[endr][endc].getPieceType() == pieceType::Nothing)) {
+                return false;
+            }
+
+            // First double-step
+            if (!((pieceColour == Colour::White && startr == 6 || pieceColour == Colour::Black && startr == 1) &&
+                endr - startr == 2 * dir &&
+                theBoard[startr + dir][startc].getPieceType() == pieceType::Nothing &&
+                theBoard[endr][endc].getPieceType() == pieceType::Nothing)) {
+                return false;
+            }
+
+            cerr << "Invalid move: Pawn move blocked or invalid distance" << endl;
+            return false;
+        }
+
+        cerr << "Invalid move: Pawn cannot move this way" << endl;
         return false;
     }
 
@@ -439,22 +438,22 @@ bool Board::isValidMove(string &startPos, string &endPos) {
                 cerr << "Invalid move: Pawn can only capture diagonally if opponent's piece exists" << endl;
                 return false;
             }
-            return true;
+            // return true;
         }
 
         // Forward move must be straight
         if (isForward) {
-            if (endr - startr == dir &&
-                theBoard[endr][endc].getPieceType() == pieceType::Nothing) {
-                return true;
+            if (!(endr - startr == dir &&
+                theBoard[endr][endc].getPieceType() == pieceType::Nothing)) {
+                return false;
             }
 
             // First double-step
-            if ((pieceColour == Colour::White && startr == 6 || pieceColour == Colour::Black && startr == 1) &&
+            if (!((pieceColour == Colour::White && startr == 6 || pieceColour == Colour::Black && startr == 1) &&
                 endr - startr == 2 * dir &&
                 theBoard[startr + dir][startc].getPieceType() == pieceType::Nothing &&
-                theBoard[endr][endc].getPieceType() == pieceType::Nothing) {
-                return true;
+                theBoard[endr][endc].getPieceType() == pieceType::Nothing)) {
+                return false;
             }
 
             cerr << "Invalid move: Pawn move blocked or invalid distance" << endl;
@@ -762,7 +761,7 @@ vector<pair<Position, Position>> Board::allPossibleMoves(){
                                     break;
                                 }
                             } else{
-                                continue;
+                                break;
                             }
                         }
                     }
@@ -798,7 +797,7 @@ vector<pair<Position, Position>> Board::allPossibleMoves(){
                                 continue;
                             }
                         } else{
-                            continue;
+                            break;
                         }
                     }
                 }
