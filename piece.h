@@ -13,36 +13,34 @@ struct moveType {
     bool repeatable;
 };
 
-class Piece : public Subject {
-protected:
-    pieceType pT;
-    Colour colour;
-    Position pos;
-    State state;
-    bool isFirstMove;
-    bool isEnPassant;
+// class Piece : public Subject {
+// protected:
+//     pieceType pT;
+//     Colour colour;
+//     Position pos;
+//     State state;
+//     bool isFirstMove;
+//     bool isEnPassant;
 
-public:
-    Piece(int r, int c, pieceType type, Colour col);
-    virtual ~Piece() = default;
+// public:
+//     Piece(int r, int c, pieceType type, Colour col);
+//     virtual ~Piece() = default;
 
-    virtual std::vector<Position> nextMove() const = 0;
-    virtual char getType() const = 0;
+//     virtual std::vector<Position> nextMove() const = 0;
+//     virtual char getType() const = 0;
 
-    Info getInfo() const override;
-    Colour getColour() const;
-    pieceType getPieceType() const;
-    State getState() const;
-    void setState(stateType sT, Colour c);
+//     Info getInfo() const override;
+//     Colour getColour() const;
+//     pieceType getPieceType() const;
+//     State getState() const;
+//     void setState(stateType sT, Colour c);
 
-    Position getPosition() const;
-    void setPosition(Position p);
-    void setFirstMove(bool);
-    void setEnPassant(bool);
-};
+//     Position getPosition() const;
+//     void setPosition(Position p);
+//     void setFirstMove(bool);
+//     void setEnPassant(bool);
+// };
 
-
-/*
 class Piece: public Subject {
     protected:
         pieceType pT;
@@ -80,5 +78,4 @@ class Piece: public Subject {
 
         vector<moveType> getMoveType();
 };
-*/
 #endif

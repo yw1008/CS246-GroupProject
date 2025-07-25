@@ -200,7 +200,7 @@ void Board::setUp(string cmd, string type, string position, string c) {
     cout << "setup successful - board" << endl;
 } //setup
 
-std::vector<std::vector<Piece>> Board::getBoard(){
+std::vector<std::vector<Piece>> Board::getBoard() const{
     return theBoard;
 }
 
@@ -285,7 +285,12 @@ char Board::getPiece(string pos) {
 
 bool Board::isValidMove(string &startPos, string &endPos) {
     // need to check if the move make player him/herself check
-    int startr, startc, endr, endc;
+    auto startInt = intPos(startPos);
+    int startc = startInt[0];
+    int startr = startInt[1];
+    auto endInt = intPos(endPos);
+    int endc = endInt[0];
+    int endr = endInt[1];
 
     if (theBoard[startr][startc].getPieceType() == pieceType::Pawn) {
         Colour pieceColour = theBoard[startr][startc].getColour();
@@ -399,6 +404,8 @@ bool Board::isValidMove(string &startPos, string &endPos) {
         for (size_t j = 1; j < BOARD_SIZE + 1; ++j) {
             int tempc = correctMove.colChange * j + startc;
             int tempr = correctMove.rowChange * j + startr;
+            if (tempc < 0 || tempc >= BOARD_SIZE ||
+                tempr < 0 || tempr >= BOARD_SIZE) break;
 
             if (tempc == endc && tempr == endr) break; // escape if the loop gets to the end posisiton
             
