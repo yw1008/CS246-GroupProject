@@ -88,6 +88,8 @@ int main() {
                     string whoWon = whosTurn == "Black" ? "White" : "Black";
                     game->setIsFinished();
                     game->addScore(whoWon);
+                    whiteScore += game->getScore("White");
+                    blackScore += game->getScore("Black");
                     isSetup = false;
                     cout << "Game is resigned. " << whoWon << " is Win!" << endl;
                 } else if (cmd == "move") {
