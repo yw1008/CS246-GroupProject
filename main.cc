@@ -175,7 +175,6 @@ int main() {
                         blackScore += game->getScore("Black");
 
                         whosTurn = whosTurn == "Black" ? "White" : "Black";
-                        board->changeTurn();
                     }
                     else if (cmd == "undo") {
                         game->undo();

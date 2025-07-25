@@ -762,12 +762,12 @@ vector<pair<Position, Position>> Board::allPossibleMoves(){
                                     break;
                                 }
                             } else{
-                                break;
+                                continue;
                             }
                         }
                     }
                 } else {
-                        if(j + next[k].colChange < 8 && i + next[k].rowChange < 8 && i + next[k].rowChange > -1 && j + next[k].colChange > -1){
+                    if(j + next[k].colChange < 8 && i + next[k].rowChange < 8 && i + next[k].rowChange > -1 && j + next[k].colChange > -1){
                         Position nextP{j + next[k].colChange, i + next[k].rowChange};
                         char from[] = "  ";
                         from[0] = 'a' + j;
@@ -795,10 +795,10 @@ vector<pair<Position, Position>> Board::allPossibleMoves(){
                                     nextmoves.emplace_back(Position{j, i},nextP);
                                 }
                             } else {
-                                break;
+                                continue;
                             }
                         } else{
-                            break;
+                            continue;
                         }
                     }
                 }
