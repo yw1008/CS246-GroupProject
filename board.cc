@@ -809,13 +809,14 @@ vector<pair<Position, Position>> Board::allPossibleMoves(){
 
 bool Board::isStalemate(){
     vector<pair<Position, Position>> posMove = allPossibleMoves();
-    if(theBoard[whiteK.row][whiteK.col].getState().sT == stateType::Nothing || theBoard[whiteK.row][whiteK.col].getState().sT == stateType::blackCheck){
-        return posMove.empty();
-    } else if(theBoard[blackK.row][blackK.col].getState().sT == stateType::Nothing || theBoard[blackK.row][blackK.col].getState().sT == stateType::whiteCheck){
-        return posMove.empty();
+
+    if (isWhite) {
+        if (!whiteKingCanMove() && posMove.empty()) return true;
+    } else {
+        if (!blackKingCanMove() && posMove.empty()) return true;
     }
     return false;
-} //isStalemate
+}
 
 vector<Position> Board::getNextMove(string startPos){ //return next move for chosen piece's pieceType
     vector<Position> nextPos;
