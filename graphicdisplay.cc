@@ -2,7 +2,7 @@
 
 const int cellPixel = 12;
 
-GraphicsDisplay::GraphicsDisplay(size_t n)
+GraphicsDisplay::GraphicsDisplay()
     : xw{579, 579}, gridSize{96} {
     if (gridSize > 0) {
         cellSize = 579 / gridSize;
@@ -23,18 +23,20 @@ GraphicsDisplay::GraphicsDisplay(size_t n)
     }
 }
 
-int GraphicsDisplay::getColorCode(const std::string &color) {
-    if (color == "black") {
+
+int GraphicsDisplay::getColorCode(const Colour c) {
+    if (c == Colour::Black) {
         return Xwindow::Black;
-    } else if (color == "white") {
+    } else if (c == Colour::White) {
         return Xwindow::White;
-    } else {
-        throw std::invalid_argument("Unsupported color: " + color);
-    }
+    } 
+    // else {
+    //     throw std::invalid_argument("Unsupported color: need to be white or black");
+    // }
 }
 
-void GraphicsDisplay::drawPawn(size_t boardr, size_t boardc, int cellSize, const std::string &color) {
-    int colourCode = getColorCode(color);
+void GraphicsDisplay::drawPawn(size_t boardr, size_t boardc, int cellSize, const Colour &c) {
+    int colourCode = getColorCode(c);
 
     xw.fillRectangle((3 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
     xw.fillRectangle((3 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
@@ -71,8 +73,8 @@ void GraphicsDisplay::drawPawn(size_t boardr, size_t boardc, int cellSize, const
     xw.fillRectangle((8 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
 }
 
-void GraphicsDisplay::drawKing(size_t boardr, size_t boardc, int cellSize, const std::string &color) {
-    int colourCode = getColorCode(color);
+void GraphicsDisplay::drawKing(size_t boardr, size_t boardc, int cellSize, const Colour &c) {
+    int colourCode = getColorCode(c);
 
     xw.fillRectangle((3 + boardc * 12) * cellSize, (2 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
     xw.fillRectangle((3 + boardc * 12) * cellSize, (3 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
@@ -121,8 +123,8 @@ void GraphicsDisplay::drawKing(size_t boardr, size_t boardc, int cellSize, const
     xw.fillRectangle((8 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
 }
 
-void GraphicsDisplay::drawQueen(size_t boardr, size_t boardc, int cellSize, const std::string &color) {
-    int colourCode = getColorCode(color);
+void GraphicsDisplay::drawQueen(size_t boardr, size_t boardc, int cellSize, const Colour &c) {
+    int colourCode = getColorCode(c);
 
     xw.fillRectangle((3 + boardc * 12) * cellSize, (1 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
     xw.fillRectangle((3 + boardc * 12) * cellSize, (2 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
@@ -171,8 +173,8 @@ void GraphicsDisplay::drawQueen(size_t boardr, size_t boardc, int cellSize, cons
     xw.fillRectangle((8 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
 }
 
-void GraphicsDisplay::drawRook(size_t boardr, size_t boardc, int cellSize, const std::string &color) {
-    int colourCode = getColorCode(color);
+void GraphicsDisplay::drawRook(size_t boardr, size_t boardc, int cellSize, const Colour &c) {
+    int colourCode = getColorCode(c);
 
     xw.fillRectangle((3 + boardc * 12) * cellSize, (3 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
     xw.fillRectangle((3 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
@@ -217,8 +219,8 @@ void GraphicsDisplay::drawRook(size_t boardr, size_t boardc, int cellSize, const
     xw.fillRectangle((8 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
 }
 
-void GraphicsDisplay::drawKnight(size_t boardr, size_t boardc, int cellSize, const std::string &color) {
-    int colourCode = getColorCode(color);
+void GraphicsDisplay::drawKnight(size_t boardr, size_t boardc, int cellSize, const Colour &c) {
+    int colourCode = getColorCode(c);
 
     xw.fillRectangle((4 + boardc * 12) * cellSize, (4 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
     xw.fillRectangle((4 + boardc * 12) * cellSize, (5 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
@@ -261,8 +263,8 @@ void GraphicsDisplay::drawKnight(size_t boardr, size_t boardc, int cellSize, con
     xw.fillRectangle((8 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
 }
 
-void GraphicsDisplay::drawBishop(size_t boardr, size_t boardc, int cellSize, const std::string &color) {
-    int colourCode = getColorCode(color);
+void GraphicsDisplay::drawBishop(size_t boardr, size_t boardc, int cellSize, const Colour &c) {
+    int colourCode = getColorCode(c);
 
     xw.fillRectangle((3 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
     xw.fillRectangle((3 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
@@ -303,4 +305,37 @@ void GraphicsDisplay::drawBishop(size_t boardr, size_t boardc, int cellSize, con
 
     xw.fillRectangle((8 + boardc * 12) * cellSize, (9 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);
     xw.fillRectangle((8 + boardc * 12) * cellSize, (10 + boardr * 12) * cellSize, cellSize, cellSize, colourCode);  
+}
+
+void GraphicsDisplay::notify(Subject &whoFrom) {
+    Info info = whoFrom.getInfo();
+    int row = info.pos.row;
+    int col = info.pos.col;
+
+    int pixelRow = row * cellPixel;
+    int pixelCol = col * cellPixel;
+
+    // Always redraw the background
+    int bgColor = (row + col) % 2 == 0 ? Xwindow::Green : Xwindow::Blue;
+    xw.fillRectangle(pixelCol, pixelRow, cellPixel, cellPixel, bgColor);
+
+    // If there's no piece to draw, stop here
+    if (info.piecetype == pieceType::Nothing) return;
+
+    Colour c = info.colour;
+
+    // Draw the piece based on type and color
+    if (info.piecetype == pieceType::Pawn) {
+        drawPawn(row, col, cellPixel, c);
+    } else if (info.piecetype == pieceType::King) {
+        drawKing(row, col, cellPixel, c);
+    } else if (info.piecetype == pieceType::Queen) {
+        drawQueen(row, col, cellPixel, c);
+    } else if (info.piecetype == pieceType::Rook) {
+        drawRook(row, col, cellPixel, c);
+    } else if (info.piecetype == pieceType::Knight) {
+        drawKnight(row, col, cellPixel, c);
+    } else if (info.piecetype == pieceType::Bishop) {
+        drawBishop(row, col, cellPixel, c);
+    }
 }
