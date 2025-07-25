@@ -11,7 +11,6 @@ using namespace std;
 
 int main() {
     string line, cmd;
-    Board *board = new Board();    
     Player *whiteP;
     Player *blackP;
     string whosTurn = "White";
@@ -20,6 +19,7 @@ int main() {
     bool isSetup = 0;
 
     while(true) {
+        Board *board = new Board();    
         string line; // must get a whole line of the command
         getline (cin, line);
 
