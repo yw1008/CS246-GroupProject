@@ -109,12 +109,10 @@ int main() {
                                 cerr << "Invalid input: must enter two positions" << endl;
                                 continue;
                             }
-                            if (startPos[1] == '7' && endPos[1] == '8') {
-                            }
                             if (!game->isValidMove(startPos, endPos)) {
                                 continue;
                             } 
-                            if (startPos[1] == '7' && endPos[1] == '8') {
+                            if ((startPos[1] == '7' && endPos[1] == '8') || (startPos[1] == '2' && endPos[1] == '1')) {
                                 if (board->isPawn(startPos)) {
                                     char promotionType;
                                     if (!(issGame >> promotionType)) {
