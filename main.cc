@@ -10,9 +10,9 @@
 using namespace std;
 
 int main() {
-    string line, cmd;
-    Board *board = new Board();    
+    string line, cmd;    
     Player *whiteP;
+    Board *board; = new Board();
     Player *blackP;
     string whosTurn = "White";
     int whiteScore = 0;
@@ -127,74 +127,6 @@ int main() {
                                 }
                                 // enpassant
                                 //catching and moving
-                            }
-                            // castling
-                            if((whosTurn == "White" && (whiteP->getLevel() == 0))) {
-                                if (startPos == "e1" && endPos == "g1") {
-                                    if(board->getBoard()[0][4].getPieceType() == pieceType::King){
-                                        if(board->getBoard()[0][5].getPieceType() == pieceType::Nothing 
-                                        && board->getBoard()[0][6].getPieceType() == pieceType::Nothing
-                                        && board->getBoard()[0][7].getPieceType() == pieceType::Rook){
-                                            board->getBoard()[0][5].addPiece(pieceType::Rook, Colour::White);
-                                            board->getBoard()[0][6].addPiece(pieceType::King, Colour::White);
-                                            board->setWhiteK(0, 6);
-                                            board->getBoard()[0][4].removePiece();
-                                            board->getBoard()[0][7].removePiece();
-                                        }
-                                    } else {
-                                        cerr << "Invalid move" << endl;
-                                    }
-                                } else if(startPos == "e1" && endPos == "c1"){
-                                    if(board->getBoard()[0][4].getPieceType() == pieceType::King){
-                                        if(board->getBoard()[0][3].getPieceType() == pieceType::Nothing 
-                                        && board->getBoard()[0][2].getPieceType() == pieceType::Nothing
-                                        && board->getBoard()[0][1].getPieceType() == pieceType::Nothing
-                                        && board->getBoard()[0][0].getPieceType() == pieceType::Rook){
-                                            board->getBoard()[0][3].addPiece(pieceType::Rook, Colour::White);
-                                            board->getBoard()[0][2].addPiece(pieceType::King, Colour::White);
-                                            board->setWhiteK(0, 2);
-                                            board->getBoard()[0][4].removePiece();
-                                            board->getBoard()[0][0].removePiece();
-                                        }
-                                    } else {
-                                        cerr << "Invalid move" << endl;
-                                    }
-                                } else {
-                                    whiteP->move(startPos, endPos, board);
-                                }
-                            } else if(whosTurn == "Black" && (blackP->getLevel() == 0)) {
-                                if (startPos == "e8" && endPos == "g8") {
-                                    if(board->getBoard()[0][4].getPieceType() == pieceType::King){
-                                        if(board->getBoard()[7][5].getPieceType() == pieceType::Nothing 
-                                        && board->getBoard()[7][6].getPieceType() == pieceType::Nothing
-                                        && board->getBoard()[7][7].getPieceType() == pieceType::Rook){
-                                            board->getBoard()[7][5].addPiece(pieceType::Rook, Colour::White);
-                                            board->getBoard()[7][6].addPiece(pieceType::King, Colour::White);
-                                            board->setWhiteK(7, 6);
-                                            board->getBoard()[7][4].removePiece();
-                                            board->getBoard()[7][7].removePiece();
-                                        }
-                                    } else {
-                                        cerr << "Invalid move" << endl;
-                                    }
-                                } else if(startPos == "e8" && endPos == "c8"){
-                                    if(board->getBoard()[0][4].getPieceType() == pieceType::King){
-                                        if(board->getBoard()[7][3].getPieceType() == pieceType::Nothing 
-                                        && board->getBoard()[7][2].getPieceType() == pieceType::Nothing
-                                        && board->getBoard()[7][1].getPieceType() == pieceType::Nothing
-                                        && board->getBoard()[7][0].getPieceType() == pieceType::Rook){
-                                            board->getBoard()[7][3].addPiece(pieceType::Rook, Colour::Black);
-                                            board->getBoard()[7][2].addPiece(pieceType::King, Colour::Black);
-                                            board->setWhiteK(7, 2);
-                                            board->getBoard()[7][4].removePiece();
-                                            board->getBoard()[7][0].removePiece();
-                                        }
-                                    } else {
-                                        cerr << "Invalid move" << endl;
-                                    }
-                                } else {
-                                    blackP->move(startPos, endPos, board);
-                                }
                             }
                         }
                         if(game->isWhiteInCheckmate()){
