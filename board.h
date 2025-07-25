@@ -92,7 +92,7 @@ public:
     // allow a single undo
     void undo();
 
-    std::vector<Position> allPossibleMoves();
+    std::vector<pair<Position, Position>> allPossibleMoves();
 
     std::vector<Position> getNextMove(std::string startPos);
 
