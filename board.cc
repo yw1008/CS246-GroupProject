@@ -516,6 +516,15 @@ void Board::makeMove(string &startPos, string &endPos) {
             blackK = {endc, endr};
         }
     }
+
+    if (theBoard[endr][endc].getPieceType() == pieceType::Pawn) {
+        if (theBoard[endr][endc].getColour() == Colour::White && endr == 7) {
+            // white pawn promotion
+        }
+        else if (theBoard[endr][endc].getColour() == Colour::Black && endr == 0) {
+            // black pawn promotion
+        }
+    }
 } //makeMove
 
 bool Board::isPawn(std::string &pos) {

@@ -53,8 +53,8 @@ class Piece: public Subject {
         //bool isAlive;
     public:
         Piece(int r, int c);
-    
-        // bool isValid(const Position &to); // Check the received move is in 
+
+        bool isValid(const Position &to); // Check the received move is in 
 
         Info getInfo() const override;
 
@@ -77,5 +77,7 @@ class Piece: public Subject {
         void removePiece();
 
         vector<moveType> getMoveType();
+
+        void promotion(pieceType p);
 };
 #endif
