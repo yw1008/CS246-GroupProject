@@ -82,6 +82,8 @@ bool Computer::isValid(string &startPos, string &endPos, Board *board) {
         for (size_t j = 1; j < 9; ++j) {
             int tempc = correctMove.colChange * j + startc;
             int tempr = correctMove.rowChange * j + startr;
+            if (tempc < 0 || tempc >= 8 ||
+                tempr < 0 || tempr >= 8) break;
 
             if (tempc == endc && tempr == endr) break; // escape if the loop gets to the end posisiton
             

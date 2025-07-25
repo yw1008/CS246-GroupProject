@@ -38,7 +38,7 @@ public:
     // construct empty board without pieces
     // Board(); // default ctor
 
-    std::vector<std::vector<Piece>> getBoard();
+    std::vector<std::vector<Piece>> getBoard() const;
 
     ~Board(); // dtor
 

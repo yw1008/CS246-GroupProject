@@ -8,10 +8,38 @@
 
 using namespace std;
 
-struct moveType{
+struct moveType {
     int colChange, rowChange;
-    bool repeatable; // true for sliders (B,R,Q), false for “leapers” (N,K,P)
+    bool repeatable;
 };
+
+// class Piece : public Subject {
+// protected:
+//     pieceType pT;
+//     Colour colour;
+//     Position pos;
+//     State state;
+//     bool isFirstMove;
+//     bool isEnPassant;
+
+// public:
+//     Piece(int r, int c, pieceType type, Colour col);
+//     virtual ~Piece() = default;
+
+//     virtual std::vector<Position> nextMove() const = 0;
+//     virtual char getType() const = 0;
+
+//     Info getInfo() const override;
+//     Colour getColour() const;
+//     pieceType getPieceType() const;
+//     State getState() const;
+//     void setState(stateType sT, Colour c);
+
+//     Position getPosition() const;
+//     void setPosition(Position p);
+//     void setFirstMove(bool);
+//     void setEnPassant(bool);
+// };
 
 class Piece: public Subject {
     protected:
@@ -25,7 +53,7 @@ class Piece: public Subject {
         //bool isAlive;
     public:
         Piece(int r, int c);
-
+    
         // bool isValid(const Position &to); // Check the received move is in 
 
         Info getInfo() const override;
@@ -50,5 +78,4 @@ class Piece: public Subject {
 
         vector<moveType> getMoveType();
 };
-
 #endif
