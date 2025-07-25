@@ -285,13 +285,7 @@ char Board::getPiece(string pos) {
 }
 
 bool Board::isValidMove(string &startPos, string &endPos) {
-    // need to check if the move make player him/herself check
-    auto startInt = intPos(startPos);
-    int startc = startInt[0];
-    int startr = startInt[1];
-    auto endInt = intPos(endPos);
-    int endc = endInt[0];
-    int endr = endInt[1];
+    int startr, startc, endr, endc;
 
     try {
         vector<int> intStartPos = intPos(startPos);
@@ -475,13 +469,25 @@ bool Board::isValidMove(string &startPos, string &endPos) {
 }
 
 bool Board::isValidMoveC(string &startPos, string &endPos) {
-    // need to check if the move make player him/herself check
-    auto startInt = intPos(startPos);
-    int startc = startInt[0];
-    int startr = startInt[1];
-    auto endInt = intPos(endPos);
-    int endc = endInt[0];
-    int endr = endInt[1];
+    int startr, startc, endr, endc;
+
+    try {
+        vector<int> intStartPos = intPos(startPos);
+        startc = intStartPos[0];
+        startr = intStartPos[1];
+    } catch (const invalid_argument& e) {
+        cerr << "Invalid move: start position error - " << e.what() << endl;
+        return false;
+    }
+
+    try {
+        vector<int> intEndPos = intPos(endPos);
+        endc = intEndPos[0];
+        endr = intEndPos[1];
+    } catch (const invalid_argument& e) {
+        cerr << "Invalid move: start position error - " << e.what() << endl;
+        return false;
+    }
 
     if (theBoard[startr][startc].getPieceType() == pieceType::Pawn) {
         Colour pieceColour = theBoard[startr][startc].getColour();
@@ -544,11 +550,6 @@ bool Board::isValidMoveC(string &startPos, string &endPos) {
 
     // check it the movement is correct for the piece type
     Position toPos{endc, endr};
-    // bool isValid = theBoard[startr][startc].isValid(toPos);
-    // if(!isValid) {
-    //     cerr << "Invalid move for the piece type" << endl;
-    //     return;
-    // }
 
     Position diffPos;
     diffPos.col = endc - startc;
@@ -651,12 +652,23 @@ bool Board::isValidMoveC(string &startPos, string &endPos) {
 void Board::makeMove(string &startPos, string &endPos) {
     int startr, startc, endr, endc;
 
-    vector<int> intStartPos = intPos(startPos);
-    startc = intStartPos[0];
-    startr = intStartPos[1];
-    vector<int> intEndPos = intPos(endPos);
-    endc = intEndPos[0];
-    endr = intEndPos[1];
+    try {
+        vector<int> intStartPos = intPos(startPos);
+        startc = intStartPos[0];
+        startr = intStartPos[1];
+    } catch (const invalid_argument& e) {
+        cerr << "Invalid move: start position error - " << e.what() << endl;
+        return;
+    }
+
+    try {
+        vector<int> intEndPos = intPos(endPos);
+        endc = intEndPos[0];
+        endr = intEndPos[1];
+    } catch (const invalid_argument& e) {
+        cerr << "Invalid move: start position error - " << e.what() << endl;
+        return;
+    }
 
     Colour c;
     if (isWhite) c = Colour::White;
@@ -809,6 +821,7 @@ vector<pair<Position, Position>> Board::allPossibleMoves(){
 
 bool Board::isStalemate(){
     vector<pair<Position, Position>> posMove = allPossibleMoves();
+    cout << posMove.empty() << endl;
 
     if (isWhite) {
         if (!whiteKingCanMove() && posMove.empty()) return true;
