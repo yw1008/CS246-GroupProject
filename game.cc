@@ -88,6 +88,17 @@ bool Game::isBlackInCheckmate() const {
     if (!board) {
         return false;
     }
+
+    if (!board->hasKing(false)) {
+        return true;
+    }
+
+    if (isInCheck() == "black" || isInCheck() == "both") {
+        if (!blackKingCanMove()) return true;
+    }
+
+    return false;
+    /*
     if(isInCheck() == "black"){
         if(!blackKingCanMove()) return true;
         return false;
@@ -97,6 +108,7 @@ bool Game::isBlackInCheckmate() const {
     } else {
         return false;
     }
+    */
 }
 
 // Undo the last move
