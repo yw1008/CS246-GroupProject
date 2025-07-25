@@ -79,5 +79,6 @@ class Piece: public Subject {
         vector<moveType> getMoveType();
 
         void promotion(pieceType p);
+
 };
 #endif

@@ -169,3 +169,4 @@ void Piece::removePiece(){
     setMoveType();
     notifyObservers();
 }
+

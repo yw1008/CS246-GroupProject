@@ -258,10 +258,10 @@ void Board::defBoard() { // use add piece to place default pieces
 
 void Board::init() {
     delete td; // clean Text display observer
-    // delete gd; // clean Graphic display observer
+    delete gd; // clean Graphic display observer
     // define text and graphics
     td = new TextDisplay();
-    // gd = new GraphicsDisplay();
+    gd = new GraphicsDisplay();
 
     // clear existing board if necessary
     theBoard.clear();
@@ -271,7 +271,7 @@ void Board::init() {
         for (int c = 0; c < BOARD_SIZE; ++c) {
             theBoard[r].emplace_back(Piece(r, c));
             theBoard[r][c].attach(td); // text
-            // theBoard[r][c].attach(gd); // graphics
+            theBoard[r][c].attach(gd); // graphics
         }
     }
 } //init
@@ -292,6 +292,50 @@ bool Board::isValidMove(string &startPos, string &endPos) {
     auto endInt = intPos(endPos);
     int endc = endInt[0];
     int endr = endInt[1];
+
+    // if (theBoard[startr][startc].getPieceType() == pieceType::Pawn) {
+    //     Colour pieceColour = theBoard[startr][startc].getColour();
+    //     int dir = (pieceColour == Colour::White) ? -1 : 1;
+
+    //     bool isForward = (startc == endc);
+    //     bool isDiagonal = std::abs(startc - endc) == 1 && (endr - startr) == dir;
+
+    //     // Capture move: must be diagonal and there must be an opponent's piece
+    //     if (isDiagonal) {
+    //         if (theBoard[endr][endc].getPieceType() == pieceType::Nothing ||
+    //             theBoard[endr][endc].getColour() == pieceColour) {
+    //             cerr << "Invalid move: Pawn can only capture diagonally if opponent's piece exists" << endl;
+    //             return false;
+    //         }
+    //         // return true;
+    //     }
+
+    //     // Forward move: must be straight and unblocked
+    //     if (isForward) {
+    //         if (!(endr - startr == dir &&
+    //             theBoard[endr][endc].getPieceType() == pieceType::Nothing) || 
+    //             !((pieceColour == Colour::White && startr == 6 || pieceColour == Colour::Black && startr == 1) &&
+    //             endr - startr == 2 * dir &&
+    //             theBoard[startr + dir][startc].getPieceType() == pieceType::Nothing &&
+    //             theBoard[endr][endc].getPieceType() == pieceType::Nothing)) {
+    //             return false;
+    //         }
+
+    //         // First double-step
+    //         // if ((pieceColour == Colour::White && startr == 6 || pieceColour == Colour::Black && startr == 1) &&
+    //         //     endr - startr == 2 * dir &&
+    //         //     theBoard[startr + dir][startc].getPieceType() == pieceType::Nothing &&
+    //         //     theBoard[endr][endc].getPieceType() == pieceType::Nothing) {
+    //         //     return true;
+    //         // }
+
+    //         cerr << "Invalid move: Pawn move blocked or invalid distance" << endl;
+    //         return false;
+    //     }
+
+    //     cerr << "Invalid move: Pawn cannot move this way" << endl;
+    //     return false;
+    // }
 
     try {
         vector<int> intStartPos = intPos(startPos);
@@ -329,45 +373,6 @@ bool Board::isValidMove(string &startPos, string &endPos) {
     Position toPos{endc, endr};
     if(!theBoard[startr][startc].isValid(toPos)) {
         cerr << "Invalid move for the " << getPiece(startPos) << endl;
-        return false;
-    }
-    if (theBoard[startr][startc].getPieceType() == pieceType::Pawn) {
-        Colour pieceColour = theBoard[startr][startc].getColour();
-        int dir = (pieceColour == Colour::White) ? -1 : 1;
-
-        bool isForward = (startc == endc);
-        bool isDiagonal = std::abs(startc - endc) == 1 && (endr - startr) == dir;
-
-        // Capture move: must be diagonal and there must be an opponent's piece
-        if (isDiagonal) {
-            if (theBoard[endr][endc].getPieceType() == pieceType::Nothing ||
-                theBoard[endr][endc].getColour() == pieceColour) {
-                cerr << "Invalid move: Pawn can only capture diagonally if opponent's piece exists" << endl;
-                return false;
-            }
-            // return true;
-        }
-
-        // Forward move: must be straight and unblocked
-        if (isForward) {
-            if (!(endr - startr == dir &&
-                theBoard[endr][endc].getPieceType() == pieceType::Nothing)) {
-                return false;
-            }
-
-            // First double-step
-            if (!((pieceColour == Colour::White && startr == 6 || pieceColour == Colour::Black && startr == 1) &&
-                endr - startr == 2 * dir &&
-                theBoard[startr + dir][startc].getPieceType() == pieceType::Nothing &&
-                theBoard[endr][endc].getPieceType() == pieceType::Nothing)) {
-                return false;
-            }
-
-            cerr << "Invalid move: Pawn move blocked or invalid distance" << endl;
-            return false;
-        }
-
-        cerr << "Invalid move: Pawn cannot move this way" << endl;
         return false;
     }
 
@@ -438,29 +443,28 @@ bool Board::isValidMove(string &startPos, string &endPos) {
                 cerr << "Invalid move: Pawn can only capture diagonally if opponent's piece exists" << endl;
                 return false;
             }
-            // return true;
+            return true;
         }
 
-        // Forward move must be straight
         if (isForward) {
-            if (!(endr - startr == dir &&
-                theBoard[endr][endc].getPieceType() == pieceType::Nothing)) {
-                return false;
+            // Single forward step
+            if (endr - startr == dir &&
+                theBoard[endr][endc].getPieceType() == pieceType::Nothing) {
+                return true;
             }
 
-            // First double-step
-            if (!((pieceColour == Colour::White && startr == 6 || pieceColour == Colour::Black && startr == 1) &&
+            // Double forward step on first move
+            if ((pieceColour == Colour::White && startr == 6 ||
+                pieceColour == Colour::Black && startr == 1) &&
                 endr - startr == 2 * dir &&
                 theBoard[startr + dir][startc].getPieceType() == pieceType::Nothing &&
-                theBoard[endr][endc].getPieceType() == pieceType::Nothing)) {
-                return false;
+                theBoard[endr][endc].getPieceType() == pieceType::Nothing) {
+                return true;
             }
 
             cerr << "Invalid move: Pawn move blocked or invalid distance" << endl;
             return false;
         }
-        cerr << "Invalid move: Pawn cannot move this way" << endl;
-        return false;
     }
 
 
@@ -483,40 +487,40 @@ bool Board::isValidMoveC(string &startPos, string &endPos) {
     int endc = endInt[0];
     int endr = endInt[1];
 
-    if (theBoard[startr][startc].getPieceType() == pieceType::Pawn) {
-        Colour pieceColour = theBoard[startr][startc].getColour();
-        int dir = (pieceColour == Colour::White) ? -1 : 1;
+    // if (theBoard[startr][startc].getPieceType() == pieceType::Pawn) {
+    //     Colour pieceColour = theBoard[startr][startc].getColour();
+    //     int dir = (pieceColour == Colour::White) ? -1 : 1;
 
-        bool isForward = (startc == endc);
-        bool isDiagonal = std::abs(startc - endc) == 1 && (endr - startr) == dir;
+    //     bool isForward = (startc == endc);
+    //     bool isDiagonal = std::abs(startc - endc) == 1 && (endr - startr) == dir;
 
-        // Capture move: must be diagonal and there must be an opponent's piece
-        if (isDiagonal) {
-            if (theBoard[endr][endc].getPieceType() == pieceType::Nothing ||
-                theBoard[endr][endc].getColour() == pieceColour) {
-                return false;
-            }
-            return true;
-        }
+    //     // Capture move: must be diagonal and there must be an opponent's piece
+    //     if (isDiagonal) {
+    //         if (theBoard[endr][endc].getPieceType() == pieceType::Nothing ||
+    //             theBoard[endr][endc].getColour() == pieceColour) {
+    //             return false;
+    //         }
+    //         return true;
+    //     }
 
-        // Forward move: must be straight and unblocked
-        if (isForward) {
-            if (endr - startr == dir &&
-                theBoard[endr][endc].getPieceType() == pieceType::Nothing) {
-                return true;
-            }
+    //     // Forward move: must be straight and unblocked
+    //     if (isForward) {
+    //         if (endr - startr == dir &&
+    //             theBoard[endr][endc].getPieceType() == pieceType::Nothing) {
+    //             return true;
+    //         }
 
-            // First double-step
-            if ((pieceColour == Colour::White && startr == 6 || pieceColour == Colour::Black && startr == 1) &&
-                endr - startr == 2 * dir &&
-                theBoard[startr + dir][startc].getPieceType() == pieceType::Nothing &&
-                theBoard[endr][endc].getPieceType() == pieceType::Nothing) {
-                return true;
-            }
-            return false;
-        }
-        return false;
-    }
+    //         // First double-step
+    //         if ((pieceColour == Colour::White && startr == 6 || pieceColour == Colour::Black && startr == 1) &&
+    //             endr - startr == 2 * dir &&
+    //             theBoard[startr + dir][startc].getPieceType() == pieceType::Nothing &&
+    //             theBoard[endr][endc].getPieceType() == pieceType::Nothing) {
+    //             return true;
+    //         }
+    //         return false;
+    //     }
+    //     return false;
+    // }
 
     try {
         vector<int> intStartPos = intPos(startPos);
@@ -542,13 +546,7 @@ bool Board::isValidMoveC(string &startPos, string &endPos) {
         return false;
     }
 
-    // check it the movement is correct for the piece type
     Position toPos{endc, endr};
-    // bool isValid = theBoard[startr][startc].isValid(toPos);
-    // if(!isValid) {
-    //     cerr << "Invalid move for the piece type" << endl;
-    //     return;
-    // }
 
     Position diffPos;
     diffPos.col = endc - startc;
@@ -651,87 +649,16 @@ bool Board::isValidMoveC(string &startPos, string &endPos) {
 void Board::makeMove(string &startPos, string &endPos) {
     int startr, startc, endr, endc;
 
-    try {
-        vector<int> intStartPos = intPos(startPos);
-        startc = intStartPos[0];
-        startr = intStartPos[1];
-    } catch (const invalid_argument& e) {
-        cerr << "Invalid move: start position error - " << e.what() << endl;
-        return;
-    }
-
-    try {
-        vector<int> intEndPos = intPos(endPos);
-        endc = intEndPos[0];
-        endr = intEndPos[1];
-    } catch (const invalid_argument& e) {
-        cerr << "Invalid move: start position error - " << e.what() << endl;
-        return;
-    }
+    vector<int> intStartPos = intPos(startPos);
+    startc = intStartPos[0];
+    startr = intStartPos[1];
+    vector<int> intEndPos = intPos(endPos);
+    endc = intEndPos[0];
+    endr = intEndPos[1];
 
     Colour c;
     if (isWhite) c = Colour::White;
     else c = Colour::Black;
-    if (isWhite && (startPos == "e1" && endPos == "g1")) {
-        if(theBoard[0][4].getPieceType() == pieceType::King){
-            if(theBoard[0][5].getPieceType() == pieceType::Nothing 
-            && theBoard[0][6].getPieceType() == pieceType::Nothing
-            && theBoard[0][7].getPieceType() == pieceType::Rook){
-                theBoard[0][4].removePiece();
-                theBoard[0][7].removePiece();
-                theBoard[0][6].addPiece(pieceType::King, Colour::White);
-                theBoard[0][5].addPiece(pieceType::Rook, Colour::White);
-                whiteK = {0, 6};
-            }
-        } else {
-            cerr << "Invalid move" << endl;
-        }
-    } else if(isWhite && (startPos == "e1" && endPos == "c1")){
-        if(theBoard[0][4].getPieceType() == pieceType::King){
-            if(theBoard[0][3].getPieceType() == pieceType::Nothing 
-                && theBoard[0][2].getPieceType() == pieceType::Nothing
-                && theBoard[0][1].getPieceType() == pieceType::Nothing
-                && theBoard[0][0].getPieceType() == pieceType::Rook){
-                    theBoard[0][4].removePiece();
-                    theBoard[0][0].removePiece();
-                    theBoard[0][2].addPiece(pieceType::King, Colour::White);
-                    theBoard[0][3].addPiece(pieceType::Rook, Colour::White);
-                    whiteK = {0, 2};
-                }
-        } else {
-            cerr << "Invalid move" << endl;
-        }
-    } else if (!isWhite && (startPos == "e8" && endPos == "g8")) {
-        if(theBoard[7][4].getPieceType() == pieceType::King){
-            if(theBoard[7][5].getPieceType() == pieceType::Nothing 
-                && theBoard[7][6].getPieceType() == pieceType::Nothing
-                && theBoard[7][7].getPieceType() == pieceType::Rook){
-                    theBoard[7][4].removePiece();
-                    theBoard[7][7].removePiece();
-                    theBoard[7][6].addPiece(pieceType::King, Colour::Black);
-                    theBoard[7][5].addPiece(pieceType::Rook, Colour::Black);
-                    blackK = {7, 6};
-            }
-        } else {
-            cerr << "Invalid move" << endl;
-        }
-    } else if(!isWhite && (startPos == "e8" && endPos == "c8")){
-        if(theBoard[7][4].getPieceType() == pieceType::King){
-            if(theBoard[7][3].getPieceType() == pieceType::Nothing 
-                && theBoard[7][2].getPieceType() == pieceType::Nothing
-                && theBoard[7][1].getPieceType() == pieceType::Nothing
-                && theBoard[7][0].getPieceType() == pieceType::Rook){
-                    theBoard[7][4].removePiece();
-                    theBoard[7][0].removePiece();
-                    theBoard[7][2].addPiece(pieceType::King, Colour::Black);
-                    theBoard[7][3].addPiece(pieceType::Rook, Colour::Black);
-                    blackK = {7, 2};
-           }
-        } else {
-            cerr << "Invalid move" << endl;
-        }
-    } 
-
         
     if (theBoard[endr][endc].getPieceType() != pieceType::Nothing) {
         if (theBoard[endr][endc].getColour() != c) {
@@ -794,33 +721,6 @@ vector<pair<Position, Position>> Board::allPossibleMoves(){
     string sFrom;
     string sTo;
     vector<pair<Position, Position>> nextmoves;
-    string sFrom;
-    string sTo;
-    vector<pair<Position, Position>> nextmoves;
-
-    if(theBoard[0][4].getPieceType() == pieceType::King && isWhite){
-        if(theBoard[0][5].getPieceType() == pieceType::Nothing 
-            && theBoard[0][6].getPieceType() == pieceType::Nothing
-            && theBoard[0][7].getPieceType() == pieceType::Rook){
-                nextmoves.emplace_back(Position{0, 4}, Position{0,6});
-        } else if(theBoard[0][3].getPieceType() == pieceType::Nothing 
-                    && theBoard[0][2].getPieceType() == pieceType::Nothing
-                    && theBoard[0][1].getPieceType() == pieceType::Nothing
-                    && theBoard[0][0].getPieceType() == pieceType::Rook){
-                        nextmoves.emplace_back(Position{0, 4}, Position{0, 2});
-        }
-    } else if(theBoard[7][4].getPieceType() == pieceType::King && !isWhite){
-        if(theBoard[0][5].getPieceType() == pieceType::Nothing 
-            && theBoard[0][6].getPieceType() == pieceType::Nothing
-            && theBoard[0][7].getPieceType() == pieceType::Rook){
-                nextmoves.emplace_back(Position{7, 4}, Position{7, 6});
-        } else if(theBoard[0][3].getPieceType() == pieceType::Nothing 
-                    && theBoard[0][2].getPieceType() == pieceType::Nothing
-                    && theBoard[0][1].getPieceType() == pieceType::Nothing
-                    && theBoard[0][0].getPieceType() == pieceType::Rook){
-                        nextmoves.emplace_back(Position{7, 4}, Position{7, 2});
-        }
-    }
 
     for(int i = 0; i < BOARD_SIZE; ++i){
         for(int j = 0; j < BOARD_SIZE; ++j){
@@ -859,38 +759,7 @@ vector<pair<Position, Position>> Board::allPossibleMoves(){
                                     break;
                                 }
                             } else{
-                                break;
-                            }
-                            char from[] = "  ";
-                            from[0] = 'a' + j;
-                            from[1] = '1' + i;
-                            sFrom = from;
-                            char to[] = "  ";
-                            to[0] = 'a' + nextP.col;
-                            to[1] = '1' + nextP.row;
-                            sTo = to; 
-                            if(isValidMoveC(sFrom, sTo)){
-                                if(theBoard[i][j].getColour() == Colour::White){
-                                    if(theBoard[i + next[k].rowChange][j + next[k].colChange].getState().sT == stateType::blackCheck){ // blackCheck is the piece where black piece can check
-                                        theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::bothCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
-                                        nextmoves.emplace_back(Position{j, i},nextP);
-                                    } else{
-                                        theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::whiteCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
-                                        nextmoves.emplace_back(Position{j, i},nextP);
-                                    }
-                                } else if(theBoard[i][j].getColour() == Colour::Black){
-                                    if(theBoard[i + next[k].rowChange][j].getState().sT == stateType::whiteCheck){
-                                        theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::bothCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
-                                        nextmoves.emplace_back(Position{j, i},nextP);
-                                    } else {
-                                        theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::blackCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
-                                        nextmoves.emplace_back(Position{j, i},nextP);
-                                    }
-                                } else {
-                                    break;
-                                }
-                            } else{
-                                break;
+                                continue;
                             }
                         }
                     }
@@ -926,38 +795,7 @@ vector<pair<Position, Position>> Board::allPossibleMoves(){
                                 continue;
                             }
                         } else{
-                            break;
-                        }
-                        char from[] = "  ";
-                        from[0] = 'a' + j;
-                        from[1] = '1' + i;
-                        sFrom = from;
-                        char to[] = "  ";
-                        to[0] = 'a' + nextP.col;
-                        to[1] = '1' + nextP.row;
-                        sTo = to; 
-                        if(isValidMoveC(sFrom, sTo)){
-                            if(theBoard[i][j].getColour() == Colour::White){
-                                if(theBoard[i + next[k].rowChange][j + next[k].colChange].getState().sT == stateType::blackCheck){ // blackCheck is the piece where black piece can check
-                                    theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::bothCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
-                                    nextmoves.emplace_back(Position{j, i},nextP);
-                                } else{
-                                    theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::whiteCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
-                                    nextmoves.emplace_back(Position{j, i},nextP);
-                                }
-                            } else if(theBoard[i][j].getColour() == Colour::Black){
-                                if(theBoard[i + next[k].rowChange][j].getState().sT == stateType::whiteCheck){
-                                    theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::bothCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
-                                    nextmoves.emplace_back(Position{j, i},nextP);
-                                } else {
-                                    theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::blackCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
-                                    nextmoves.emplace_back(Position{j, i},nextP);
-                                }
-                            } else {
-                                continue;
-                            }
-                        } else{
-                            break;
+                            continue;
                         }
                     }
                 }
@@ -969,19 +807,13 @@ vector<pair<Position, Position>> Board::allPossibleMoves(){
 
 bool Board::isStalemate(){
     vector<pair<Position, Position>> posMove = allPossibleMoves();
-
-    if (isWhite) {
-        if (!whiteKingCanMove() && posMove.empty()) return true;
-    } else {
-        if (!blackKingCanMove() && posMove.empty()) return true;
-    vector<pair<Position, Position>> posMove = allPossibleMoves();
-    if (isWhite) {
-        if (whiteKingCanMove() && posMove.empty()) return true;
-    } else {
-        if (blackKingCanMove() && posMove.empty()) return true;
+    if(theBoard[whiteK.row][whiteK.col].getState().sT == stateType::Nothing || theBoard[whiteK.row][whiteK.col].getState().sT == stateType::blackCheck){
+        return posMove.empty();
+    } else if(theBoard[blackK.row][blackK.col].getState().sT == stateType::Nothing || theBoard[blackK.row][blackK.col].getState().sT == stateType::whiteCheck){
+        return posMove.empty();
     }
     return false;
-}
+} //isStalemate
 
 vector<Position> Board::getNextMove(string startPos){ //return next move for chosen piece's pieceType
     vector<Position> nextPos;
@@ -1093,18 +925,4 @@ void Board::undo() {
 ostream &operator<<(ostream &out, const Board &b) {
     if(b.td) out << *(b.td);
     return out;
-}
-
-
-bool Board::hasKing(bool isWhite) const {
-    for (int row = 0; row < 8; ++row) {
-        for (int col = 0; col < 8; ++col) {
-            auto info = theBoard[row][col].getInfo();
-            if (info.piecetype == pieceType::King &&
-                info.colour == (isWhite ? Colour::White : Colour::Black)) {
-                return true;
-            }
-        }
-    }
-    return false;
 }

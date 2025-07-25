@@ -11,16 +11,15 @@ using namespace std;
 
 int main() {
     string line, cmd;
-    Board *board = new Board();    
     Player *whiteP;
     Player *blackP;
     string whosTurn = "White";
     int whiteScore = 0;
     int blackScore = 0;
     bool isSetup = 0;
-    Game *game = nullptr;   // for avoiding double free
 
     while(true) {
+        Board *board = new Board();    
         string line; // must get a whole line of the command
         getline (cin, line);
 
@@ -30,37 +29,19 @@ int main() {
             cout << "Final Score: " << endl;
             cout << "White: " << whiteScore << endl;
             cout << "Black: " << blackScore << endl;
-
-            // Avoid double free
-            if (board) { delete board; board = nullptr; }
-            if (whiteP) { delete whiteP; whiteP = nullptr; }
-            if (blackP) { delete blackP; blackP = nullptr; }
+            delete board;
+            delete whiteP;
+            delete blackP;
             break;
         }
         if(cmd == "game") {
-            if (game) { delete game; game = nullptr; }
-            game = new Game();
-            // should initialize the game 
+            Game *game = new Game();
             // set players
             string wp, bp;
             if (!(issProgram >> wp >> bp)) {
                 cerr << "Invalid input: must enter two players" << endl; // enter two players
                 continue;
             }
-
-            if (whiteP) {
-                delete whiteP; 
-                whiteP = nullptr; 
-            }
-            if (blackP) {
-                delete blackP;
-                blackP = nullptr;
-            }
-
-            if ((wp != "human" && wp != "computer[1]") || 
-            (bp != "human" && bp != "computer[1]")) {
-            continue; // skip game creation if players are invalid
-}
             
             // check if white player is human or computer
             if (wp == "human") {
@@ -111,7 +92,6 @@ int main() {
                     isSetup = false;
                     cout << "Game is resigned. " << whoWon << " is Win!" << endl;
                 } else if (cmd == "move") {
-                        // castling, pawn promotion
                         if ((whosTurn == "White" && !(whiteP->getLevel() == 0)) || (whosTurn == "Black" && !(blackP->getLevel() == 0))) {
                             if((whosTurn == "White" && (whiteP->getLevel() == 1))) {
                                 string temp = " ";
@@ -120,6 +100,7 @@ int main() {
                             } else if(whosTurn == "Black" && (blackP->getLevel() == 1)) {
                                 string temp = " ";
                                 string temp1 = " ";
+                                cout << "blackplayer move" << endl;
                                 blackP->move(temp, temp1, board);
                             }
                         } 
@@ -130,49 +111,45 @@ int main() {
                                 continue;
                             }
                             if (!game->isValidMove(startPos, endPos)) {
+                                cout << "Invalid move" << endl;
                                 continue;
                             } 
                             // special move for pawn
-                            if (board->isPawn(startPos)) {
-                                // promotion
-                                if ((startPos[1] == '7' && endPos[1] == '8') || (startPos[1] == '2' && endPos[1] == '1')) {
-                                    char promotionType;
-                                    if (!(issGame >> promotionType)) {
-                                        cerr << "Invalid input: must enter the correct piece type for pawn promotion" << endl;
-                                        continue;
-                                    }
-                                    board->promotion(promotionType, startPos, endPos);
-                                    continue;
-                                }
-                                // enpassant
-                                //catching and moving
-                            }
-                            // castling
-                            if (startPos == "e1" && (endPos == "g1" || endPos == "c1")) {
-                                
-                            }
+                            // if (board->isPawn(startPos)) {
+                            //     // promotion
+                            //     if ((startPos[1] == '7' && endPos[1] == '8') || (startPos[1] == '2' && endPos[1] == '1')) {
+                            //         char promotionType;
+                            //         if (!(issGame >> promotionType)) {
+                            //             cerr << "Invalid input: must enter the correct piece type for pawn promotion" << endl;
+                            //             continue;
+                            //         }
+                            //         board->promotion(promotionType, startPos, endPos);
+                            //         continue;
+                            //     }
+                            // }
+                            cout << whosTurn << endl;
+                            cout << (whiteP->getLevel() == 0) << endl;
                             if((whosTurn == "White" && (whiteP->getLevel() == 0))) {
+                                cout << "whiteplayer" << endl;
                                 whiteP->move(startPos, endPos, board);
                             } else if(whosTurn == "Black" && (blackP->getLevel() == 0)) {
+                                cout << "black player" << endl;
                                 blackP->move(startPos, endPos, board);
                             }
                         }
                         if(game->isWhiteInCheckmate()){
                             cout << "Checkmate! Black wins!" << endl;
-                            //whiteP->~Player();
-                            //blackP->~Player();
+                            whiteP->~Player();
+                            blackP->~Player();
                             game->setIsFinished();
                             game->addScore("Black");
-                            //whiteScore += game->getScore("White");
-                            //blackScore += game->getScore("Black");
+                            delete board;
                         } else if(game->isBlackInCheckmate()){
                             cout << "Checkmate! White wins!" << endl;
-                            //whiteP->~Player();
-                            //blackP->~Player();
-                            game->setIsFinished();
+                            whiteP->~Player();
+                            blackP->~Player();
                             game->addScore("White");
-                            //whiteScore += game->getScore("White");
-                            //blackScore += game->getScore("Black");
+                            delete board;
                         } else {
                             if(game->isInCheck() == "white"){
                                 cout << "White is in check." << endl;
@@ -181,14 +158,12 @@ int main() {
                             } else if(game->isInCheck() == "both"){
                                 cout << "White is in check." << endl;
                                 cout << "Black is in check." << endl;
-                            } else {
-                                if(board->isStalemate()){ 
+                            } else if (board->isStalemate()){
                                 game->setIsFinished();
                                 cout << "Stalemate!" << endl;
                                 whiteP->~Player();
                                 blackP->~Player();
                                 delete board;
-                                }
                             }
                         }
                         // game should be initialized after the first game is called
@@ -196,6 +171,7 @@ int main() {
                         blackScore += game->getScore("Black");
 
                         whosTurn = whosTurn == "Black" ? "White" : "Black";
+                        board->changeTurn();
                     }
                     else if (cmd == "undo") {
                         game->undo();

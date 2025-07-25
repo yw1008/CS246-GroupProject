@@ -38,6 +38,9 @@ public:
     // construct empty board without pieces
     // Board(); // default ctor
 
+    void setWhiteK(int col, int row);
+    void setBlackK(int col, int row);
+
     std::vector<std::vector<Piece>> getBoard() const;
 
     ~Board(); // dtor
@@ -91,8 +94,6 @@ public:
 
     // allow a single undo
     void undo();
-
-    bool hasKing(bool isWhite) const;
 
     std::vector<pair<Position, Position>> allPossibleMoves();
 
