@@ -162,6 +162,7 @@ int main() {
                                 cout << "Black is in check." << endl;
                             } else {
                                 if(board->isStalemate()){ 
+                                cout << *board << endl;
                                 cout << "Stalemate!" << endl;
                                 whiteP->~Player();
                                 blackP->~Player();
@@ -178,6 +179,8 @@ int main() {
                     }
                     else if (cmd == "undo") {
                         game->undo();
+                        whosTurn = whosTurn == "Black" ? "White" : "Black";
+                        board->changeTurn();
                     }
                     else {
                         cerr << "Invalid input for the game" << endl;
