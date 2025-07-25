@@ -69,6 +69,11 @@ public:
     // move piece from startpos to endpos
     void makeMove(std::string &startPos, std::string &endPos);
 
+    // check if the piecetype is pawn
+    bool isPawn(std::string &pos);
+    // make a pawn promotion
+    void promotion(char type, std::string &startPos, std::string &endPos);
+
     // change the turn of player
     void changeTurn();
 
