@@ -928,3 +928,12 @@ ostream &operator<<(ostream &out, const Board &b) {
     if(b.td) out << *(b.td);
     return out;
 }
+
+ void Board::setWhiteK(int col, int row){
+    whiteK.col = col;
+    whiteK.row = row;
+ }
+void Board::setBlackK(int col, int row){
+    blackK.col = col;
+    blackK.row = row;
+}
