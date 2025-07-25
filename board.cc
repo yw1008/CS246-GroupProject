@@ -558,21 +558,6 @@ vector<pair<Position, Position>> Board::allPossibleMoves(){
                     for(int w = 1; w < BOARD_SIZE + 1; ++w){
                         if(j + w * next[k].colChange < 8 && i + w * next[k].rowChange < 8 && i + w * next[k].rowChange > -1 && j + w * next[k].colChange > -1){
                             Position nextP{j + w * next[k].colChange, i + w * next[k].rowChange};
-                            if(theBoard[i][j].getColour() == Colour::White){
-                                if(theBoard[i + next[k].rowChange][j + next[k].colChange].getState().sT == stateType::blackCheck){ // blackCheck is the piece where black piece can check
-                                    theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::bothCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
-                                } else{
-                                    theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::whiteCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
-                                }
-                            } else if(theBoard[i][j].getColour() == Colour::Black){
-                                if(theBoard[i + next[k].rowChange][j].getState().sT == stateType::whiteCheck){
-                                    theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::bothCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
-                                } else {
-                                    theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::blackCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
-                                }
-                            } else {
-                                break;
-                            }
                             char from[] = "  ";
                             from[0] = 'a' + j;
                             from[1] = '1' + i;
@@ -580,28 +565,35 @@ vector<pair<Position, Position>> Board::allPossibleMoves(){
                             char to[] = "  ";
                             to[0] = 'a' + nextP.col;
                             to[1] = '1' + nextP.row;
-                            string sTo(to);                            
+                            string sTo(to); 
                             if(isValidMoveC(sFrom, sTo)){
-                                nextmoves.emplace_back(Position{j, i},nextP);
+                                if(theBoard[i][j].getColour() == Colour::White){
+                                    if(theBoard[i + next[k].rowChange][j + next[k].colChange].getState().sT == stateType::blackCheck){ // blackCheck is the piece where black piece can check
+                                        theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::bothCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
+                                        nextmoves.emplace_back(Position{j, i},nextP);
+                                    } else{
+                                        theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::whiteCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
+                                        nextmoves.emplace_back(Position{j, i},nextP);
+                                    }
+                                } else if(theBoard[i][j].getColour() == Colour::Black){
+                                    if(theBoard[i + next[k].rowChange][j].getState().sT == stateType::whiteCheck){
+                                        theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::bothCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
+                                        nextmoves.emplace_back(Position{j, i},nextP);
+                                    } else {
+                                        theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::blackCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
+                                        nextmoves.emplace_back(Position{j, i},nextP);
+                                    }
+                                } else {
+                                    break;
+                                }
+                            } else{
+                                break;
                             }
                         }
                     }
                 } else {
-                    if(j + next[k].colChange < 8 && i + next[k].rowChange < 8 && i + next[k].rowChange > -1 && j + next[k].colChange > -1){
+                        if(j + next[k].colChange < 8 && i + next[k].rowChange < 8 && i + next[k].rowChange > -1 && j + next[k].colChange > -1){
                         Position nextP{j + next[k].colChange, i + next[k].rowChange};
-                        if(theBoard[i][j].getColour() == Colour::White){
-                            if(theBoard[i + next[k].rowChange][j + next[k].colChange].getState().sT == stateType::blackCheck){ // blackCheck is the piece where black piece can check
-                                theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::bothCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
-                            } else{
-                                theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::whiteCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
-                            }
-                        } else if(theBoard[i][j].getColour() == Colour::Black) {
-                            if(theBoard[i + next[k].rowChange][j].getState().sT == stateType::whiteCheck){
-                                theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::bothCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
-                            } else {
-                                theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::blackCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
-                            }
-                        }
                         char from[] = "  ";
                         from[0] = 'a' + j;
                         from[1] = '1' + i;
@@ -609,9 +601,29 @@ vector<pair<Position, Position>> Board::allPossibleMoves(){
                         char to[] = "  ";
                         to[0] = 'a' + nextP.col;
                         to[1] = '1' + nextP.row;
-                        string sTo(to);
+                        string sTo(to); 
                         if(isValidMoveC(sFrom, sTo)){
-                                nextmoves.emplace_back(Position{j, i},nextP);
+                            if(theBoard[i][j].getColour() == Colour::White){
+                                if(theBoard[i + next[k].rowChange][j + next[k].colChange].getState().sT == stateType::blackCheck){ // blackCheck is the piece where black piece can check
+                                    theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::bothCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
+                                    nextmoves.emplace_back(Position{j, i},nextP);
+                                } else{
+                                    theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::whiteCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
+                                    nextmoves.emplace_back(Position{j, i},nextP);
+                                }
+                            } else if(theBoard[i][j].getColour() == Colour::Black){
+                                if(theBoard[i + next[k].rowChange][j].getState().sT == stateType::whiteCheck){
+                                    theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::bothCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
+                                    nextmoves.emplace_back(Position{j, i},nextP);
+                                } else {
+                                    theBoard[i + next[k].rowChange][j + next[k].colChange].setState(stateType::blackCheck, theBoard[i + next[k].rowChange][j + next[k].colChange].getState().colour);
+                                    nextmoves.emplace_back(Position{j, i},nextP);
+                                }
+                            } else {
+                                break;
+                            }
+                        } else{
+                            break;
                         }
                     }
                 }
@@ -619,7 +631,7 @@ vector<pair<Position, Position>> Board::allPossibleMoves(){
         }
     }
     return nextmoves;
-} //allPossibleMove
+}  //allPossibleMove
 
 bool Board::isStalemate(){
     if(theBoard[whiteK.row][whiteK.col].getState().sT == stateType::Nothing || theBoard[whiteK.row][whiteK.col].getState().sT == stateType::blackCheck){
