@@ -475,6 +475,179 @@ bool Board::isValidMove(string &startPos, string &endPos) {
     return true;
 }
 
+bool Board::isValidMoveC(string &startPos, string &endPos) {
+    // need to check if the move make player him/herself check
+    auto startInt = intPos(startPos);
+    int startc = startInt[0];
+    int startr = startInt[1];
+    auto endInt = intPos(endPos);
+    int endc = endInt[0];
+    int endr = endInt[1];
+
+    if (theBoard[startr][startc].getPieceType() == pieceType::Pawn) {
+        Colour pieceColour = theBoard[startr][startc].getColour();
+        int dir = (pieceColour == Colour::White) ? -1 : 1;
+
+        bool isForward = (startc == endc);
+        bool isDiagonal = std::abs(startc - endc) == 1 && (endr - startr) == dir;
+
+        // Capture move: must be diagonal and there must be an opponent's piece
+        if (isDiagonal) {
+            if (theBoard[endr][endc].getPieceType() == pieceType::Nothing ||
+                theBoard[endr][endc].getColour() == pieceColour) {
+                return false;
+            }
+            return true;
+        }
+
+        // Forward move: must be straight and unblocked
+        if (isForward) {
+            if (endr - startr == dir &&
+                theBoard[endr][endc].getPieceType() == pieceType::Nothing) {
+                return true;
+            }
+
+            // First double-step
+            if ((pieceColour == Colour::White && startr == 6 || pieceColour == Colour::Black && startr == 1) &&
+                endr - startr == 2 * dir &&
+                theBoard[startr + dir][startc].getPieceType() == pieceType::Nothing &&
+                theBoard[endr][endc].getPieceType() == pieceType::Nothing) {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+    try {
+        vector<int> intStartPos = intPos(startPos);
+        startc = intStartPos[0];
+        startr = intStartPos[1];
+    } catch (const invalid_argument& e) {
+        return false;
+    }
+
+    try {
+        vector<int> intEndPos = intPos(endPos);
+        endc = intEndPos[0];
+        endr = intEndPos[1];
+    } catch (const invalid_argument& e) {
+        return false;
+    }
+
+    Colour c;
+    if (isWhite) c = Colour::White;
+    else c = Colour::Black;
+
+    if (theBoard[startr][startc].getColour() != c) {
+        return false;
+    }
+
+    // check it the movement is correct for the piece type
+    Position toPos{endc, endr};
+    // bool isValid = theBoard[startr][startc].isValid(toPos);
+    // if(!isValid) {
+    //     cerr << "Invalid move for the piece type" << endl;
+    //     return;
+    // }
+
+    Position diffPos;
+    diffPos.col = endc - startc;
+    diffPos.row = endr - startr;
+    vector<moveType> possibleMove = theBoard[startr][startc].getMoveType();
+    moveType correctMove;
+    if (possibleMove[1].repeatable) {
+        for (size_t i = 0; i < possibleMove.size(); ++i) {
+            if (possibleMove[i].rowChange < 0 && diffPos.row < 0) {
+                if (possibleMove[i].colChange < 0 && diffPos.col < 0) {
+                    correctMove = possibleMove[i];
+                } else if (possibleMove[i].colChange > 0 && diffPos.col > 0) {
+                    correctMove = possibleMove[i];
+                } else if (possibleMove[i].colChange == 0 && diffPos.col == 0) {
+                    correctMove = possibleMove[i];
+                }
+            } else if (possibleMove[i].rowChange > 0 && diffPos.row > 0) {
+                if (possibleMove[i].colChange < 0 && diffPos.col < 0) {
+                    correctMove = possibleMove[i];
+                } else if (possibleMove[i].colChange > 0 && diffPos.col > 0) {
+                    correctMove = possibleMove[i];
+                } else if (possibleMove[i].colChange == 0 && diffPos.col == 0) {
+                    correctMove = possibleMove[i];
+                }
+            } else if (possibleMove[i].rowChange == 0 && diffPos.row == 0) {
+                if (possibleMove[i].colChange < 0 && diffPos.col < 0) {
+                    correctMove = possibleMove[i];
+                } else if (possibleMove[i].colChange > 0 && diffPos.col > 0) {
+                    correctMove = possibleMove[i];
+                } else if (possibleMove[i].colChange == 0 && diffPos.col == 0) {
+                    correctMove = possibleMove[i];                
+                }
+            }
+        }
+        
+        for (size_t j = 1; j < BOARD_SIZE + 1; ++j) {
+            int tempc = correctMove.colChange * j + startc;
+            int tempr = correctMove.rowChange * j + startr;
+            if (tempc < 0 || tempc >= BOARD_SIZE ||
+                tempr < 0 || tempr >= BOARD_SIZE) break;
+
+            if (tempc == endc && tempr == endr) break; // escape if the loop gets to the end posisiton
+            
+            if (theBoard[tempr][tempc].getPieceType() != pieceType::Nothing) {
+                return false;
+            }
+        } 
+    }
+
+    // Special logic for pawn
+    if (theBoard[startr][startc].getPieceType() == pieceType::Pawn) {
+        Colour pieceColour = theBoard[startr][startc].getColour();
+        int dir = 1;
+        if (pieceColour == Colour::White) {
+            dir = -1;
+        }
+
+        bool isForward = (startc == endc);
+        bool isDiagonal = std::abs(startc - endc) == 1 && (endr - startr) == dir;
+
+        // Capture move: must be diagonal and there must be an opponent's piece
+        if (isDiagonal) {
+            if (theBoard[endr][endc].getPieceType() == pieceType::Nothing ||
+                theBoard[endr][endc].getColour() == pieceColour) {
+                return false;
+            }
+            return true;
+        }
+
+        // Forward move must be straight
+        if (isForward) {
+            if (endr - startr == dir &&
+                theBoard[endr][endc].getPieceType() == pieceType::Nothing) {
+                return true;
+            }
+
+            // First double-step
+            if ((pieceColour == Colour::White && startr == 6 || pieceColour == Colour::Black && startr == 1) &&
+                endr - startr == 2 * dir &&
+                theBoard[startr + dir][startc].getPieceType() == pieceType::Nothing &&
+                theBoard[endr][endc].getPieceType() == pieceType::Nothing) {
+                return true;
+            }
+            return false;
+        }
+        return false;
+    }
+
+
+    if (theBoard[endr][endc].getPieceType() != pieceType::Nothing) {
+        // catching the same coloured piece
+        if (theBoard[endr][endc].getColour() == c) {
+            return false;
+        }
+    }
+    return true;
+}
+
 
 void Board::makeMove(string &startPos, string &endPos) {
     int startr, startc, endr, endc;

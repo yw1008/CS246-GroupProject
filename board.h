@@ -66,6 +66,9 @@ public:
     // check if the move is valid
     bool isValidMove(std::string &startPos, std::string &endPos);
 
+    // for the computer
+    bool isValidMoveC(string &startPos, string &endPos);
+
     // move piece from startpos to endpos
     void makeMove(std::string &startPos, std::string &endPos);
 
