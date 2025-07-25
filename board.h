@@ -8,10 +8,10 @@
 #include "piece.h"
 #include "player.h"
 #include "textdisplay.h"
-//#include "graphicdisplay.h"
+#include "graphicsdisplay.h"
 
 class TextDisplay;
-class GraphicDisplay;
+class GraphicsDisplay;
 
 struct History {
     Position startPos; // start position of the last move
@@ -32,7 +32,7 @@ class Board {
     History prev; // storing previous move and removed piece (if it exists)
 
     TextDisplay *td = nullptr;
-    GraphicDisplay *gd = nullptr;
+    GraphicsDisplay *gd = nullptr;
     
 public:
     // construct empty board without pieces
@@ -68,6 +68,11 @@ public:
 
     // move piece from startpos to endpos
     void makeMove(std::string &startPos, std::string &endPos);
+
+    // check if the piecetype is pawn
+    bool isPawn(std::string &pos);
+    // make a pawn promotion
+    void promotion(char type, std::string &startPos, std::string &endPos);
 
     // change the turn of player
     void changeTurn();

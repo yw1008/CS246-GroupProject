@@ -106,19 +106,29 @@ int main() {
                         else {
                             string startPos, endPos;
                             if (!(issGame >> startPos >> endPos)) {
-                            cerr << "Invalid input: must enter two positions" << endl;
-                            continue;
+                                cerr << "Invalid input: must enter two positions" << endl;
+                                continue;
                             }
                             if (!game->isValidMove(startPos, endPos)) {
-                            continue;
+                                continue;
                             } 
+                            if (startPos[1] == '7' && endPos[1] == '8') {
+                                if (board->isPawn(startPos)) {
+                                    char promotionType;
+                                    if (!(issGame >> promotionType)) {
+                                        cerr << "Invalid input: must enter the correct piece type for pawn promotion" << endl;
+                                        continue;
+                                    }
+                                    board->promotion(promotionType, startPos, endPos);
+                                    continue;
+                                }
+                            }
                             if((whosTurn == "White" && (whiteP->getLevel() == 0))) {
                                 whiteP->move(startPos, endPos, board);
                             } else if(whosTurn == "Black" && (blackP->getLevel() == 0)) {
                                 blackP->move(startPos, endPos, board);
                             }
                         }
-                        // game.makeMove(startPos, endPos);
 
                         if(game->isWhiteInCheckmate()){
                             cout << "Checkmate! Black wins!" << endl;
