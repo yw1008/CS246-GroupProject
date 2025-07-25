@@ -114,11 +114,9 @@ void Board::addPieceCount(pieceType pt, Colour c) {
 
 void Board::removePieceCount(pieceType pt, Colour c) {
     if (c == Colour::White) {
-        if (whitePieceCount[pt] == 0) return;
-        else whitePieceCount[pt]++;
+        if (whitePieceCount[pt] > 0) --whitePieceCount[pt];
     } else  {
-        if (blackPieceCount[pt] == 0) return;
-        else blackPieceCount[pt]++;
+        if (blackPieceCount[pt] > 0) --blackPieceCount[pt];
     }
 }
 
@@ -132,6 +130,9 @@ void Board::setUp(string cmd, string type, string position, string c) {
             vector<int> coords = intPos(pos);
             int r = coords[1];
             int c = coords[0];
+            if (theBoard[r][c].getPieceType() != pieceType::Nothing) {
+                removePieceCount(theBoard[r][c].getPieceType(), theBoard[r][c].getColour());
+            }
             pieceType pt = getPieceType(piece);     // may throw
             Colour colour = getPieceColor(piece);   // may throw
             addPieceCount(pt, colour);                       // add number of that piece type
@@ -516,15 +517,6 @@ void Board::makeMove(string &startPos, string &endPos) {
             blackK = {endc, endr};
         }
     }
-
-    if (theBoard[endr][endc].getPieceType() == pieceType::Pawn) {
-        if (theBoard[endr][endc].getColour() == Colour::White && endr == 7) {
-            // white pawn promotion
-        }
-        else if (theBoard[endr][endc].getColour() == Colour::Black && endr == 0) {
-            // black pawn promotion
-        }
-    }
 } //makeMove
 
 bool Board::isPawn(std::string &pos) {
@@ -537,8 +529,12 @@ void Board::promotion(char type, std::string &startPos, std::string &endPos) {
     Colour c = getPieceColor(type);
     vector<int> startP = intPos(startPos);
     vector<int> endP = intPos(endPos);
-    theBoard[startP[1]][startP[0]].removePiece();
+    if (getPieceColor(type) != theBoard[startP[1]][startP[0]].getColour()) {
+        cerr << "Invalid input: must pick the piece of your colour for promotion" << endl;
+        return;
+    }
     theBoard[endP[1]][endP[0]].addPiece(pt, c);
+    theBoard[startP[1]][startP[0]].removePiece();
 }
 
 void Board::changeTurn() {
