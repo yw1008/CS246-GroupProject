@@ -286,57 +286,7 @@ char Board::getPiece(string pos) {
 
 bool Board::isValidMove(string &startPos, string &endPos) {
     // need to check if the move make player him/herself check
-    auto startInt = intPos(startPos);
-    int startc = startInt[0];
-    int startr = startInt[1];
-    auto endInt = intPos(endPos);
-    int endc = endInt[0];
-    int endr = endInt[1];
-
-    // if (theBoard[startr][startc].getPieceType() == pieceType::Pawn) {
-    //     Colour pieceColour = theBoard[startr][startc].getColour();
-    //     int dir = (pieceColour == Colour::White) ? -1 : 1;
-
-    //     bool isForward = (startc == endc);
-    //     bool isDiagonal = std::abs(startc - endc) == 1 && (endr - startr) == dir;
-
-    //     // Capture move: must be diagonal and there must be an opponent's piece
-    //     if (isDiagonal) {
-    //         if (theBoard[endr][endc].getPieceType() == pieceType::Nothing ||
-    //             theBoard[endr][endc].getColour() == pieceColour) {
-    //             cerr << "Invalid move: Pawn can only capture diagonally if opponent's piece exists" << endl;
-    //             return false;
-    //         }
-    //         // return true;
-    //     }
-
-    //     // Forward move: must be straight and unblocked
-    //     if (isForward) {
-    //         if (!(endr - startr == dir &&
-    //             theBoard[endr][endc].getPieceType() == pieceType::Nothing) || 
-    //             !((pieceColour == Colour::White && startr == 6 || pieceColour == Colour::Black && startr == 1) &&
-    //             endr - startr == 2 * dir &&
-    //             theBoard[startr + dir][startc].getPieceType() == pieceType::Nothing &&
-    //             theBoard[endr][endc].getPieceType() == pieceType::Nothing)) {
-    //             return false;
-    //         }
-
-    //         // First double-step
-    //         // if ((pieceColour == Colour::White && startr == 6 || pieceColour == Colour::Black && startr == 1) &&
-    //         //     endr - startr == 2 * dir &&
-    //         //     theBoard[startr + dir][startc].getPieceType() == pieceType::Nothing &&
-    //         //     theBoard[endr][endc].getPieceType() == pieceType::Nothing) {
-    //         //     return true;
-    //         // }
-
-    //         cerr << "Invalid move: Pawn move blocked or invalid distance" << endl;
-    //         return false;
-    //     }
-
-    //     cerr << "Invalid move: Pawn cannot move this way" << endl;
-    //     return false;
-    // }
-
+    int startc, startr, endr, endc;
     try {
         vector<int> intStartPos = intPos(startPos);
         startc = intStartPos[0];
@@ -480,48 +430,7 @@ bool Board::isValidMove(string &startPos, string &endPos) {
 
 bool Board::isValidMoveC(string &startPos, string &endPos) {
     // need to check if the move make player him/herself check
-    auto startInt = intPos(startPos);
-    int startc = startInt[0];
-    int startr = startInt[1];
-    auto endInt = intPos(endPos);
-    int endc = endInt[0];
-    int endr = endInt[1];
-
-    // if (theBoard[startr][startc].getPieceType() == pieceType::Pawn) {
-    //     Colour pieceColour = theBoard[startr][startc].getColour();
-    //     int dir = (pieceColour == Colour::White) ? -1 : 1;
-
-    //     bool isForward = (startc == endc);
-    //     bool isDiagonal = std::abs(startc - endc) == 1 && (endr - startr) == dir;
-
-    //     // Capture move: must be diagonal and there must be an opponent's piece
-    //     if (isDiagonal) {
-    //         if (theBoard[endr][endc].getPieceType() == pieceType::Nothing ||
-    //             theBoard[endr][endc].getColour() == pieceColour) {
-    //             return false;
-    //         }
-    //         return true;
-    //     }
-
-    //     // Forward move: must be straight and unblocked
-    //     if (isForward) {
-    //         if (endr - startr == dir &&
-    //             theBoard[endr][endc].getPieceType() == pieceType::Nothing) {
-    //             return true;
-    //         }
-
-    //         // First double-step
-    //         if ((pieceColour == Colour::White && startr == 6 || pieceColour == Colour::Black && startr == 1) &&
-    //             endr - startr == 2 * dir &&
-    //             theBoard[startr + dir][startc].getPieceType() == pieceType::Nothing &&
-    //             theBoard[endr][endc].getPieceType() == pieceType::Nothing) {
-    //             return true;
-    //         }
-    //         return false;
-    //     }
-    //     return false;
-    // }
-
+    int startc, startr, endr, endc;
     try {
         vector<int> intStartPos = intPos(startPos);
         startc = intStartPos[0];
@@ -912,10 +821,9 @@ void Board::undo() {
     }
     pieceType movedPiece = theBoard[prev.endPos.row][prev.endPos.col].getPieceType();
     Colour movedColor = theBoard[prev.endPos.row][prev.endPos.col].getColour();
-    // return moved piece
     theBoard[prev.startPos.row][prev.startPos.col].addPiece(movedPiece, movedColor);
     theBoard[prev.endPos.row][prev.endPos.col].removePiece();
-    // return removed piece if there exists
+
     if (prev.removedPiece != pieceType::Nothing) {
         theBoard[prev.endPos.row][prev.endPos.col].addPiece(prev.removedPiece, prev.removedColour);
     }

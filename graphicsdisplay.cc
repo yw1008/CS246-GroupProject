@@ -8,11 +8,6 @@ GraphicsDisplay::GraphicsDisplay() {
     // fill 8x8 blocks with the same color
     for (size_t r = 0; r < BOARD_SIZE; ++r) {
         for (size_t c = 0; c < BOARD_SIZE; ++c) {
-            // Determine which 12×12 block we're in
-            // size_t blockRow = r / 12;
-            // size_t blockCol = c / 12;
-
-            // Alternate colors by block
             int color = ((r + c) % 2 == 0) ? Xwindow::Green : Xwindow::Blue;
 
             xw.fillRectangle(c * cellSize, r * cellSize, cellSize, cellSize, color);
@@ -28,9 +23,6 @@ int GraphicsDisplay::getColorCode(const Colour c) {
     } else if (c == Colour::White) {
         return Xwindow::White;
     } 
-    // else {
-    //     throw std::invalid_argument("Unsupported color: need to be white or black");
-    // }
 }
 
 void GraphicsDisplay::drawPawn(size_t boardr, size_t boardc, int cellSize, const Colour &c) {

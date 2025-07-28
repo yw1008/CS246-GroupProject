@@ -35,9 +35,6 @@ class Board {
     GraphicsDisplay *gd = nullptr;
     
 public:
-    // construct empty board without pieces
-    // Board(); // default ctor
-
     void setWhiteK(int col, int row);
     void setBlackK(int col, int row);
 

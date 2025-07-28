@@ -11,15 +11,16 @@ using namespace std;
 
 int main() {
     string line, cmd;
+    Board *board = new Board();    
     Player *whiteP;
     Player *blackP;
     string whosTurn = "White";
     int whiteScore = 0;
     int blackScore = 0;
     bool isSetup = 0;
+    Game *game = nullptr;   // for avoiding double free
 
     while(true) {
-        Board *board = new Board();    
         string line; // must get a whole line of the command
         getline (cin, line);
 
@@ -29,9 +30,10 @@ int main() {
             cout << "Final Score: " << endl;
             cout << "White: " << whiteScore << endl;
             cout << "Black: " << blackScore << endl;
-            delete board;
-            delete whiteP;
-            delete blackP;
+            // Avoid double free
+            if (board) { delete board; board = nullptr; }
+            if (whiteP) { delete whiteP; whiteP = nullptr; }
+            if (blackP) { delete blackP; blackP = nullptr; }
             break;
         }
         if(cmd == "game") {
@@ -42,6 +44,9 @@ int main() {
                 cerr << "Invalid input: must enter two players" << endl; // enter two players
                 continue;
             }
+
+            // skip game creation if players are invalid
+            if ((wp != "human" && wp != "computer[1]") || (bp != "human" && bp != "computer[1]")) continue;
             
             // check if white player is human or computer
             if (wp == "human") {
@@ -77,6 +82,7 @@ int main() {
             cout << "The game is started" << endl;
             // need to print starting board
             while(!game->getIsFinished()) {
+                if (cin.eof()) break;
                 cout << *board << endl;
                 
                 // read new input
@@ -114,19 +120,6 @@ int main() {
                                 cout << "Invalid move" << endl;
                                 continue;
                             } 
-                            // special move for pawn
-                            // if (board->isPawn(startPos)) {
-                            //     // promotion
-                            //     if ((startPos[1] == '7' && endPos[1] == '8') || (startPos[1] == '2' && endPos[1] == '1')) {
-                            //         char promotionType;
-                            //         if (!(issGame >> promotionType)) {
-                            //             cerr << "Invalid input: must enter the correct piece type for pawn promotion" << endl;
-                            //             continue;
-                            //         }
-                            //         board->promotion(promotionType, startPos, endPos);
-                            //         continue;
-                            //     }
-                            // }
                             cout << whosTurn << endl;
                             cout << (whiteP->getLevel() == 0) << endl;
                             if((whosTurn == "White" && (whiteP->getLevel() == 0))) {
@@ -230,4 +223,10 @@ int main() {
             continue;
         }
     }
+    if (board) { delete board; board = nullptr; }
+    if (whiteP) { delete whiteP; whiteP = nullptr; }
+    if (blackP) { delete blackP; blackP = nullptr; }
+                    delete board;
+                    delete board;
+                        delete board;
 }

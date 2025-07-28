@@ -15,8 +15,6 @@ TextDisplay::TextDisplay()
 }
 
 void TextDisplay::notify(Subject &whoNotified) {
-    // need end position and the type of the piece (with color) that is moved. 
-    // for now just assume each variable represent those two
     Info info = whoNotified.getInfo();
     Colour c = info.colour;
     pieceType type = info.piecetype;

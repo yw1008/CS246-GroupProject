@@ -2,9 +2,6 @@
 #define INFO_H
 #include <vector>
 
-/* 
-
-*/
 enum class pieceType {Pawn, King, Queen, Rook, Knight, Bishop, Nothing};
 enum class Colour {Nothing, White, Black};
 

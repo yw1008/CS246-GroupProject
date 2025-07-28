@@ -15,8 +15,6 @@ public:
     bool isValid(string &startPos, string &endPos, Board *board);
 
     void moveLevel1(Board *board);
-    // void moveLevel2(Board &board);
-    // void moveLevel3(Board &board);
 };
 
 #endif

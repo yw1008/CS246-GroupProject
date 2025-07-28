@@ -12,18 +12,12 @@ public:
     // Constructor
     Player(bool isWhite, int lv);
 
-    // Returns true if the player is human
-    //bool isHuman() const;
-
     virtual void move(std::string &startPos, std::string &endPos, Board* b) = 0;
 
     // Returns true if the player is white
     bool isWhite() const;
 
     int getLevel() const;
-
-    // Destructor
-    // virtual ~Player() = 0;
 };
 
 #endif
