@@ -4,16 +4,16 @@ The rules of chess are readily available online, so we outline them only briefly
 Chess is played on an 8x8 checkerboard, arranged so that there is a white square at the bottom right. Players take turns
 making one move at a time. The player controlling the white pieces makes the first move.
 There are six types of pieces:
-* • King (K) Moves one square in any direction.
-• Queen (Q) Moves in any of the eight possible directions, any distance, but cannot move past any piece that blocks its
+* King (K) Moves one square in any direction.
+* Queen (Q) Moves in any of the eight possible directions, any distance, but cannot move past any piece that blocks its
 path.
-• Bishop (B) Moves in any of the four diagonal directions, any distance, but cannot move past any piece that blocks its
+* Bishop (B) Moves in any of the four diagonal directions, any distance, but cannot move past any piece that blocks its
 path.
-• Rook (R) Moves in any of the four vertical/horizontal directions, any distance, but cannot move past any piece that
+* Rook (R) Moves in any of the four vertical/horizontal directions, any distance, but cannot move past any piece that
 blocks its path.
-• Knight (N) If it sits on square (x, y), it can move to square (x±2, y ±1) or (x±1, y ±2). Can “jump over” any piece
+* Knight (N) If it sits on square (x, y), it can move to square (x±2, y ±1) or (x±1, y ±2). Can “jump over” any piece
 that blocks its path.
-• Pawn (P) Moves one square forward.
+* Pawn (P) Moves one square forward.
 Page 1 of 5
 CS246 SPRING 2025 PROJECT – CHESS
 A piece captures another piece by moving onto the square occupied by that piece. The captured piece is then permanently
@@ -22,22 +22,22 @@ piece of the opposite colour.
 The object of the game is to place your opponent’s king under attack, such that your opponent’s king cannot escape in one
 move. This is known as checkmate. An attack on the king, whether it can escape or not, is known as check.
 The following additional rules govern the movement of pieces:
-• The pawn is the only piece whose standard move is different from its capturing move. A pawn moves only forward,
+* The pawn is the only piece whose standard move is different from its capturing move. A pawn moves only forward,
 but it captures on the forward diagonals (one square). Thus, on capturing, a pawn must move diagonally forward, one
 square, to take over a square occupied by another piece.
-• A pawn, on its first move, may move either one square forward or two squares forward.
-• If a pawn, by moving two squares forward, avoids capture by another pawn (i.e, if moving one square forward would
+* A pawn, on its first move, may move either one square forward or two squares forward.
+* If a pawn, by moving two squares forward, avoids capture by another pawn (i.e, if moving one square forward would
 have put it under attack by another pawn), the would-be attacking pawn may still capture it by moving one square
 diagonally forward to the square the other pawn skipped over. This is known as pawn capture en passant. This option
 is only available immediately following the two-square move by the opposing pawn. If you wait, you can’t do it.
-• A pawn, upon reaching the other end of the board is replaced by either a rook, knight, bishop, or queen (your choice).
-• A move known as castling helps to move the king to a safer square while simultaneously mobilizing a rook. To execute
+* A pawn, upon reaching the other end of the board is replaced by either a rook, knight, bishop, or queen (your choice).
+* A move known as castling helps to move the king to a safer square while simultaneously mobilizing a rook. To execute
 it, the king moves two squares towards one of the rooks, and that rook then occupies the square “skipped over” by the
 king. This happens in one move. For castling to be legal, the king and rook used must not previously have moved in the
 game; there must be no pieces between the king and rook used; and the king must not be in check on either its starting
 position, its final position, or the position in between (to be occupied by the rook).
-• It is not legal to make any move that puts your king in check.
-• If any player ever has no legal moves available, but is not in check, it is known as stalemate, and the game is a draw.
+* It is not legal to make any move that puts your king in check.
+* If any player ever has no legal moves available, but is not in check, it is known as stalemate, and the game is a draw.
 Display
 You need to provide both a text-based display and a graphical display of your game board. A sample text display follows:
 8 rnbqkbnr
@@ -65,10 +65,10 @@ Your system should accommodate both human and computer players. In particular, h
 and computer vs. computer should all be possible. When both players are human, the role of your program is to provide the
 game board, to detect checkmate and stalemate, and to prohibit illegal moves. Computer players should operate at one of
 several difficulty levels:
-• Level 1: random legal moves.
-• Level 2: prefers capturing moves and checks over other moves.
-• Level 3: prefers avoiding capture, capturing moves, and checks.
-• Levels 4+: something more sophisticated.
+* Level 1: random legal moves.
+* Level 2: prefers capturing moves and checks over other moves.
+* Level 3: prefers avoiding capture, capturing moves, and checks.
+* Levels 4+: something more sophisticated.
 For levels 4 and above, try to come up with more sophisticated strategies for your player to use. Attempt level 4 (or any higher
 levels) only when the rest of the project is done.
 Question: Chess programs usually come with a book of standard opening move sequences, which list accepted opening moves
@@ -84,16 +84,16 @@ too specific into the rule set changes in answering the question though; your fo
 altered at the high level of the design?)
 Command Interpreter
 You interact with the system by issuing text-based commands. The following commands are to be supported:
-• game white-player black-player starts a new game. The parameters white-player and black-player
+* game white-player black-player starts a new game. The parameters white-player and black-player
 can be either human or computer[1-4].
-• resign concedes the game to your opponent. This is the only way, outside of winning or drawing the game, to end a
+* resign concedes the game to your opponent. This is the only way, outside of winning or drawing the game, to end a
 game.
-• A move consists of the command move, followed by the starting and ending coordinates of the piece to be moved. For
+* A move consists of the command move, followed by the starting and ending coordinates of the piece to be moved. For
 example: move e2 e4. Castling would specified by the two-square move for the king: move e1 g1 or move e1
 c1 for white. Pawn promotion would additionally specify the piece type to which the pawn is promoted: move e7
 e8 Q. In the case of a computer player, the command move (without arguments) makes the computer player make a
 move.
-• setup enters setup mode, within which you can set up your own initial board configurations. This can only be done
+* setup enters setup mode, within which you can set up your own initial board configurations. This can only be done
 when a game is not currently running. Within setup mode, the following language is used:
 – + K e1 places the piece K (i.e., white king in this case) on the square e1. If a piece is already on that square, it
 is replaced. The board should be redisplayed.
@@ -126,10 +126,10 @@ make a reasonable assessment).
 If Things Go Wrong
 If you run into trouble and find yourself unable to complete the entire game, please do your best to submit something that
 works, even if it doesn’t solve the entire game requirements. For example:
-• can’t handle castling, en passant, or pawn promotion
-• program only produces text output; no graphics
-• only one level of difficulty implemented
-• can’t detect check or checkmate
+* can’t handle castling, en passant, or pawn promotion
+* program only produces text output; no graphics
+* only one level of difficulty implemented
+* can’t detect check or checkmate
 You will get a higher mark for fully implementing some of the requirements than for a program that attempts all of the
 requirements, but doesn’t run.
 A well-documented, well-designed program that has all of the deficiencies listed above, but still runs, can still potentially
