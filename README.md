@@ -1,4 +1,6 @@
-available online, so we outline them only briefly here.
+The Game of Chess
+In this project, you and your partner(s) will work together to produce a chess game.
+The rules of chess are readily available online, so we outline them only briefly here.
 Chess is played on an 8x8 checkerboard, arranged so that there is a white square at the bottom right. Players take turns
 making one move at a time. The player controlling the white pieces makes the first move.
 There are six types of pieces:
