@@ -4,7 +4,7 @@ The rules of chess are readily available online, so we outline them only briefly
 Chess is played on an 8x8 checkerboard, arranged so that there is a white square at the bottom right. Players take turns
 making one move at a time. The player controlling the white pieces makes the first move.
 There are six types of pieces:
-• King (K) Moves one square in any direction.
+* • King (K) Moves one square in any direction.
 • Queen (Q) Moves in any of the eight possible directions, any distance, but cannot move past any piece that blocks its
 path.
 • Bishop (B) Moves in any of the four diagonal directions, any distance, but cannot move past any piece that blocks its
